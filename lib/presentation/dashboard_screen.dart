@@ -1,0 +1,304 @@
+import 'package:flutter/material.dart';
+import 'package:saalt/helper/dashboard_helper.dart';
+import 'package:saalt/helper/tracker_helper.dart';
+import 'package:saalt/models/dashboard_item.dart';
+import 'package:saalt/presentation/community/community_screen.dart';
+import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
+import 'package:saalt/presentation/products/products_screen.dart';
+import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
+import 'package:saalt/presentation/show/saalt_show_screen.dart';
+import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
+import 'package:saalt/presentation/widgets/dashboard_tile.dart';
+import 'package:saalt/presentation/widgets/period_tracker_card.dart';
+import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
+
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  void _open(String name) {
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text('$name coming up'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: AppColors.primaryColor,
+        duration: const Duration(milliseconds: 1200),
+      ),
+    );
+  }
+
+  void _openTracker() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const PeriodTrackerScreen()));
+  }
+
+  void _openItem(DashboardItem item) {
+    if (item.title == 'Products') {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const ProductsScreen()));
+      return;
+    } else if (item.title == "Knowledgebase") {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const KnowledgebaseScreen()));
+      return;
+    } else if (item.title == 'Saalt Show') {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const SaaltShowScreen()));
+      return;
+    } else if (item.title == 'Testimonials') {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const TestimonialsScreen()));
+      return;
+    } else if (item.title == 'Community') {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const CommunityScreen()));
+      return;
+    }
+
+    _open(item.title);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.canvas,
+      body: Stack(
+        children: [
+          const _BackdropWash(),
+          SafeArea(
+            child: Column(
+              children: [
+                const _Header(),
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
+                          child: PeriodTrackerCard(
+                            cycleDay: TrackerHelper.cycleDay,
+                            cycleLength: TrackerHelper.averageCycle,
+                            phaseLabel: TrackerHelper.phase.label,
+                            onTap: _openTracker,
+                            onLogTap: _openTracker,
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(child: _SectionLabel('Explore')),
+                      SliverPadding(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
+                        sliver: SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 14,
+                                crossAxisSpacing: 14,
+                                childAspectRatio: 1.14,
+                              ),
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final item = DashboardHelper.items[index];
+                            return DashboardTile(
+                              item: item,
+                              onTap: () => _openItem(item),
+                            );
+                          }, childCount: DashboardHelper.items.length),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BackdropWash extends StatelessWidget {
+  const _BackdropWash();
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: IgnorePointer(
+        child: Stack(
+          children: [
+            Positioned(
+              top: -110,
+              right: -70,
+              child: _Bloom(color: AppColors.roseTint, size: 260),
+            ),
+            Positioned(
+              top: 180,
+              left: -100,
+              child: _Bloom(color: AppColors.periwinkleTint, size: 220),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Bloom extends StatelessWidget {
+  const _Bloom({required this.color, required this.size});
+
+  final Color color;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [color.withValues(alpha: 0.75), color.withValues(alpha: 0)],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Image.asset(AppImages.logo, height: 26, fit: BoxFit.contain),
+              const Spacer(),
+              const _CircleAction(
+                icon: Icons.notifications_none_rounded,
+                showDot: true,
+              ),
+              const SizedBox(width: 10),
+              const _CircleAction(icon: Icons.person_outline_rounded),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'Hey there 👋',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.2,
+              color: AppColors.inkMuted.withValues(alpha: 0.9),
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            'Everything you need,\nall in one place.',
+            style: TextStyle(
+              fontSize: 24,
+              height: 1.25,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.4,
+              color: AppColors.ink,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CircleAction extends StatelessWidget {
+  const _CircleAction({required this.icon, this.showDot = false});
+
+  final IconData icon;
+  final bool showDot;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: 40,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.hairline),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primaryColor.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Icon(icon, size: 19, color: AppColors.ink),
+          if (showDot)
+            Positioned(
+              top: 10,
+              right: 11,
+              child: Container(
+                height: 7,
+                width: 7,
+                decoration: BoxDecoration(
+                  color: AppColors.rose,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.surface, width: 1.5),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 14),
+      child: Row(
+        children: [
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.2,
+              color: AppColors.ink,
+            ),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(child: Divider(color: AppColors.hairline, height: 1)),
+        ],
+      ),
+    );
+  }
+}
