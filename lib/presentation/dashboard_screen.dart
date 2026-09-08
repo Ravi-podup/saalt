@@ -4,6 +4,7 @@ import 'package:saalt/helper/tracker_helper.dart';
 import 'package:saalt/models/dashboard_item.dart';
 import 'package:saalt/presentation/community/community_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
+import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/products/products_screen.dart';
 import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
 import 'package:saalt/presentation/show/saalt_show_screen.dart';
@@ -65,6 +66,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       Navigator.of(
         context,
       ).push(MaterialPageRoute(builder: (_) => const CommunityScreen()));
+      return;
+    } else if (item.title == 'TMI Parties') {
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (_) => const TmiPartiesScreen()));
       return;
     }
 

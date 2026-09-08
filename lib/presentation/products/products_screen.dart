@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:saalt/helper/bag_store.dart';
 import 'package:saalt/helper/product_helper.dart';
 import 'package:saalt/models/product.dart';
+import 'package:saalt/presentation/products/product_listing_screen.dart';
+import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
 import 'package:saalt/presentation/products/product_detail_screen.dart';
+import 'package:saalt/presentation/products/widgets/best_sellers.dart';
+import 'package:saalt/presentation/products/widgets/category_strip.dart';
+import 'package:saalt/presentation/products/widgets/collections_row.dart';
 import 'package:saalt/presentation/products/widgets/product_card.dart';
 import 'package:saalt/presentation/products/widgets/promo_slider.dart';
+import 'package:saalt/presentation/products/widgets/review_carousel.dart';
+import 'package:saalt/presentation/products/widgets/why_saalt_wear.dart';
 import 'package:saalt/presentation/products/widgets/products_nav_bar.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
@@ -18,17 +26,12 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  static const _categories = ['All', 'Cups', 'Discs', 'Underwear', 'Bundles'];
-
-  String _selected = 'All';
+  String _bestSellerGroup = ProductHelper.bestSellerGroups.keys.first;
   String _query = '';
 
   /// Hearted products. Saving is a wishlist action, not a purchase.
   final _saved = <String>{};
 
-  /// Resolved variants in the bag, mapped to quantity. Keyed by variant rather
-  /// than product name so a Small and a Regular are separate lines.
-  final _bag = <String, int>{};
   final _searchController = TextEditingController();
 
   @override
@@ -37,34 +40,29 @@ class _ProductsScreenState extends State<ProductsScreen> {
     super.dispose();
   }
 
-  /// True when the list is showing less than the whole catalogue, which is
-  /// the only time a count tells the reader anything.
-  /// Total items, not distinct lines: two of one variant counts as two.
-  int get _bagCount => _bag.values.fold(0, (sum, q) => sum + q);
-
-  /// Sends the shopper to where size, absorbency and colour get resolved, then
-  /// folds whatever they chose into the bag.
   Future<void> _openDetail(Product product) async {
     final added = await Navigator.of(context).push<BagAddition>(
       MaterialPageRoute(builder: (_) => ProductDetailScreen(product: product)),
     );
     if (added == null || !mounted) return;
-    setState(() {
-      _bag.update(
-        added.label,
-        (q) => q + added.quantity,
-        ifAbsent: () => added.quantity,
-      );
-    });
+    BagStore.add(added.label, added.quantity);
     _toast('${added.label} added to bag');
   }
 
-  bool get _isNarrowed => _selected != 'All' || _query.isNotEmpty;
+  /// The landing page browses; the listing only appears as search results.
+  List<Product> get _results =>
+      ProductHelper.catalog.where((p) => p.matches(_query)).toList();
 
-  List<Product> get _visible => ProductHelper.catalog
-      .where((p) => _selected == 'All' || p.category == _selected)
-      .where((p) => p.matches(_query))
-      .toList();
+  void _openCategory(String label) {
+    final category = ProductHelper.categories.firstWhere(
+      (c) => c.label == label,
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ProductListingScreen(category: category),
+      ),
+    );
+  }
 
   void _toast(String message) {
     final messenger = ScaffoldMessenger.of(context);
@@ -81,7 +79,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final products = _visible;
+    final results = _results;
 
     return Scaffold(
       backgroundColor: AppColors.canvas,
@@ -92,28 +90,59 @@ class _ProductsScreenState extends State<ProductsScreen> {
             ScreenHeader(
               title: 'Products',
               onBack: () => Navigator.of(context).maybePop(),
-              trailing: CircleIconButton(
-                icon: _bagCount == 0
-                    ? Icons.shopping_bag_outlined
-                    : Icons.shopping_bag_rounded,
-                badgeCount: _bagCount,
-                onTap: () => _toast(
-                  _bagCount == 0
-                      ? 'Your bag is empty'
-                      : '$_bagCount in your bag',
-                ),
-                tooltip: 'Bag',
+              // One action group, in the title bar. Splitting four icons
+              // across two rows read as clutter.
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircleIconButton(
+                    icon: Icons.notifications_none_rounded,
+                    showDot: true,
+                    flat: true,
+                    onTap: () => _toast('No new notifications'),
+                    tooltip: 'Notifications',
+                  ),
+                  CircleIconButton(
+                    icon: _saved.isEmpty
+                        ? Icons.favorite_border_rounded
+                        : Icons.favorite_rounded,
+                    iconColor: _saved.isEmpty ? null : AppColors.rose,
+                    badgeCount: _saved.length,
+                    flat: true,
+                    onTap: () => _toast(
+                      _saved.isEmpty
+                          ? 'Nothing saved yet'
+                          : '${_saved.length} saved',
+                    ),
+                    tooltip: 'Favourites',
+                  ),
+                  ValueListenableBuilder<Map<String, int>>(
+                    valueListenable: BagStore.items,
+                    builder: (context, _, _) {
+                      final count = BagStore.count;
+                      return CircleIconButton(
+                        icon: count == 0
+                            ? Icons.shopping_bag_outlined
+                            : Icons.shopping_bag_rounded,
+                        badgeCount: count,
+                        flat: true,
+                        onTap: () => _toast(
+                          count == 0
+                              ? 'Your bag is empty'
+                              : '$count in your bag',
+                        ),
+                        tooltip: 'Bag',
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-            _SearchRow(
+            // Full width now that the actions live in the title bar.
+            SearchField(
               controller: _searchController,
-              savedCount: _saved.length,
+              hintText: 'Search cups, discs, underwear…',
               onChanged: (v) => setState(() => _query = v),
-              onNotifications: () => _toast('No new notifications'),
-              onFavourites: () => _toast(
-                _saved.isEmpty ? 'Nothing saved yet' : '${_saved.length} saved',
-              ),
-              onProfile: () => _toast('Profile'),
             ),
             // Only the header and search stay put. The banner and the
             // category strip scroll, so the pinned area does not grow.
@@ -122,24 +151,66 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 key: const Key('shop-body'),
                 padding: const EdgeInsets.only(top: 12, bottom: 28),
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: PromoSlider(
-                      images: ProductHelper.banners,
-                      onTap: (_) => _toast('Shop the collection'),
+                  // While searching, the banner and the shelf step aside:
+                  // results should be results.
+                  if (_query.isEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: PromoSlider(
+                        images: ProductHelper.banners,
+                        onTap: (_) => _toast('Shop the collection'),
+                      ),
                     ),
-                  ),
-                  _FilterBar(
-                    categories: _categories,
-                    selected: _selected,
-                    onSelect: (c) => setState(() => _selected = c),
-                  ),
-                  if (_isNarrowed) _ResultNote(count: products.length),
-                  const SizedBox(height: 10),
-                  if (products.isEmpty)
+                    const SizedBox(height: 24),
+                    const _SectionLabel('Shop by category'),
+                    CategoryStrip(
+                      categories: ProductHelper.categories,
+                      selected: null,
+                      onSelect: (label) => _openCategory(label!),
+                    ),
+                    const SizedBox(height: 26),
+                    BestSellers(
+                      groups: ProductHelper.bestSellerGroups.keys.toList(),
+                      selected: _bestSellerGroup,
+                      products: ProductHelper.bestSellers(_bestSellerGroup),
+                      onSelectGroup: (g) =>
+                          setState(() => _bestSellerGroup = g),
+                      onOpen: _openDetail,
+                    ),
+                    const SizedBox(height: 26),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: WhySaaltWear(
+                        imageAsset: ProductHelper.whySaaltWearImage,
+                        onShop: () => _openCategory('Leakproof Underwear'),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    ReviewCarousel(
+                      reviews: ProductHelper.reviewQuotes,
+                      // Read more lands on the full testimonials screen.
+                      onReadMore: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const TestimonialsScreen(),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    const _SectionLabel('Collections'),
+                    CollectionsRow(
+                      collections: ProductHelper.collections,
+                      onOpen: (c) => _openCategory(c.opensCategory),
+                    ),
+                    const SizedBox(height: 8),
+                  ],
+                  if (_query.isNotEmpty) ...[
+                    _ResultNote(count: results.length),
+                    const SizedBox(height: 10),
+                  ],
+                  if (_query.isNotEmpty && results.isEmpty)
                     _EmptyState(query: _query)
-                  else
-                    for (final product in products) ...[
+                  else if (_query.isNotEmpty)
+                    for (final product in results) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ProductCard(
@@ -204,68 +275,6 @@ class _EmptyState extends StatelessWidget {
 
 /// Search field with the notification, favourites and profile actions to its
 /// right, so the brand bar above stays uncluttered.
-class _SearchRow extends StatelessWidget {
-  const _SearchRow({
-    required this.controller,
-    required this.savedCount,
-    required this.onChanged,
-    this.onNotifications,
-    this.onFavourites,
-    this.onProfile,
-  });
-
-  final TextEditingController controller;
-  final int savedCount;
-  final ValueChanged<String> onChanged;
-  final VoidCallback? onNotifications;
-  final VoidCallback? onFavourites;
-  final VoidCallback? onProfile;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-      child: Row(
-        children: [
-          Expanded(
-            child: SearchField(
-              controller: controller,
-              hintText: 'Search products…',
-              onChanged: onChanged,
-              padding: EdgeInsets.zero,
-            ),
-          ),
-          const SizedBox(width: 4),
-          CircleIconButton(
-            icon: Icons.notifications_none_rounded,
-            showDot: true,
-            flat: true,
-            onTap: onNotifications,
-            tooltip: 'Notifications',
-          ),
-          CircleIconButton(
-            icon: savedCount == 0
-                ? Icons.favorite_border_rounded
-                : Icons.favorite_rounded,
-            // Rose when active: a filled heart in ink reads as a black blob.
-            iconColor: savedCount == 0 ? null : AppColors.rose,
-            badgeCount: savedCount,
-            flat: true,
-            onTap: onFavourites,
-            tooltip: 'Favourites',
-          ),
-          CircleIconButton(
-            icon: Icons.person_outline_rounded,
-            flat: true,
-            onTap: onProfile,
-            tooltip: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 /// Compact count shown only while a filter or search is applied.
 class _ResultNote extends StatelessWidget {
   const _ResultNote({required this.count});
@@ -293,57 +302,26 @@ class _ResultNote extends StatelessWidget {
   }
 }
 
-class _FilterBar extends StatelessWidget {
-  const _FilterBar({
-    required this.categories,
-    required this.selected,
-    required this.onSelect,
-  });
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text);
 
-  final List<String> categories;
-  final String selected;
-  final ValueChanged<String> onSelect;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 58,
-      child: ListView.separated(
-        key: const Key('product-categories'),
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        itemCount: categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          final isActive = category == selected;
-          return Material(
-            color: isActive ? AppColors.ink : AppColors.surface,
-            borderRadius: BorderRadius.circular(30),
-            child: InkWell(
-              onTap: () => onSelect(category),
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  border: Border.all(
-                    color: isActive ? AppColors.ink : AppColors.hairline,
-                  ),
-                ),
-                child: Text(
-                  category,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    fontWeight: FontWeight.w600,
-                    color: isActive ? Colors.white : AppColors.inkMuted,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+      child: SizedBox(
+        width: double.infinity,
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.5,
+            color: AppColors.ink,
+          ),
+        ),
       ),
     );
   }

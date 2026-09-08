@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:saalt/helper/tracker_helper.dart';
 import 'package:saalt/res/app_colors.dart';
 
-/// Today's entry: flow, symptoms, mood. Deliberately one screenful - the
+/// One day's entry: flow, symptoms, mood. Deliberately one screenful - the
 /// longer this form gets, the fewer days people actually log.
 class LogTodayCard extends StatelessWidget {
   const LogTodayCard({
     super.key,
+    this.title = 'Log today',
     required this.flow,
     required this.symptoms,
     required this.mood,
@@ -15,7 +16,12 @@ class LogTodayCard extends StatelessWidget {
     required this.onMood,
     this.onSave,
     this.isSaved = false,
+    this.saveLabel = 'Save entry',
+    this.canSave,
   });
+
+  /// Heading, so the same form can carry a date other than today.
+  final String title;
 
   final String? flow;
   final Set<String> symptoms;
@@ -26,7 +32,14 @@ class LogTodayCard extends StatelessWidget {
   final VoidCallback? onSave;
   final bool isSaved;
 
-  bool get _hasEntry => flow != null || symptoms.isNotEmpty || mood != null;
+  final String saveLabel;
+
+  /// Overrides the default rule. A day that already has a stored entry can be
+  /// saved empty, which is how an entry gets cleared.
+  final bool? canSave;
+
+  bool get _hasEntry =>
+      canSave ?? (flow != null || symptoms.isNotEmpty || mood != null);
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +55,12 @@ class LogTodayCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  'Log today',
-                  style: TextStyle(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w700,
                     letterSpacing: -0.2,
@@ -134,7 +149,7 @@ class LogTodayCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 13),
                   child: Text(
-                    'Save entry',
+                    saveLabel,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,

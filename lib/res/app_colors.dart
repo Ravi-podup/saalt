@@ -20,6 +20,12 @@ class AppColors {
   static const sageTint = Color(0xFFE4EDE3);
   static const sage = Color(0xFF62855E);
 
+  /// Success green. Sage is a product accent — grey-green and quiet — so a
+  /// state that has to read as "done" at a glance gets its own, clearly
+  /// green pair. Dark enough for 9.5px bold on [successTint] (5.4:1).
+  static const successTint = Color(0xFFE1F4E9);
+  static const success = Color(0xFF0F6E3F);
+
   static const apricotTint = Color(0xFFFBEBDB);
   static const apricot = Color(0xFFBC7F4C);
 

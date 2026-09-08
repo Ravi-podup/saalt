@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:saalt/helper/entry_store.dart';
 import 'package:saalt/helper/tracker_helper.dart';
-import 'package:saalt/models/cycle_log.dart';
+import 'package:saalt/helper/tracker_settings.dart';
+import 'package:saalt/presentation/tracker/day_detail_screen.dart';
+import 'package:saalt/presentation/tracker/tracker_settings_screen.dart';
 import 'package:saalt/presentation/tracker/widgets/cycle_calendar.dart';
-import 'package:saalt/presentation/tracker/widgets/cycle_status_card.dart';
-import 'package:saalt/presentation/tracker/widgets/log_today_card.dart';
+import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
 
+/// Step one of the tracker: the calendar, and nothing competing with it.
+/// Tapping a day opens [DayDetailScreen], which carries that day's entry and
+/// the cycle statistics.
 class PeriodTrackerScreen extends StatefulWidget {
   const PeriodTrackerScreen({super.key});
 
@@ -15,82 +20,49 @@ class PeriodTrackerScreen extends StatefulWidget {
 }
 
 class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
-  String? _flow;
-  String? _mood;
-  final _symptoms = <String>{};
-  bool _isSaved = false;
-
-  final _logKey = GlobalKey();
-  final _scrollController = ScrollController();
+  /// First of the month on show. Kept normalised so month arithmetic cannot
+  /// skip a month from a 31st.
+  late DateTime _month;
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _scrollToLog() {
-    final context = _logKey.currentContext;
-    if (context == null) return;
-    Scrollable.ensureVisible(
-      context,
-      duration: const Duration(milliseconds: 320),
-      curve: Curves.easeOut,
-      alignment: 0.1,
-    );
-  }
-
-  void _save() {
-    setState(() => _isSaved = true);
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      const SnackBar(
-        content: Text('Today’s entry saved'),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.ink,
-        duration: Duration(milliseconds: 1400),
-      ),
-    );
-  }
-
-  /// Day-of-month sets for the calendar, derived from the recorded cycles and
-  /// the prediction rather than hardcoded.
-  ({Set<int> period, Set<int> predicted, Set<int> fertile}) _calendarMarks() {
+  void initState() {
+    super.initState();
     final now = DateTime.now();
-    final period = <int>{};
-    final predicted = <int>{};
-    final fertile = <int>{};
+    _month = DateTime(now.year, now.month);
+  }
 
-    bool sameMonth(DateTime d) => d.year == now.year && d.month == now.month;
+  bool get _isCurrentMonth {
+    final now = DateTime.now();
+    return _month.year == now.year && _month.month == now.month;
+  }
 
-    for (final cycle in TrackerHelper.history) {
-      for (var i = 0; i < cycle.periodLength; i++) {
-        final day = cycle.startDate.add(Duration(days: i));
-        if (sameMonth(day)) period.add(day.day);
-      }
-    }
+  void _shiftMonth(int by) {
+    setState(() => _month = DateTime(_month.year, _month.month + by));
+  }
 
-    final next = TrackerHelper.nextPeriodStart;
-    for (var i = 0; i < TrackerHelper.averagePeriod; i++) {
-      final day = next.add(Duration(days: i));
-      if (sameMonth(day)) predicted.add(day.day);
-    }
+  void _goToToday() {
+    final now = DateTime.now();
+    setState(() => _month = DateTime(now.year, now.month));
+  }
 
-    final start = TrackerHelper.current.startDate;
-    for (var d = 1; d <= TrackerHelper.averageCycle; d++) {
-      if (!TrackerHelper.isFertile(d)) continue;
-      final day = start.add(Duration(days: d - 1));
-      if (sameMonth(day) && !period.contains(day.day)) fertile.add(day.day);
-    }
+  void _openDay(int dayOfMonth) {
+    _openDate(DateTime(_month.year, _month.month, dayOfMonth));
+  }
 
-    return (period: period, predicted: predicted, fertile: fertile);
+  void _openDate(DateTime date) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => DayDetailScreen(date: date)));
+  }
+
+  void _openSettings() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const TrackerSettingsScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
-    final marks = _calendarMarks();
-
     return Scaffold(
       backgroundColor: AppColors.canvas,
       body: SafeArea(
@@ -99,69 +71,60 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
             ScreenHeader(
               title: 'Period Tracker',
               onBack: () => Navigator.of(context).maybePop(),
-            ),
-            Expanded(
-              child: ListView(
-                key: const Key('tracker-body'),
-                controller: _scrollController,
-                padding: const EdgeInsets.fromLTRB(20, 6, 20, 28),
+              trailing: Row(
                 children: [
-                  CycleStatusCard(
-                    cycleDay: TrackerHelper.cycleDay,
-                    cycleLength: TrackerHelper.averageCycle,
-                    phase: TrackerHelper.phase,
-                    daysUntilNextPeriod: TrackerHelper.daysUntilNextPeriod,
-                    onLog: _scrollToLog,
-                  ),
-                  const SizedBox(height: 22),
-                  const _SectionLabel('This month'),
-                  const SizedBox(height: 12),
-                  CycleCalendar(
-                    month: DateTime.now(),
-                    periodDays: marks.period,
-                    predictedDays: marks.predicted,
-                    fertileDays: marks.fertile,
-                  ),
-                  const SizedBox(height: 22),
-                  const _SectionLabel('Your averages'),
-                  const SizedBox(height: 12),
-                  const _Averages(),
-                  const SizedBox(height: 22),
-                  _SectionLabel('Log today', key: _logKey),
-                  const SizedBox(height: 12),
-                  LogTodayCard(
-                    flow: _flow,
-                    symptoms: _symptoms,
-                    mood: _mood,
-                    isSaved: _isSaved,
-                    onFlow: (v) => setState(() {
-                      _flow = _flow == v ? null : v;
-                      _isSaved = false;
-                    }),
-                    onSymptom: (v) => setState(() {
-                      _symptoms.contains(v)
-                          ? _symptoms.remove(v)
-                          : _symptoms.add(v);
-                      _isSaved = false;
-                    }),
-                    onMood: (v) => setState(() {
-                      _mood = _mood == v ? null : v;
-                      _isSaved = false;
-                    }),
-                    onSave: _save,
-                  ),
-                  const SizedBox(height: 22),
-                  const _SectionLabel('Recent cycles'),
-                  const SizedBox(height: 12),
-                  for (final cycle in TrackerHelper.history) ...[
-                    _CycleRow(cycle: cycle),
-                    const SizedBox(height: 8),
+                  if (!_isCurrentMonth) ...[
+                    CircleIconButton(
+                      icon: Icons.today_rounded,
+                      tooltip: 'Back to this month',
+                      onTap: _goToToday,
+                    ),
+                    const SizedBox(width: 8),
                   ],
-                  const SizedBox(height: 10),
-                  const _Disclaimer(),
+                  CircleIconButton(
+                    icon: Icons.tune_rounded,
+                    tooltip: 'Tracker settings',
+                    onTap: _openSettings,
+                  ),
                 ],
               ),
             ),
+            Expanded(
+              // Settings change the cycle lengths and the week start, and
+              // logging a day adds a marker, so the calendar rebuilds on both
+              // stores rather than reading them once.
+              child: ListenableBuilder(
+                listenable: Listenable.merge([
+                  TrackerSettings.prefs,
+                  EntryStore.entries,
+                ]),
+                builder: (context, _) {
+                  final logged = EntryStore.loggedDaysIn(_month);
+                  return ListView(
+                    key: const Key('tracker-body'),
+                    padding: const EdgeInsets.fromLTRB(20, 6, 20, 28),
+                    children: [
+                      _TodayStrip(onTap: () => _openDate(DateTime.now())),
+                      const SizedBox(height: 16),
+                      CycleCalendar(
+                        month: _month,
+                        periodDays: TrackerHelper.periodDaysIn(_month),
+                        predictedDays: TrackerHelper.predictedDaysIn(_month),
+                        fertileDays: TrackerHelper.fertileDaysIn(_month),
+                        loggedDays: logged,
+                        weekStartsOnSunday:
+                            TrackerSettings.current.weekStartsOnSunday,
+                        onDayTap: _openDay,
+                        onPreviousMonth: () => _shiftMonth(-1),
+                        onNextMonth: () => _shiftMonth(1),
+                      ),
+                      const SizedBox(height: 14),
+                      _Hint(loggedThisMonth: logged.length),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -169,225 +132,119 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   }
 }
 
-class _Averages extends StatelessWidget {
-  const _Averages();
+/// Where the cycle is right now. Deliberately one line tall: the calendar is
+/// what this screen is for.
+class _TodayStrip extends StatelessWidget {
+  const _TodayStrip({required this.onTap});
+
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _Stat(
-          value: '${TrackerHelper.averageCycle}',
-          unit: 'days',
-          label: 'Cycle',
-          accent: AppColors.rose,
-        ),
-        const SizedBox(width: 10),
-        _Stat(
-          value: '${TrackerHelper.averagePeriod}',
-          unit: 'days',
-          label: 'Period',
-          accent: AppColors.periwinkle,
-        ),
-        const SizedBox(width: 10),
-        _Stat(
-          value: '±${TrackerHelper.variability}',
-          unit: 'days',
-          label: 'Variation',
-          accent: AppColors.teal,
-        ),
-      ],
-    );
-  }
-}
-
-class _Stat extends StatelessWidget {
-  const _Stat({
-    required this.value,
-    required this.unit,
-    required this.label,
-    required this.accent,
-  });
-
-  final String value;
-  final String unit;
-  final String label;
-  final Color accent;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.hairline),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 22,
-                    height: 1,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.8,
-                    color: accent,
+    return Material(
+      color: AppColors.roseTint,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+          child: Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.rose,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '${TrackerHelper.cycleDay}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
                   ),
                 ),
-                const SizedBox(width: 3),
-                Flexible(
-                  child: Text(
-                    unit,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.inkFaint,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Cycle day ${TrackerHelper.cycleDay} · '
+                      '${TrackerHelper.phase.label}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.2,
+                        color: AppColors.ink,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 3),
+                    Text(
+                      TrackerHelper.statusLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.inkMuted,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 5),
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                size: 20,
                 color: AppColors.inkMuted,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _CycleRow extends StatelessWidget {
-  const _CycleRow({required this.cycle});
+class _Hint extends StatelessWidget {
+  const _Hint({required this.loggedThisMonth});
 
-  final CycleLog cycle;
-
-  static const _months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
+  final int loggedThisMonth;
 
   @override
   Widget build(BuildContext context) {
-    final start = cycle.startDate;
-    final end = cycle.endDate;
-    final range =
-        '${start.day} ${_months[start.month - 1]} – '
-        '${end.day} ${_months[end.month - 1]}';
+    final text = loggedThisMonth == 0
+        ? 'Tap any day to log it and see your cycle statistics.'
+        : '$loggedThisMonth ${loggedThisMonth == 1 ? 'day' : 'days'} logged '
+              'this month. Tap any day to add or change it.';
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.hairline),
-      ),
-      child: Row(
-        children: [
-          Container(
-            height: 8,
-            width: 8,
-            decoration: const BoxDecoration(
-              color: AppColors.rose,
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 11),
-          Expanded(
-            child: Text(
-              range,
-              style: const TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w600,
-                color: AppColors.ink,
-              ),
-            ),
-          ),
-          Text(
-            '${cycle.periodLength}d period · ${cycle.cycleLength}d cycle',
-            style: const TextStyle(fontSize: 11, color: AppColors.inkFaint),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Disclaimer extends StatelessWidget {
-  const _Disclaimer();
-
-  @override
-  Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(
-          Icons.info_outline_rounded,
+        Icon(
+          loggedThisMonth == 0
+              ? Icons.touch_app_outlined
+              : Icons.check_circle_outline_rounded,
           size: 13,
           color: AppColors.inkFaint,
         ),
         const SizedBox(width: 7),
-        const Expanded(
+        Expanded(
           child: Text(
-            'Predictions are estimates from your logged cycles, not '
-            'contraception or medical advice.',
-            style: TextStyle(
+            text,
+            style: const TextStyle(
               fontSize: 10.5,
               height: 1.4,
               color: AppColors.inkFaint,
             ),
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.text, {super.key});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.2,
-            color: AppColors.ink,
-          ),
-        ),
-        const SizedBox(width: 12),
-        const Expanded(child: Divider(color: AppColors.hairline, height: 1)),
       ],
     );
   }

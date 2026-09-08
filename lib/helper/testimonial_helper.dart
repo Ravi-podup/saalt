@@ -52,7 +52,7 @@ class TestimonialHelper {
       author: 'Jess',
       rating: 4,
       timeAgo: '1 week ago',
-      product: 'Menstrual Disc',
+      product: 'Saalt Disc',
       quote:
           'Took me two tries to get the angle right and I nearly gave up. '
           'Third attempt it clicked, and removal is genuinely mess-free now. '

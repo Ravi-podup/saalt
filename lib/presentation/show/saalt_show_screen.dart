@@ -9,7 +9,7 @@ import 'package:saalt/presentation/show/widgets/episode_tile.dart';
 import 'package:saalt/presentation/show/widgets/platform_row.dart';
 import 'package:saalt/presentation/show/widgets/show_hero.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
-import 'package:saalt/presentation/show/widgets/view_toggle.dart';
+import 'package:saalt/presentation/widgets/view_toggle.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
 

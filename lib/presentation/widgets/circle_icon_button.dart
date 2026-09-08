@@ -38,7 +38,7 @@ class CircleIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
+    final button = Semantics(
       button: true,
       label: tooltip,
       child: Material(
@@ -107,5 +107,11 @@ class CircleIconButton extends StatelessWidget {
         ),
       ),
     );
+
+    // A real tooltip, not just a semantics label: it gives long-press and
+    // hover help on top of the screen-reader name.
+    final label = tooltip;
+    if (label == null) return button;
+    return Tooltip(message: label, child: button);
   }
 }

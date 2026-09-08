@@ -11,6 +11,8 @@ class CycleStatusCard extends StatelessWidget {
     required this.cycleLength,
     required this.phase,
     required this.daysUntilNextPeriod,
+    this.headline,
+    this.detail,
     this.onLog,
   });
 
@@ -18,6 +20,16 @@ class CycleStatusCard extends StatelessWidget {
   final int cycleLength;
   final CyclePhase phase;
   final int daysUntilNextPeriod;
+
+  /// Overrides the countdown, for a day other than today.
+  final String? headline;
+
+  /// Overrides the phase blurb. A day in the future has not bled yet, so
+  /// "Bleeding" would be a statement about something that has not happened.
+  final String? detail;
+
+  /// When null the card drops its button, for screens that carry the log form
+  /// directly underneath.
   final VoidCallback? onLog;
 
   @override
@@ -62,10 +74,11 @@ class CycleStatusCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  daysUntilNextPeriod <= 0
-                      ? 'Period expected today'
-                      : 'Period in $daysUntilNextPeriod '
-                            '${daysUntilNextPeriod == 1 ? 'day' : 'days'}',
+                  headline ??
+                      (daysUntilNextPeriod <= 0
+                          ? 'Period expected today'
+                          : 'Period in $daysUntilNextPeriod '
+                                '${daysUntilNextPeriod == 1 ? 'day' : 'days'}'),
                   style: const TextStyle(
                     fontSize: 20,
                     height: 1.2,
@@ -76,14 +89,16 @@ class CycleStatusCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  phase.blurb,
+                  detail ?? phase.blurb,
                   style: TextStyle(
                     fontSize: 12.5,
                     color: Colors.white.withValues(alpha: 0.62),
                   ),
                 ),
-                const SizedBox(height: 16),
-                _LogButton(onTap: onLog),
+                if (onLog != null) ...[
+                  const SizedBox(height: 16),
+                  _LogButton(onTap: onLog),
+                ],
               ],
             ),
           ),

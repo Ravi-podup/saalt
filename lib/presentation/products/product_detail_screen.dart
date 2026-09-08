@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saalt/helper/product_helper.dart';
 import 'package:saalt/models/product.dart';
 import 'package:saalt/presentation/widgets/star_rating.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
@@ -214,7 +215,12 @@ class _OptionPicker extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            for (final value in option.values)
+            // Same canonical order the filters use, so Size reads S, M, L
+            // here as well.
+            for (final value in ProductHelper.sortValues(
+              option.name,
+              option.values,
+            ))
               _ValueChip(
                 label: value,
                 isActive: value == selected,

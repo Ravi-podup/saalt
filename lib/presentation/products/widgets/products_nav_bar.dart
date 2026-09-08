@@ -14,7 +14,10 @@ class ProductsNavBar extends StatelessWidget {
       items: [
         BottomNavItem.home(),
         const BottomNavItem(label: 'Underwear', icon: Icons.checkroom_rounded),
-        const BottomNavItem(label: 'Cups', icon: Icons.water_drop_rounded),
+        const BottomNavItem(
+          label: 'Cups & Discs',
+          icon: Icons.water_drop_rounded,
+        ),
         const BottomNavItem(label: 'Bags', icon: Icons.shopping_bag_outlined),
       ],
     );

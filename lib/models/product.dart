@@ -59,6 +59,27 @@ class Product {
   /// True when the shopper must pick something first.
   bool get needsChoice => options.isNotEmpty;
 
+  /// Absorbency summary for a listing badge, the way the site shows it: the
+  /// level when there is only one, otherwise how many there are to pick from.
+  /// Null for products with no absorbency choice, such as cups.
+  ({String label, int drops})? get absorbencyBadge {
+    final option = options.where((o) => o.name == 'Absorbency').firstOrNull;
+    if (option == null) return null;
+    if (option.values.length > 1) {
+      return (label: '${option.values.length} options', drops: 1);
+    }
+    final level = option.values.single;
+    return (label: level, drops: _dropsFor(level));
+  }
+
+  static int _dropsFor(String level) => switch (level) {
+    'Light' => 2,
+    'Regular' => 3,
+    'Heavy' => 4,
+    'Super' => 5,
+    _ => 1,
+  };
+
   /// Matches against a lowercase search term.
   bool matches(String query) {
     if (query.isEmpty) return true;

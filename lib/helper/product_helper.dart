@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:saalt/models/collection.dart';
 import 'package:saalt/models/product.dart';
+import 'package:saalt/models/review_quote.dart';
+import 'package:saalt/models/shop_category.dart';
 import 'package:saalt/res/app_colors.dart';
 
 class ProductHelper {
@@ -178,7 +181,7 @@ class ProductHelper {
       accent: AppColors.lilac,
     ),
     Product(
-      name: 'Menstrual Disc',
+      name: 'Saalt Disc',
       options: [
         ProductOption(
           name: 'Color/Size',
@@ -197,6 +200,295 @@ class ProductHelper {
       tint: AppColors.roseTint,
       accent: AppColors.rose,
     ),
+    Product(
+      name: 'Saalt Teen Cup',
+      imageAsset: 'assets/images/saalt_teen_cup.jpg',
+      blurb:
+          'Sized and softened for a first cup, with a shorter stem so it sits '
+          'comfortably on a smaller frame.',
+      price: 32,
+      rating: 4.5,
+      reviews: 187,
+      category: 'Teen',
+      badge: 'For first cups',
+      icon: Icons.spa_rounded,
+      tint: AppColors.roseTint,
+      accent: AppColors.rose,
+      options: [
+        ProductOption(name: 'Color', values: ['Wild Rose']),
+      ],
+    ),
+    Product(
+      name: 'Saalt Cup Wash',
+      imageAsset: 'assets/images/saalt_cup_wash.jpg',
+      blurb:
+          'A pH-balanced wash made for silicone. Keeps the seal intact, which '
+          'ordinary soap slowly degrades.',
+      price: 14,
+      rating: 4.5,
+      reviews: 412,
+      category: 'Cleaning',
+      icon: Icons.soap_rounded,
+      tint: AppColors.sageTint,
+      accent: AppColors.sage,
+      options: [
+        ProductOption(name: 'Size', values: ['100 ml']),
+      ],
+    ),
+    Product(
+      name: 'Saalt Steamer',
+      imageAsset: 'assets/images/saalt_steamer.jpg',
+      blurb:
+          'Sterilises a cup or disc in three minutes without a saucepan. '
+          'Water in, lid on, done.',
+      price: 39,
+      rating: 4.5,
+      reviews: 96,
+      category: 'Cleaning',
+      badge: 'New',
+      icon: Icons.local_fire_department_rounded,
+      tint: AppColors.tealTint,
+      accent: AppColors.teal,
+      options: [
+        ProductOption(name: 'Color', values: ['Blue Dusk', 'Cloud', 'Blush']),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Cotton Lace Trim Thong',
+      imageAsset: 'assets/images/lace_trim_thong.jpg',
+      blurb: 'Your favorite cotton pair, effortlessly elevated.',
+      price: 28,
+      rating: 4.5,
+      reviews: 208,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.periwinkleTint,
+      accent: AppColors.periwinkle,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Light']),
+        ProductOption(
+          name: 'Size',
+          values: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: ['Volcanic Black', 'Seaglass', 'Dawn Sky'],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Cotton Lace Trim Brief',
+      imageAsset: 'assets/images/lace_trim_brief.jpg',
+      blurb: 'Your favorite cotton pair, effortlessly elevated.',
+      price: 32,
+      rating: 5.0,
+      reviews: 477,
+      category: 'Underwear',
+      badge: 'New',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.roseTint,
+      accent: AppColors.rose,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Heavy']),
+        ProductOption(
+          name: 'Size',
+          values: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: ['Volcanic Black', 'Seaglass', 'Dawn Sky'],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Comfort Brief',
+      imageAsset: 'assets/images/comfort_brief.jpg',
+      blurb:
+          'Feels like clouds. Works like whoa. Your everyday, full '
+          'coverage go-to for no pad, no problem confidence.',
+      price: 39,
+      rating: 4.5,
+      reviews: 1903,
+      category: 'Underwear',
+      badge: 'Bestseller',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.sageTint,
+      accent: AppColors.sage,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Super', 'Heavy']),
+        ProductOption(
+          name: 'Size',
+          values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: [
+            'Volcanic Black',
+            'Deep Plum',
+            'Soft Lavender',
+            'Rich Ruby',
+            'Deep Marine',
+          ],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Seamless Bikini',
+      imageAsset: 'assets/images/seamless_bikini.jpg',
+      blurb:
+          'Slip into any outfit without rethinking your underwear. The '
+          'just-cheeky-enough, super flattering style for any occasion.',
+      price: 36,
+      rating: 5.0,
+      reviews: 598,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.apricotTint,
+      accent: AppColors.apricot,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Super', 'Regular']),
+        ProductOption(
+          name: 'Size',
+          values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: [
+            'Volcanic Black',
+            'Midnight Sky',
+            'Crimson Rose',
+            'Smooth Terracotta',
+            'Sunset Mauve',
+            'Soft Lavender',
+            'Rich Earth',
+            'Deep Umber',
+            'Soft Sand',
+            'Warm Wheat',
+            'Electric Raspberry',
+            'Lightning Indigo',
+          ],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Seamless High Waist',
+      imageAsset: 'assets/images/seamless_high_waist.jpg',
+      blurb:
+          'All of the freedom, none of the panty lines. A little more '
+          'coverage without sacrificing that second-skin feel.',
+      price: 42,
+      rating: 4.5,
+      reviews: 641,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.tealTint,
+      accent: AppColors.teal,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Regular']),
+        ProductOption(
+          name: 'Size',
+          values: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: [
+            'Volcanic Black',
+            'Rich Earth',
+            'Deep Umber',
+            'Smooth Terracotta',
+            'Warm Wheat',
+            'Soft Sand',
+            'Electric Raspberry',
+            'Lightning Indigo',
+            'Midnight Sky',
+            'Crimson Rose',
+            'Sunset Mauve',
+            'Soft Lavender',
+          ],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Cotton Brief',
+      imageAsset: 'assets/images/cotton_brief.jpg',
+      blurb:
+          'Cute, comfy, cotton—upgraded. Breathable confidence. Your '
+          'go-to, full coverage pair that will go the distance.',
+      price: 29,
+      rating: 4.5,
+      reviews: 428,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.lilacTint,
+      accent: AppColors.lilac,
+      options: [
+        ProductOption(
+          name: 'Absorbency',
+          values: ['Super', 'Heavy', 'Regular'],
+        ),
+        ProductOption(
+          name: 'Size',
+          values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: ['Volcanic Black', 'Seashell', 'Pink Dawn', 'Thistle Bloom'],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Mesh Thong',
+      imageAsset: 'assets/images/mesh_thong.jpg',
+      blurb:
+          'Live free of VPL (visible panty lines) and light leaks with '
+          'our next-best-thing-to-nothing thong.',
+      price: 30,
+      rating: 4.0,
+      reviews: 167,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.periwinkleTint,
+      accent: AppColors.periwinkle,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Light']),
+        ProductOption(
+          name: 'Size',
+          values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: [
+            'Moonlit Mauve',
+            'Volcanic Black',
+            'Blue Rain',
+            'Amber Stone',
+          ],
+        ),
+      ],
+    ),
+    Product(
+      name: 'Leakproof Cotton Sleep Short',
+      imageAsset: 'assets/images/cotton_sleep_short.jpg',
+      blurb: 'Count sheep, not leaks!',
+      price: 49,
+      rating: 4.5,
+      reviews: 438,
+      category: 'Underwear',
+      icon: Icons.checkroom_rounded,
+      tint: AppColors.roseTint,
+      accent: AppColors.rose,
+      options: [
+        ProductOption(name: 'Absorbency', values: ['Super']),
+        ProductOption(
+          name: 'Size',
+          values: ['XXS', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+        ),
+        ProductOption(
+          name: 'Color',
+          values: ['Volcanic Black', 'Seashell', 'Pink Dawn', 'Thistle Bloom'],
+        ),
+      ],
+    ),
   ];
 
   /// Brand banners for the shop slider. Converted to JPEG because Flutter
@@ -206,4 +498,169 @@ class ProductHelper {
     'assets/images/slider2.jpg',
     'assets/images/slider3.jpg',
   ];
+
+  /// The two best-seller groups the site splits its shelf into.
+  static const bestSellerGroups = <String, Set<String>>{
+    'Saalt Wear': {'Underwear'},
+    'Cups & Discs': {'Cups', 'Discs'},
+  };
+
+  static List<Product> bestSellers(String group) {
+    final wanted = bestSellerGroups[group] ?? const <String>{};
+    return catalog.where((p) => wanted.contains(p.category)).toList();
+  }
+
+  /// The shop-by-category row, mirroring the site's collections.
+  static const categories = <ShopCategory>[
+    ShopCategory(
+      label: 'Leakproof Underwear',
+      chipLabel: 'Underwear',
+      imageAsset: 'assets/images/leakproof_seamless_brief.jpg',
+      matches: {'Underwear'},
+    ),
+    ShopCategory(
+      label: 'Cups & Discs',
+      chipLabel: 'Cups & Discs',
+      imageAsset: 'assets/images/menstrual_disc.jpg',
+      matches: {'Cups', 'Discs'},
+    ),
+    ShopCategory(
+      label: 'Teen',
+      chipLabel: 'Teen',
+      imageAsset: 'assets/images/saalt_teen_cup.jpg',
+      matches: {'Teen'},
+    ),
+    ShopCategory(
+      label: 'Cleaning & Accessories',
+      chipLabel: 'Cleaning',
+      imageAsset: 'assets/images/saalt_steamer.jpg',
+      matches: {'Cleaning'},
+    ),
+    ShopCategory(
+      label: 'Bundles',
+      chipLabel: 'Bundles',
+      imageAsset: 'assets/images/saalt_disc_duo.jpg',
+      matches: {'Bundles'},
+    ),
+  ];
+
+  static List<Product> inCategory(ShopCategory category) =>
+      catalog.where((p) => category.matches.contains(p.category)).toList();
+
+  /// Editorial panel promoting the underwear line.
+  static const whySaaltWearImage = 'assets/images/why_saalt_wear.jpg';
+
+  /// Promoted collections, shown under the Why Saalt Wear panel.
+  static const collections = <Collection>[
+    Collection(
+      label: 'Cotton Lace Trim',
+      imageAsset: 'assets/images/lace-trim-card_600x.webp',
+      opensCategory: 'Leakproof Underwear',
+      flag: 'NEW',
+    ),
+    Collection(
+      label: 'hanky panky+ (powered by Saalt)',
+      imageAsset: 'assets/images/hanky-panky_poweredbySaalt.avif',
+      opensCategory: 'Leakproof Underwear',
+    ),
+    Collection(
+      label: 'Our Best Deals',
+      imageAsset: 'assets/images/OurBestDeals.avif',
+      opensCategory: 'Bundles',
+      discount: ['Up to', '50% off'],
+    ),
+  ];
+
+  /// Pull-quote reviews, shown between the Why Saalt Wear panel and the
+  /// promoted collections.
+  static const reviewQuotes = <ReviewQuote>[
+    ReviewQuote(
+      product: 'Saalt Cup',
+      lead: 'The Saalt Cup is my bestie! I’ve had it for 5 years. ',
+      emphasis: 'Imagine how much money I\'ve saved not buying tampons!',
+      author: 'Kels',
+    ),
+    ReviewQuote(
+      product: 'Saalt Disc',
+      lead:
+          'Truly the best invention ever! There is a learning curve, but I '
+          'promise this will ',
+      emphasis: 'change your life for the better!!',
+      author: 'Dava',
+    ),
+    ReviewQuote(
+      product: 'Leakproof Seamless Thong',
+      lead: 'I was skeptical at first, but honestly they\'re ',
+      emphasis:
+          'very thin and comfortable — the perfect thong to wear under '
+          'leggings.',
+      author: 'Euna',
+    ),
+  ];
+
+  /// Canonical order for option values. Neither the feed order nor an
+  /// alphabetical sort is meaningful here: absorbency runs light to heavy,
+  /// and sizes run small to large.
+  static const optionOrder = <String, List<String>>{
+    'Absorbency': ['Light', 'Regular', 'Heavy', 'Super'],
+    'Size': [
+      'XXS',
+      'XS',
+      'S',
+      'M',
+      'L',
+      'XL',
+      '2XL',
+      '3XL',
+      '4XL',
+      // Cup and accessory sizing sits after the garment run.
+      'Small',
+      'Regular',
+      '100 ml',
+    ],
+  };
+
+  /// Sorts [values] into the canonical order for [optionName]. Anything not
+  /// listed keeps its original position at the end, so a new colourway or
+  /// size shows up rather than vanishing.
+  static List<String> sortValues(String optionName, Iterable<String> values) {
+    final order = optionOrder[optionName];
+    if (order == null) return values.toList();
+    final known = <String>[];
+    final unknown = <String>[];
+    for (final value in values) {
+      (order.contains(value) ? known : unknown).add(value);
+    }
+    known.sort((a, b) => order.indexOf(a).compareTo(order.indexOf(b)));
+    return [...known, ...unknown];
+  }
+
+  /// Distinct values of one option across [from], in canonical order.
+  static List<String> optionValues(String optionName, List<Product> from) {
+    final seen = <String>[];
+    for (final product in from) {
+      for (final option in product.options) {
+        if (option.name != optionName) continue;
+        for (final value in option.values) {
+          if (!seen.contains(value)) seen.add(value);
+        }
+      }
+    }
+    return sortValues(optionName, seen);
+  }
+
+  /// True when [product] offers at least one of [values] for [optionName].
+  /// A product with no such option is excluded, which is what a shopper
+  /// filtering on size expects.
+  static bool offers(Product product, String optionName, Set<String> values) {
+    if (values.isEmpty) return true;
+    return product.options.any(
+      (o) => o.name == optionName && o.values.any(values.contains),
+    );
+  }
+
+  /// How many colourways a product comes in.
+  static int colourCount(Product product) => product.options
+      .where((o) => o.name == 'Color' || o.name == 'Color/Size')
+      .fold(0, (sum, o) => sum + o.values.length);
 }

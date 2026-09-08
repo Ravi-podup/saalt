@@ -8,15 +8,19 @@ class DashboardItem {
     required this.icon,
     required this.tint,
     required this.accent,
+    required this.imageAsset,
+    this.secondImageAsset,
   });
 
   final String title;
   final String subtitle;
   final IconData icon;
 
-  /// Soft background wash for the card.
   final Color tint;
 
-  /// Saturated colour used for the icon and its badge.
   final Color accent;
+
+  final String imageAsset;
+
+  final String? secondImageAsset;
 }

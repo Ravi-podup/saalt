@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/models/dashboard_item.dart';
-import 'package:saalt/res/app_colors.dart';
 
+/// Dashboard tile: a cover photo with the label over a scrim. Photography
+/// says what an area is faster than an icon does.
 class DashboardTile extends StatefulWidget {
   const DashboardTile({super.key, required this.item, this.onTap});
 
@@ -37,62 +38,81 @@ class _DashboardTileState extends State<DashboardTile> {
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
           child: Container(
-            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: item.tint,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.6)),
               boxShadow: [
                 BoxShadow(
-                  color: item.accent.withValues(alpha: 0.10),
+                  color: item.accent.withValues(alpha: 0.16),
                   blurRadius: 18,
                   offset: const Offset(0, 8),
                 ),
               ],
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              fit: StackFit.expand,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      height: 44,
-                      width: 44,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.75),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Icon(item.icon, size: 22, color: item.accent),
+                _Cover(asset: item.imageAsset, item: item),
+                const DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Color(0x1A000000),
+                        Color(0xB3000000),
+                      ],
+                      stops: [0, 0.45, 1],
                     ),
-                    const Spacer(),
-                    Icon(
-                      Icons.arrow_outward_rounded,
-                      size: 16,
-                      color: item.accent.withValues(alpha: 0.55),
-                    ),
-                  ],
-                ),
-                const Spacer(),
-                Text(
-                  item.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 15.5,
-                    height: 1.2,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.ink,
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  item.subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    height: 1.3,
-                    color: AppColors.ink.withValues(alpha: 0.55),
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: Container(
+                    height: 26,
+                    width: 26,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.arrow_outward_rounded,
+                      size: 14,
+                      color: item.accent,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 14,
+                  right: 14,
+                  bottom: 12,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.2,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        item.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.white.withValues(alpha: 0.82),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -100,6 +120,39 @@ class _DashboardTileState extends State<DashboardTile> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Cover extends StatelessWidget {
+  const _Cover({required this.asset, required this.item});
+
+  final String asset;
+  final DashboardItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      asset,
+      fit: BoxFit.cover,
+      // Faces and products sit high in these frames.
+      alignment: Alignment.topCenter,
+      errorBuilder: (_, _, _) => _Fallback(item: item),
+    );
+  }
+}
+
+/// Keeps the old tinted look if a cover photo is missing.
+class _Fallback extends StatelessWidget {
+  const _Fallback({required this.item});
+
+  final DashboardItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: item.tint,
+      child: Center(child: Icon(item.icon, size: 34, color: item.accent)),
     );
   }
 }

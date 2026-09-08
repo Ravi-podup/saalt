@@ -6,6 +6,7 @@ class DashboardHelper {
   static const items = <DashboardItem>[
     DashboardItem(
       title: 'Community',
+      imageAsset: 'assets/images/Community_explore.png',
       subtitle: 'Real talk, no filter',
       icon: Icons.forum_rounded,
       tint: AppColors.roseTint,
@@ -13,6 +14,8 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'Products',
+      imageAsset: 'assets/images/Saalt_Products_explore.jpg',
+      // secondImageAsset: 'assets/images/Saalt_Products_explore.jpg',
       subtitle: 'Cups, discs & more',
       icon: Icons.shopping_bag_rounded,
       tint: AppColors.sageTint,
@@ -20,6 +23,7 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'Testimonials',
+      imageAsset: 'assets/images/explore_testimonials.jpg',
       subtitle: 'Stories from users',
       icon: Icons.favorite_rounded,
       tint: AppColors.apricotTint,
@@ -27,6 +31,7 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'Knowledgebase',
+      imageAsset: 'assets/images/Knowledgebase_explore.png',
       subtitle: 'Guides & education',
       icon: Icons.menu_book_rounded,
       tint: AppColors.periwinkleTint,
@@ -34,6 +39,7 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'TMI Parties',
+      imageAsset: 'assets/images/TMI_Parties_explore.png',
       subtitle: 'Live webinars',
       icon: Icons.celebration_rounded,
       tint: AppColors.lilacTint,
@@ -41,6 +47,7 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'Saalt Show',
+      imageAsset: 'assets/images/SaaltShow_explore.png',
       subtitle: 'Watch the series',
       icon: Icons.play_circle_fill_rounded,
       tint: AppColors.tealTint,
