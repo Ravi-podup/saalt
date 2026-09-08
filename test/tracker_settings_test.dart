@@ -6,6 +6,8 @@ import 'package:saalt/models/tracker_prefs.dart';
 import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
 import 'package:saalt/presentation/tracker/tracker_settings_screen.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -26,7 +28,7 @@ Finder _dayCell(String day) => find.descendant(
 );
 
 Future<void> _openSettings(WidgetTester tester) async {
-  await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+  await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
   await tester.tap(find.byIcon(Icons.tune_rounded));
   await tester.pumpAndSettle();
 }
@@ -233,7 +235,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       final now = DateTime.now();
       final firstOfMonth = DateTime(now.year, now.month);

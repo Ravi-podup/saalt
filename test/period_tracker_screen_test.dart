@@ -11,6 +11,8 @@ import 'package:saalt/presentation/tracker/widgets/cycle_calendar.dart';
 import 'package:saalt/presentation/tracker/widgets/cycle_chart.dart';
 import 'package:saalt/presentation/tracker/widgets/log_today_card.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -34,7 +36,7 @@ Future<void> _scrollTo(
 /// it is not in the month the calendar opens on. Tapping a day is the only
 /// route to the entry form and the statistics now.
 Future<void> _openDate(WidgetTester tester, DateTime date) async {
-  await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+  await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
   final now = DateTime.now();
   final months = (date.year - now.year) * 12 + (date.month - now.month);
@@ -235,7 +237,7 @@ void main() {
   group('calendar screen', () {
     testWidgets('opens on the calendar and nothing else', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       expect(find.text('Period Tracker'), findsOneWidget);
       expect(find.byType(CycleCalendar), findsOneWidget);
@@ -253,7 +255,7 @@ void main() {
 
     testWidgets('the strip says where the cycle is', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       expect(
         find.text(
@@ -266,7 +268,7 @@ void main() {
 
     testWidgets('the arrows walk through the months', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       final now = DateTime.now();
       final next = DateTime(now.year, now.month + 1);
@@ -292,7 +294,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       expect(find.byIcon(Icons.today_rounded), findsNothing);
 
@@ -323,7 +325,7 @@ void main() {
 
     testWidgets('the strip opens today', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       await tester.tap(find.text(TrackerHelper.statusLabel));
       await tester.pumpAndSettle();
@@ -502,7 +504,7 @@ void main() {
 
   testWidgets('the dashboard tracker card opens the calendar', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.tap(find.text('Log today'));
     await tester.pumpAndSettle();

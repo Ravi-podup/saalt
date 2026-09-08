@@ -15,7 +15,6 @@ class DashboardHelper {
     DashboardItem(
       title: 'Products',
       imageAsset: 'assets/images/Saalt_Products_explore.jpg',
-      // secondImageAsset: 'assets/images/Saalt_Products_explore.jpg',
       subtitle: 'Cups, discs & more',
       icon: Icons.shopping_bag_rounded,
       tint: AppColors.sageTint,
@@ -23,7 +22,7 @@ class DashboardHelper {
     ),
     DashboardItem(
       title: 'Testimonials',
-      imageAsset: 'assets/images/explore_testimonials.jpg',
+      imageAsset: 'assets/images/Testimonial_explore.png',
       subtitle: 'Stories from users',
       icon: Icons.favorite_rounded,
       tint: AppColors.apricotTint,

@@ -9,11 +9,23 @@ import 'package:saalt/presentation/products/widgets/product_grid_tile.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// A collection listing: two-column grid with absorbency, size and type
 /// filters. Opened from a category card or from "View all products".
 class ProductListingScreen extends StatefulWidget {
   const ProductListingScreen({super.key, this.category});
+
+  static const kCategory = 'category';
+
+  /// [category] null lists the whole catalogue.
+  static Future open(BuildContext context, {ShopCategory? category}) {
+    return context.push(
+      AppRoutePaths.productListingScreen,
+      extra: {kCategory: category},
+    );
+  }
 
   /// Null lists the whole catalogue.
   final ShopCategory? category;
@@ -54,9 +66,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
   }
 
   Future<void> _openDetail(Product product) async {
-    final added = await Navigator.of(context).push<BagAddition>(
-      MaterialPageRoute(builder: (_) => ProductDetailScreen(product: product)),
-    );
+    final added = await ProductDetailScreen.open(context, product: product);
     if (added == null || !mounted) return;
     BagStore.add(added.label, added.quantity);
     _toast('${added.label} added to bag');
@@ -93,7 +103,7 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
               subtitle:
                   '${products.length} '
                   '${products.length == 1 ? 'product' : 'products'}',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               trailing: ValueListenableBuilder<Map<String, int>>(
                 valueListenable: BagStore.items,
                 builder: (context, _, _) {

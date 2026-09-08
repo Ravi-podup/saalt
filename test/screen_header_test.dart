@@ -7,6 +7,8 @@ import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_images.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -48,7 +50,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     final title = _inHeader(find.text('Knowledgebase'));
     final before = tester.getTopLeft(title);
@@ -65,7 +67,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     expect(find.text('Community'), findsOneWidget);
     // The only wordmark left on the screen is the bottom bar's Home tab.

@@ -7,9 +7,15 @@ import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/video_player_screen.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class TestimonialsScreen extends StatefulWidget {
   const TestimonialsScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.testimonialsScreen);
+  }
 
   @override
   State<TestimonialsScreen> createState() => _TestimonialsScreenState();
@@ -31,14 +37,15 @@ class _TestimonialsScreenState extends State<TestimonialsScreen> {
   bool get _isNarrowed => _filter != 'All';
 
   void _play(Testimonial review) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => VideoPlayerScreen(
-          title: review.quote.split('.').first,
-          subtitle: '${review.author} · ${review.product}',
-          url: review.videoUrl,
-        ),
-      ),
+    // Captured in a local so the null check promotes: a field on another
+    // object cannot be promoted in place.
+    final url = review.videoUrl;
+    if (url == null) return;
+    VideoPlayerScreen.open(
+      context,
+      title: review.quote.split('.').first,
+      subtitle: '${review.author} · ${review.product}',
+      url: url,
     );
   }
 
@@ -67,7 +74,7 @@ class _TestimonialsScreenState extends State<TestimonialsScreen> {
             ScreenHeader(
               title: 'Testimonials',
               subtitle: 'Real switch stories, on video',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               trailing: CircleIconButton(
                 icon: Icons.rate_review_outlined,
                 onTap: () => _toast('Write a review'),

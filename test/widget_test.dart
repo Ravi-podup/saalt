@@ -9,13 +9,15 @@ import 'package:saalt/presentation/products/products_screen.dart';
 import 'package:saalt/presentation/show/saalt_show_screen.dart';
 import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
 
+import 'helpers/router_host.dart';
+
 void main() {
   testWidgets('dashboard shows all seven destinations', (tester) async {
     tester.view.physicalSize = const Size(1170, 2532);
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
 
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     // The tracker hero is visible without scrolling.
     expect(find.text('Period Tracker'), findsOneWidget);
@@ -63,7 +65,7 @@ void main() {
       // MaterialApp reuses the Navigator, which would keep the route pushed
       // by the previous pass.
       await tester.pumpWidget(
-        MaterialApp(key: ValueKey(entry.key), home: const DashboardScreen()),
+        hosted(const DashboardScreen(), key: ValueKey(entry.key)),
       );
       final tile = find.text(entry.key);
       await tester.scrollUntilVisible(

@@ -17,9 +17,15 @@ import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/search_field.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class ProductsScreen extends StatefulWidget {
   const ProductsScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.productsScreen);
+  }
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
@@ -41,9 +47,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> _openDetail(Product product) async {
-    final added = await Navigator.of(context).push<BagAddition>(
-      MaterialPageRoute(builder: (_) => ProductDetailScreen(product: product)),
-    );
+    final added = await ProductDetailScreen.open(context, product: product);
     if (added == null || !mounted) return;
     BagStore.add(added.label, added.quantity);
     _toast('${added.label} added to bag');
@@ -57,11 +61,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     final category = ProductHelper.categories.firstWhere(
       (c) => c.label == label,
     );
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ProductListingScreen(category: category),
-      ),
-    );
+    ProductListingScreen.open(context, category: category);
   }
 
   void _toast(String message) {
@@ -89,7 +89,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           children: [
             ScreenHeader(
               title: 'Products',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               // One action group, in the title bar. Splitting four icons
               // across two rows read as clutter.
               trailing: Row(
@@ -189,11 +189,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ReviewCarousel(
                       reviews: ProductHelper.reviewQuotes,
                       // Read more lands on the full testimonials screen.
-                      onReadMore: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const TestimonialsScreen(),
-                        ),
-                      ),
+                      onReadMore: () => TestimonialsScreen.open(context),
                     ),
                     const SizedBox(height: 30),
                     const _SectionLabel('Collections'),

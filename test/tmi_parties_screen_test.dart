@@ -10,6 +10,8 @@ import 'package:saalt/presentation/parties/widgets/party_hero.dart';
 import 'package:saalt/presentation/widgets/view_toggle.dart';
 import 'package:saalt/presentation/widgets/video_player_screen.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -36,7 +38,7 @@ Future<void> _toTop(WidgetTester tester) async {
 }
 
 Future<void> _open(WidgetTester tester) async {
-  await tester.pumpWidget(const MaterialApp(home: TmiPartiesScreen()));
+  await tester.pumpWidget(hosted(const TmiPartiesScreen()));
   await tester.pump(const Duration(milliseconds: 300));
 }
 

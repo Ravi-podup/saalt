@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:video_player/video_player.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// Full-screen playback for any clip, opened as its own route. Shared by the
 /// show and the video testimonials.
@@ -11,6 +13,22 @@ class VideoPlayerScreen extends StatefulWidget {
     required this.subtitle,
     required this.url,
   });
+
+  static const kTitle = 'title';
+  static const kSubtitle = 'subtitle';
+  static const kUrl = 'url';
+
+  static Future open(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required String url,
+  }) {
+    return context.push(
+      AppRoutePaths.videoPlayerScreen,
+      extra: {kTitle: title, kSubtitle: subtitle, kUrl: url},
+    );
+  }
 
   final String title;
   final String subtitle;
@@ -80,7 +98,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
             _TitleBar(
               title: widget.title,
               subtitle: widget.subtitle,
-              onClose: () => Navigator.of(context).maybePop(),
+              onClose: () => context.pop(),
             ),
             Expanded(
               child: Center(

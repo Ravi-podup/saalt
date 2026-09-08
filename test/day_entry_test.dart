@@ -11,6 +11,8 @@ import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
 import 'package:saalt/presentation/tracker/widgets/care_suggestions.dart';
 import 'package:saalt/presentation/tracker/widgets/log_today_card.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -192,7 +194,7 @@ void main() {
   group('logging a day', () {
     testWidgets('an entry comes back when the day is reopened', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       final date = _plainDay();
       await _openDate(tester, date);
 
@@ -222,7 +224,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       final date = _plainDay();
       await _openDate(tester, date);
 
@@ -253,7 +255,7 @@ void main() {
 
     testWidgets('the calendar marks the day and counts it', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       expect(find.text('Logged'), findsNothing);
       expect(find.textContaining('Tap any day to log it'), findsOneWidget);
@@ -274,7 +276,7 @@ void main() {
 
     testWidgets('a stored day can be emptied, which clears it', (tester) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       final date = _plainDay();
       EntryStore.save(date, const DayEntry(flow: 'Heavy'));
       await _openDate(tester, date);
@@ -298,7 +300,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       final date = _plainDay();
       await _openDate(tester, date);
 
@@ -325,7 +327,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       final date = _plainDay();
       EntryStore.save(date, const DayEntry(flow: 'Heavy'));
       await _openDate(tester, date);
@@ -344,7 +346,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
 
       // A plain mid-cycle day is not a shopping prompt.
       await _openDate(tester, _plainDay());
@@ -380,7 +382,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       await _openDate(tester, TrackerHelper.nextPeriodStart);
 
       expect(find.text('Period expected'), findsOneWidget);
@@ -393,7 +395,7 @@ void main() {
       tester,
     ) async {
       _phone(tester);
-      await tester.pumpWidget(const MaterialApp(home: PeriodTrackerScreen()));
+      await tester.pumpWidget(hosted(const PeriodTrackerScreen()));
       await _openDate(tester, _plainDay());
 
       await _scrollTo(tester, find.text('Recent cycles'));

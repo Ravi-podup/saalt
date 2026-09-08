@@ -6,10 +6,24 @@ import 'package:saalt/presentation/knowledgebase/widgets/article_row.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/search_field.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// Step two: the knowledge filed under one section.
 class KnowledgeSectionScreen extends StatefulWidget {
   const KnowledgeSectionScreen({super.key, required this.section});
+
+  static const kSection = 'section';
+
+  static Future open(
+    BuildContext context, {
+    required KnowledgeSection section,
+  }) {
+    return context.push(
+      AppRoutePaths.knowledgeSectionScreen,
+      extra: {kSection: section},
+    );
+  }
 
   final KnowledgeSection section;
 
@@ -60,7 +74,7 @@ class _KnowledgeSectionScreenState extends State<KnowledgeSectionScreen> {
             ScreenHeader(
               title: section.title,
               subtitle: '${_items.length} $unit · ${section.subtitle}',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
             ),
             SearchField(
               controller: _searchController,

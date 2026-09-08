@@ -4,6 +4,8 @@ import 'package:saalt/models/webinar_draft.dart';
 import 'package:saalt/presentation/parties/wizard/wizard_widgets.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// The brief, on its own screen. Step one is already the longest in the flow,
 /// and describing a session is a different job from filling in its fields —
@@ -11,6 +13,19 @@ import 'package:saalt/res/app_colors.dart';
 /// the very fields it fills.
 class BriefScreen extends StatefulWidget {
   const BriefScreen({super.key, required this.draft});
+
+  static const kDraft = 'draft';
+
+  /// Resolves true when the brief was carried into the draft.
+  static Future<bool?> open(
+    BuildContext context, {
+    required WebinarDraft draft,
+  }) {
+    return context.push<bool>(
+      AppRoutePaths.briefScreen,
+      extra: {kDraft: draft},
+    );
+  }
 
   final WebinarDraft draft;
 
@@ -78,7 +93,7 @@ class _BriefScreenState extends State<BriefScreen> {
     if (_time != null) draft.time = _time;
 
     draft.applyBrief();
-    Navigator.of(context).pop(true);
+    context.pop(true);
   }
 
   @override
@@ -101,7 +116,7 @@ class _BriefScreenState extends State<BriefScreen> {
             ScreenHeader(
               title: 'Start with a brief',
               subtitle: 'Describe the session and we fill in what we can',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
             ),
             Expanded(
               child: ListView(

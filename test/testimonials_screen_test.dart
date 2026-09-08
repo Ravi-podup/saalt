@@ -6,6 +6,8 @@ import 'package:saalt/presentation/testimonials/widgets/rating_summary.dart';
 import 'package:saalt/presentation/testimonials/widgets/testimonial_card.dart';
 import 'package:saalt/presentation/widgets/video_player_screen.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -32,7 +34,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     expect(find.byType(RatingSummary), findsOneWidget);
     // Eight reviews: five 5s, two 4s, one 3 -> 4.5 average.
@@ -43,7 +45,7 @@ void main() {
 
   testWidgets('5 stars filter keeps only top-rated reviews', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     await _tapFilter(tester, '5 stars');
 
@@ -54,7 +56,7 @@ void main() {
 
   testWidgets('Verified filter keeps only confirmed purchases', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     await _tapFilter(tester, 'Verified');
 
@@ -67,7 +69,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     await _tapFilter(tester, '4 stars');
 
@@ -79,7 +81,7 @@ void main() {
 
   testWidgets('marking a review helpful bumps its count', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     expect(find.text('128 found this helpful'), findsOneWidget);
 
@@ -105,7 +107,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.tap(find.text('Testimonials'));
     await tester.pumpAndSettle();
@@ -117,7 +119,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     expect(find.text('Real switch stories, on video'), findsOneWidget);
 
@@ -138,7 +140,7 @@ void main() {
 
   testWidgets('tapping the poster opens the player', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TestimonialsScreen()));
+    await tester.pumpWidget(hosted(const TestimonialsScreen()));
 
     await tester.tap(
       find.descendant(

@@ -9,6 +9,8 @@ import 'package:saalt/presentation/parties/wizard/webinar_wizard_screen.dart';
 import 'package:saalt/presentation/parties/wizard/brief_screen.dart';
 import 'package:saalt/presentation/parties/wizard/wizard_widgets.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -42,7 +44,7 @@ Future<void> _reveal(WidgetTester tester, Finder target) async {
 }
 
 Future<void> _open(WidgetTester tester) async {
-  await tester.pumpWidget(const MaterialApp(home: WebinarWizardScreen()));
+  await tester.pumpWidget(hosted(const WebinarWizardScreen()));
   await tester.pump(const Duration(milliseconds: 250));
 }
 
@@ -432,7 +434,7 @@ void main() {
 
   testWidgets('finishing puts the webinar on the schedule', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: TmiPartiesScreen()));
+    await tester.pumpWidget(hosted(const TmiPartiesScreen()));
     await tester.pump(const Duration(milliseconds: 250));
 
     final before = find.byType(PartyGridCard).evaluate().length;

@@ -12,11 +12,17 @@ import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/video_player_screen.dart';
 import 'package:saalt/presentation/widgets/view_toggle.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// TMI Parties, laid out as a session console: filter by state, switch
 /// between a grid and a list, and act on any session from its own card.
 class TmiPartiesScreen extends StatefulWidget {
   const TmiPartiesScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.tmiPartiesScreen);
+  }
 
   @override
   State<TmiPartiesScreen> createState() => _TmiPartiesScreenState();
@@ -65,6 +71,7 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
       builder: (_) => _HowItWorksSheet(
         onDone: () {
           TmiHelper.hideHowItWorks.value = true;
+          // Closes the sheet, so Navigator rather than the router.
           Navigator.of(context).pop();
         },
       ),
@@ -87,21 +94,16 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
   void _watchReplay(TmiParty party) {
     final url = party.replayUrl;
     if (url == null) return;
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => VideoPlayerScreen(
-          title: party.title,
-          subtitle: 'TMI Party replay · ${party.host}',
-          url: url,
-        ),
-      ),
+    VideoPlayerScreen.open(
+      context,
+      title: party.title,
+      subtitle: 'TMI Party replay · ${party.host}',
+      url: url,
     );
   }
 
   void _scheduleSession() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const WebinarWizardScreen()));
+    WebinarWizardScreen.open(context);
   }
 
   /// The grid has no room for a description, so it lives one tap away.
@@ -113,6 +115,8 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
       builder: (_) => _AboutSheet(
         party: party,
         onAction: () {
+          // Navigator, not context.pop: this closes a modal sheet, and the
+          // router's pop would take the page underneath it instead.
           Navigator.of(context).pop();
           _act(party);
         },
@@ -143,7 +147,7 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
             ScreenHeader(
               title: 'TMI Parties',
               subtitle: 'Live and on-demand, hosted by Saalt',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               trailing: CircleIconButton(
                 icon: Icons.add_rounded,
                 tooltip: 'Schedule a webinar',

@@ -5,9 +5,15 @@ import 'package:saalt/presentation/community/widgets/post_card.dart';
 import 'package:saalt/presentation/community/widgets/stories_row.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class CommunityScreen extends StatefulWidget {
   const CommunityScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.communityScreen);
+  }
 
   @override
   State<CommunityScreen> createState() => _CommunityScreenState();
@@ -100,7 +106,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
           children: [
             // Pinned: brand row stays; everything below it scrolls.
             _CommunityHeader(
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               onSearch: () => _toast('Search the community'),
               onNotifications: () => _toast('No new notifications'),
               onProfile: () => _toast('Profile'),

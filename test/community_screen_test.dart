@@ -6,6 +6,8 @@ import 'package:saalt/presentation/community/widgets/stories_row.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 import 'package:saalt/presentation/dashboard_screen.dart';
 
+import 'helpers/router_host.dart';
+
 /// Author name inside a post card. Names also appear in the stories strip,
 /// so filter assertions must scope to the timeline.
 Finder _author(String name) =>
@@ -20,7 +22,7 @@ void _phone(WidgetTester tester) {
 void main() {
   testWidgets('timeline shows posts, badges and the composer', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     expect(find.text('Community'), findsOneWidget);
     expect(find.text("What's on your mind today?"), findsOneWidget);
@@ -32,7 +34,7 @@ void main() {
 
   testWidgets('posts render their attached photo', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     // Post 2 carries a photo; post 1 does not.
     final withPhoto = find.descendant(
@@ -58,7 +60,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     expect(find.text('24 found this helpful'), findsOneWidget);
 
@@ -80,7 +82,7 @@ void main() {
 
   testWidgets('saving a post fills its bookmark', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     final firstPost = find.byType(PostCard).first;
     expect(
@@ -121,7 +123,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     await tapFilter(tester, 'Text');
 
@@ -131,7 +133,7 @@ void main() {
 
   testWidgets('Photos filter excludes the clip', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     await tapFilter(tester, 'Photos');
 
@@ -144,7 +146,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     await tapFilter(tester, 'Videos');
 
@@ -155,7 +157,7 @@ void main() {
 
   testWidgets('Groups filter keeps only followed groups', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     await tapFilter(tester, 'Groups');
 
@@ -166,7 +168,7 @@ void main() {
 
   testWidgets('stories strip leads with Add story', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     expect(find.byType(StoriesRow), findsOneWidget);
     expect(find.text('Add story'), findsOneWidget);
@@ -181,7 +183,7 @@ void main() {
 
   testWidgets('bottom bar shows five tabs with a Chat badge', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: CommunityScreen()));
+    await tester.pumpWidget(hosted(const CommunityScreen()));
 
     final bar = find.byType(AppBottomNav);
     expect(bar, findsOneWidget);
@@ -199,7 +201,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.tap(find.text('Community'));
     await tester.pumpAndSettle();

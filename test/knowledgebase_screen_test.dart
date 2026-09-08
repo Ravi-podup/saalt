@@ -7,6 +7,8 @@ import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/knowledgebase/widgets/article_row.dart';
 import 'package:saalt/presentation/knowledgebase/widgets/section_panel.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -36,7 +38,7 @@ Future<void> _choose(WidgetTester tester, String title) async {
 void main() {
   testWidgets('landing screen asks you to choose an area', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     expect(find.text('Knowledgebase'), findsOneWidget);
     expect(find.text('Search all guides and videos…'), findsOneWidget);
@@ -60,7 +62,7 @@ void main() {
 
   testWidgets('each panel reports how much knowledge it holds', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     expect(
       find.descendant(
@@ -81,7 +83,7 @@ void main() {
 
   testWidgets('Testimonials is the video section', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     final card = find.widgetWithText(SectionPanel, 'Testimonials');
     expect(
@@ -96,7 +98,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     await _choose(tester, 'Products');
 
@@ -112,7 +114,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     await _choose(tester, 'Testimonials');
 
@@ -134,7 +136,7 @@ void main() {
 
   testWidgets('search narrows within the chosen section only', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     await _choose(tester, 'Products');
     await tester.enterText(find.byType(TextField), 'softener');
@@ -150,7 +152,7 @@ void main() {
 
   testWidgets('quick answers stay on the landing screen', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     final question = find.text('Can it get lost inside me?');
     await tester.scrollUntilVisible(question, 250, scrollable: _sectionsList());
@@ -166,7 +168,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.tap(find.text('Knowledgebase'));
     await tester.pumpAndSettle();
@@ -177,7 +179,7 @@ void main() {
 
   testWidgets('each panel previews what is inside it', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     expect(find.byType(SectionPanel), findsWidgets);
 
@@ -206,7 +208,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     await tester.enterText(find.byType(TextField), 'period');
     await tester.pumpAndSettle();
@@ -223,7 +225,7 @@ void main() {
 
   testWidgets('the landing screen is not a grid of tiles', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: KnowledgebaseScreen()));
+    await tester.pumpWidget(hosted(const KnowledgebaseScreen()));
 
     expect(find.byType(GridView), findsNothing);
   });

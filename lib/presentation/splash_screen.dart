@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:saalt/presentation/dashboard_screen.dart';
 import 'package:saalt/res/app_images.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(milliseconds: 1800), _goToDashboard);
+    _timer = Timer(const Duration(milliseconds: 1800), _goToLogin);
   }
 
   @override
@@ -26,16 +27,10 @@ class _SplashScreenState extends State<SplashScreen> {
     super.dispose();
   }
 
-  void _goToDashboard() {
+  void _goToLogin() {
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 450),
-        pageBuilder: (_, _, _) => const DashboardScreen(),
-        transitionsBuilder: (_, animation, _, child) =>
-            FadeTransition(opacity: animation, child: child),
-      ),
-    );
+    // go, not push: the splash must not stay underneath the login screen.
+    context.go(AppRoutePaths.loginScreen);
   }
 
   @override

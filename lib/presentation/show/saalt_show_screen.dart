@@ -12,9 +12,15 @@ import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 import 'package:saalt/presentation/widgets/view_toggle.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class SaaltShowScreen extends StatefulWidget {
   const SaaltShowScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.saaltShowScreen);
+  }
 
   @override
   State<SaaltShowScreen> createState() => _SaaltShowScreenState();
@@ -44,7 +50,10 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
   /// Watchable episodes open the player as its own route. Self-contained on
   /// purpose, so it does not depend on the commented-out toast helper.
   void _play(Episode episode) {
-    if (!episode.hasVideo) {
+    // Captured in a local so the null check promotes: a field on another
+    // object cannot be promoted in place.
+    final url = episode.videoUrl;
+    if (url == null) {
       final messenger = ScaffoldMessenger.of(context);
       messenger.hideCurrentSnackBar();
       messenger.showSnackBar(
@@ -57,14 +66,11 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
       );
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => VideoPlayerScreen(
-          title: episode.title,
-          subtitle: 'EP ${episode.number} · with ${episode.guest}',
-          url: episode.videoUrl,
-        ),
-      ),
+    VideoPlayerScreen.open(
+      context,
+      title: episode.title,
+      subtitle: 'EP ${episode.number} · with ${episode.guest}',
+      url: url,
     );
   }
 
@@ -78,10 +84,7 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
         bottom: false,
         child: Column(
           children: [
-            ScreenHeader(
-              title: 'The Saalt Show',
-              onBack: () => Navigator.of(context).maybePop(),
-            ),
+            ScreenHeader(title: 'The Saalt Show', onBack: () => context.pop()),
             Expanded(
               child: ListView(
                 key: const Key('show-body'),

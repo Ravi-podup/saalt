@@ -76,9 +76,7 @@ class _SuggestionRow extends StatelessWidget {
   final Product product;
 
   void _open(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => ProductDetailScreen(product: product)),
-    );
+    ProductDetailScreen.open(context, product: product);
   }
 
   @override

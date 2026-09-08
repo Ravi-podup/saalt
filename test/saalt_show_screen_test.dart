@@ -13,6 +13,8 @@ import 'package:saalt/presentation/show/widgets/platform_row.dart';
 import 'package:saalt/presentation/show/widgets/show_hero.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 
+import 'helpers/router_host.dart';
+
 void _phone(WidgetTester tester) {
   tester.view.physicalSize = const Size(1170, 2532);
   tester.view.devicePixelRatio = 3;
@@ -49,7 +51,7 @@ Future<void> _tapFormat(WidgetTester tester, String label) async {
 void main() {
   testWidgets('opens on the hero and the episode list', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     expect(find.text('The Saalt Show'), findsOneWidget);
     expect(find.byType(ShowHero), findsOneWidget);
@@ -62,7 +64,7 @@ void main() {
 
   testWidgets('format chips filter the episode list', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.text('All episodes'));
     await _tapFormat(tester, 'Expert Interviews');
@@ -74,7 +76,7 @@ void main() {
 
   testWidgets('lists the platforms to listen on', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.byType(PlatformRow));
     expect(find.text('Where to listen'), findsOneWidget);
@@ -91,7 +93,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.byType(AskCard));
 
@@ -123,7 +125,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     final bar = find.byType(AppBottomNav);
     expect(bar, findsOneWidget);
@@ -140,7 +142,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.scrollUntilVisible(
       find.text('Saalt Show'),
@@ -157,7 +159,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     expect(find.text('Latest'), findsOneWidget);
     expect(find.byType(EpisodeCarousel), findsOneWidget);
@@ -187,7 +189,7 @@ void main() {
 
   testWidgets('carousel only carries the three newest', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     final carousel = tester.widget<EpisodeCarousel>(
       find.byType(EpisodeCarousel),
@@ -198,7 +200,7 @@ void main() {
 
   testWidgets('all episodes offers a list and a grid view', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.byType(ViewToggle));
 
@@ -224,7 +226,7 @@ void main() {
 
   testWidgets('the format filter still applies in grid view', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.byType(ViewToggle));
     await tester.tap(find.byIcon(Icons.grid_view_rounded));
@@ -265,7 +267,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.byType(EpisodeCard));
     await tester.tap(find.byType(EpisodeCard).first);
@@ -279,7 +281,7 @@ void main() {
 
   testWidgets('the origin story now opens the player too', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: SaaltShowScreen()));
+    await tester.pumpWidget(hosted(const SaaltShowScreen()));
 
     await _scrollTo(tester, find.textContaining('Cherie & Jon Hoeger'));
     await tester.tap(find.textContaining('Cherie & Jon Hoeger'));

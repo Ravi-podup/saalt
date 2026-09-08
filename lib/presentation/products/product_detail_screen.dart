@@ -4,6 +4,8 @@ import 'package:saalt/models/product.dart';
 import 'package:saalt/presentation/widgets/star_rating.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// What the detail screen hands back when something is added to the bag.
 class BagAddition {
@@ -20,6 +22,20 @@ class BagAddition {
 /// add to the bag because most products have dozens of variants.
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.product});
+
+  static const kProduct = 'product';
+
+  /// Resolves to the bag addition the shopper made, or null if they backed
+  /// out without adding anything.
+  static Future<BagAddition?> open(
+    BuildContext context, {
+    required Product product,
+  }) {
+    return context.push<BagAddition>(
+      AppRoutePaths.productDetailScreen,
+      extra: {kProduct: product},
+    );
+  }
 
   final Product product;
 
@@ -74,10 +90,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         bottom: false,
         child: Column(
           children: [
-            ScreenHeader(
-              title: product.name,
-              onBack: () => Navigator.of(context).maybePop(),
-            ),
+            ScreenHeader(title: product.name, onBack: () => context.pop()),
             Expanded(
               child: ListView(
                 key: const Key('detail-body'),

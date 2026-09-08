@@ -4,12 +4,18 @@ import 'package:saalt/helper/tracker_settings.dart';
 import 'package:saalt/models/tracker_prefs.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// Tracker settings. The two lengths are the ones that matter: they drive the
 /// predictions, so changing them here moves the calendar shading, the phase
 /// labels and the countdown together.
 class TrackerSettingsScreen extends StatelessWidget {
   const TrackerSettingsScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.trackerSettingsScreen);
+  }
 
   void _toast(BuildContext context, String message) {
     final messenger = ScaffoldMessenger.of(context);
@@ -33,7 +39,7 @@ class TrackerSettingsScreen extends StatelessWidget {
           children: [
             ScreenHeader(
               title: 'Tracker settings',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
             ),
             Expanded(
               child: ValueListenableBuilder<TrackerPrefs>(

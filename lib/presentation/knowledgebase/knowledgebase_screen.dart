@@ -9,11 +9,17 @@ import 'package:saalt/presentation/knowledgebase/widgets/section_panel.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/search_field.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// Step one of the knowledgebase: search everything, or pick a section. The
 /// knowledge itself lives on [KnowledgeSectionScreen].
 class KnowledgebaseScreen extends StatefulWidget {
   const KnowledgebaseScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.knowledgebaseScreen);
+  }
 
   @override
   State<KnowledgebaseScreen> createState() => _KnowledgebaseScreenState();
@@ -37,11 +43,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       KnowledgeHelper.library.where((a) => a.matches(_query)).toList();
 
   void _open(KnowledgeSection section) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => KnowledgeSectionScreen(section: section),
-      ),
-    );
+    KnowledgeSectionScreen.open(context, section: section);
   }
 
   void _toast(String message) {
@@ -67,10 +69,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            ScreenHeader(
-              title: 'Knowledgebase',
-              onBack: () => Navigator.of(context).maybePop(),
-            ),
+            ScreenHeader(title: 'Knowledgebase', onBack: () => context.pop()),
             SearchField(
               controller: _searchController,
               hintText: 'Search all guides and videos…',

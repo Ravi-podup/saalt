@@ -20,6 +20,8 @@ import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 
+import 'helpers/router_host.dart';
+
 /// Chips further down the detail screen are not laid out until scrolled to.
 Future<void> _pickOption(WidgetTester tester, String value) async {
   final chip = find.widgetWithText(InkWell, value);
@@ -82,9 +84,7 @@ Future<void> _revealCard(WidgetTester tester, String name) async {
 /// Pumps one category's listing, which is where product cards now live.
 Future<void> _pumpCategory(WidgetTester tester, String label) async {
   final category = ProductHelper.categories.firstWhere((c) => c.label == label);
-  await tester.pumpWidget(
-    MaterialApp(home: ProductListingScreen(category: category)),
-  );
+  await tester.pumpWidget(hosted(ProductListingScreen(category: category)));
   await tester.pumpAndSettle();
 }
 
@@ -116,7 +116,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     // No chip row and no listing beneath: the shelf and categories are the
     // browse surface.
@@ -127,7 +127,7 @@ void main() {
 
   testWidgets('a category card opens that category listing', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _tapCategoryCard(tester, 'Cups & Discs');
 
@@ -140,7 +140,7 @@ void main() {
 
   testWidgets('header stays put while the catalogue scrolls', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     final searchBefore = tester.getTopLeft(find.byType(TextField));
     await tester.drag(
@@ -154,7 +154,7 @@ void main() {
 
   testWidgets('saving a product updates the favourites badge', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     expect(find.text('1'), findsNothing);
 
@@ -185,7 +185,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     // All three actions live in the title bar, not beside the search field.
     final header = find.byType(ScreenHeader);
@@ -219,7 +219,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await tester.enterText(find.byType(TextField), 'cloudshort');
     await tester.pumpAndSettle();
@@ -237,7 +237,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: DashboardScreen()));
+    await tester.pumpWidget(hosted(const DashboardScreen()));
 
     await tester.tap(find.text('Products'));
     await tester.pumpAndSettle();
@@ -248,7 +248,7 @@ void main() {
 
   testWidgets('bottom bar shows four tabs with Home current', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     final bar = find.byType(ProductsNavBar);
     expect(bar, findsOneWidget);
@@ -278,7 +278,7 @@ void main() {
 
   testWidgets('bottom bar tabs do not navigate or filter', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     final bar = find.byType(ProductsNavBar);
     await tester.tap(
@@ -293,7 +293,7 @@ void main() {
 
   testWidgets('liking a product does not touch the bag count', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     // Back comes first in the header, the bag second.
 
@@ -379,7 +379,7 @@ void main() {
 
   testWidgets('active favourites icon is rose, not ink', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _revealCard(tester, 'Leakproof Seamless Thong');
     await tester.tap(
@@ -414,7 +414,7 @@ void main() {
 
   testWidgets('the shop opens on a swipeable banner slider', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     expect(find.byType(PromoSlider), findsOneWidget);
     final slider = find.byKey(const Key('promo-slider'));
@@ -441,7 +441,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     final searchBefore = tester.getTopLeft(find.byType(TextField));
     final bannerBefore = tester.getTopLeft(find.byType(PromoSlider));
@@ -463,7 +463,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     expect(find.text('Best Sellers'), findsOneWidget);
     final shelf = find.byKey(const Key('best-sellers'));
@@ -506,7 +506,7 @@ void main() {
 
   testWidgets('shelf cards render the absorbency badge', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     // Only the leading cards are built at a time, so assert on the first.
     // The derivation itself is covered by the unit test below.
@@ -537,7 +537,7 @@ void main() {
 
   testWidgets('searching hides the banner and the shelf', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     expect(find.byType(BestSellers), findsOneWidget);
 
@@ -553,7 +553,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     expect(find.text('Shop by category'), findsOneWidget);
     expect(find.byType(CategoryStrip), findsOneWidget);
@@ -576,7 +576,7 @@ void main() {
 
   testWidgets('Why Saalt Wear promotes the underwear line', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(WhySaaltWear));
 
@@ -596,7 +596,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(CollectionsRow));
 
@@ -615,7 +615,7 @@ void main() {
 
   testWidgets('a collection card opens a listing', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(CollectionsRow));
     await tester.tap(find.text('Cotton Lace Trim'));
@@ -642,7 +642,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(ReviewCarousel));
 
@@ -660,7 +660,7 @@ void main() {
 
   testWidgets('swiping the reviews moves to the next quote', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(ReviewCarousel));
 
@@ -679,7 +679,7 @@ void main() {
     tester,
   ) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductsScreen()));
+    await tester.pumpWidget(hosted(const ProductsScreen()));
 
     await _scrollTo(tester, find.byType(ReviewCarousel));
     await tester.tap(find.text('Read more reviews'));
@@ -703,7 +703,7 @@ void main() {
 
   testWidgets('filters narrow the listing and can be cleared', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductListingScreen()));
+    await tester.pumpWidget(hosted(const ProductListingScreen()));
 
     expect(find.text('18 products'), findsOneWidget);
 
@@ -735,7 +735,7 @@ void main() {
 
   testWidgets('a filter combination with no matches says so', (tester) async {
     _phone(tester);
-    await tester.pumpWidget(const MaterialApp(home: ProductListingScreen()));
+    await tester.pumpWidget(hosted(const ProductListingScreen()));
 
     await tester.tap(find.text('Filters'));
     await tester.pumpAndSettle();

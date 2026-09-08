@@ -8,12 +8,18 @@ import 'package:saalt/presentation/tracker/widgets/cycle_calendar.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// Step one of the tracker: the calendar, and nothing competing with it.
 /// Tapping a day opens [DayDetailScreen], which carries that day's entry and
 /// the cycle statistics.
 class PeriodTrackerScreen extends StatefulWidget {
   const PeriodTrackerScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.periodTrackerScreen);
+  }
 
   @override
   State<PeriodTrackerScreen> createState() => _PeriodTrackerScreenState();
@@ -50,15 +56,11 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   }
 
   void _openDate(DateTime date) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => DayDetailScreen(date: date)));
+    DayDetailScreen.open(context, date: date);
   }
 
   void _openSettings() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const TrackerSettingsScreen()));
+    TrackerSettingsScreen.open(context);
   }
 
   @override
@@ -70,7 +72,7 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
           children: [
             ScreenHeader(
               title: 'Period Tracker',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               trailing: Row(
                 children: [
                   if (!_isCurrentMonth) ...[

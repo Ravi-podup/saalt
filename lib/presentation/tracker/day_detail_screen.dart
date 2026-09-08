@@ -13,6 +13,8 @@ import 'package:saalt/presentation/tracker/widgets/log_today_card.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -35,6 +37,12 @@ const _months = [
 /// the entry form for it, what Saalt makes for it, and the history it sits in.
 class DayDetailScreen extends StatefulWidget {
   const DayDetailScreen({super.key, required this.date});
+
+  static const kDate = 'date';
+
+  static Future open(BuildContext context, {required DateTime date}) {
+    return context.push(AppRoutePaths.dayDetailScreen, extra: {kDate: date});
+  }
 
   final DateTime date;
 
@@ -174,7 +182,7 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
           children: [
             ScreenHeader(
               title: _isToday ? 'Today' : _dateLabel,
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
               trailing: Row(
                 children: [
                   CircleIconButton(

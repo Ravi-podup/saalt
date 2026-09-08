@@ -7,6 +7,8 @@ import 'package:saalt/presentation/parties/wizard/wizard_steps_b.dart';
 import 'package:saalt/presentation/parties/wizard/wizard_steps_c.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 /// The eight steps of the console's create flow.
 enum WizardStep {
@@ -74,6 +76,10 @@ enum WizardStep {
 class WebinarWizardScreen extends StatefulWidget {
   const WebinarWizardScreen({super.key});
 
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.webinarWizardScreen);
+  }
+
   @override
   State<WebinarWizardScreen> createState() => _WebinarWizardScreenState();
 }
@@ -133,7 +139,7 @@ class _WebinarWizardScreenState extends State<WebinarWizardScreen> {
 
   void _back() {
     if (_index == 0) {
-      Navigator.of(context).maybePop();
+      context.pop();
       return;
     }
     _goTo(WizardStep.values[_index - 1]);
@@ -174,7 +180,7 @@ class _WebinarWizardScreenState extends State<WebinarWizardScreen> {
       ),
     );
 
-    Navigator.of(context).pop();
+    context.pop();
     _toast('${_draft.title.trim()} is on the schedule');
   }
 
@@ -228,7 +234,7 @@ class _WebinarWizardScreenState extends State<WebinarWizardScreen> {
           children: [
             ScreenHeader(
               title: 'Schedule a webinar',
-              onBack: () => Navigator.of(context).maybePop(),
+              onBack: () => context.pop(),
             ),
             _StepRail(
               controller: _railController,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saalt/helper/dashboard_helper.dart';
 import 'package:saalt/helper/tracker_helper.dart';
 import 'package:saalt/models/dashboard_item.dart';
+import 'package:saalt/presentation/auth/login_screen.dart';
 import 'package:saalt/presentation/community/community_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
@@ -13,9 +14,15 @@ import 'package:saalt/presentation/widgets/dashboard_tile.dart';
 import 'package:saalt/presentation/widgets/period_tracker_card.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/res/app_images.dart';
+import 'package:go_router/go_router.dart';
+import 'package:saalt/router/app_route_paths.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  static Future open(BuildContext context) {
+    return context.push(AppRoutePaths.dashboardScreen);
+  }
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -36,45 +43,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _openTracker() {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const PeriodTrackerScreen()));
+    PeriodTrackerScreen.open(context);
   }
 
   void _openItem(DashboardItem item) {
-    if (item.title == 'Products') {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const ProductsScreen()));
-      return;
-    } else if (item.title == "Knowledgebase") {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const KnowledgebaseScreen()));
-      return;
-    } else if (item.title == 'Saalt Show') {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const SaaltShowScreen()));
-      return;
-    } else if (item.title == 'Testimonials') {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const TestimonialsScreen()));
-      return;
-    } else if (item.title == 'Community') {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const CommunityScreen()));
-      return;
-    } else if (item.title == 'TMI Parties') {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (_) => const TmiPartiesScreen()));
-      return;
+    switch (item.title) {
+      case 'Products':
+        ProductsScreen.open(context);
+      case 'Knowledgebase':
+        KnowledgebaseScreen.open(context);
+      case 'Saalt Show':
+        SaaltShowScreen.open(context);
+      case 'Testimonials':
+        TestimonialsScreen.open(context);
+      case 'Community':
+        CommunityScreen.open(context);
+      case 'TMI Parties':
+        TmiPartiesScreen.open(context);
+      default:
+        _open(item.title);
     }
-
-    _open(item.title);
   }
 
   @override
@@ -204,7 +192,10 @@ class _Header extends StatelessWidget {
                 showDot: true,
               ),
               const SizedBox(width: 10),
-              const _CircleAction(icon: Icons.person_outline_rounded),
+              _CircleAction(
+                icon: Icons.person_outline_rounded,
+                onTap: () => LoginScreen.open(context),
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -235,10 +226,11 @@ class _Header extends StatelessWidget {
 }
 
 class _CircleAction extends StatelessWidget {
-  const _CircleAction({required this.icon, this.showDot = false});
+  const _CircleAction({required this.icon, this.showDot = false, this.onTap});
 
   final IconData icon;
   final bool showDot;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -257,25 +249,29 @@ class _CircleAction extends StatelessWidget {
           ),
         ],
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Icon(icon, size: 19, color: AppColors.ink),
-          if (showDot)
-            Positioned(
-              top: 10,
-              right: 11,
-              child: Container(
-                height: 7,
-                width: 7,
-                decoration: BoxDecoration(
-                  color: AppColors.rose,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.surface, width: 1.5),
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Icon(icon, size: 19, color: AppColors.ink),
+            if (showDot)
+              Positioned(
+                top: 10,
+                right: 11,
+                child: Container(
+                  height: 7,
+                  width: 7,
+                  decoration: BoxDecoration(
+                    color: AppColors.rose,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: AppColors.surface, width: 1.5),
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

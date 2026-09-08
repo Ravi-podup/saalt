@@ -75,9 +75,7 @@ class _SetupStepState extends State<SetupStep> {
   /// The brief is its own screen; on the way back the fields it filled are
   /// reflected in the controllers.
   Future<void> _openBrief() async {
-    final used = await Navigator.of(
-      context,
-    ).push<bool>(MaterialPageRoute(builder: (_) => BriefScreen(draft: _draft)));
+    final used = await BriefScreen.open(context, draft: _draft);
     if (used != true || !mounted) return;
     setState(() {
       _description.text = _draft.description;
