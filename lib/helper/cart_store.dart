@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 
-/// The bag, shared across screens. Products are added from a category listing
+/// The cart, shared across screens. Products are added from a category listing
 /// or from search results, but the count is shown on the shop header, so the
 /// state cannot live inside one screen.
-class BagStore {
-  BagStore._();
+class CartStore {
+  CartStore._();
 
   /// Resolved variants mapped to quantity, keyed by variant rather than
   /// product name so a Small and a Regular are separate lines.

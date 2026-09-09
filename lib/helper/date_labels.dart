@@ -1,5 +1,3 @@
-/// Short date and time labels, in one place so two screens cannot disagree
-/// about how a date is written.
 class DateLabels {
   DateLabels._();
 

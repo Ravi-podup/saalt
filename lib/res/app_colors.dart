@@ -8,7 +8,7 @@ class AppColors {
   // Neutrals
   static const canvas = Color(0xFFFAF8F6);
   static const surface = Color(0xFFFFFFFF);
-  static const ink = Color(0xFF2C3341);
+  static const ink = Color(0xFF373737);
   static const inkMuted = Color(0xFF6B7385);
   static const inkFaint = Color(0xFF9AA1B0);
   static const hairline = Color(0xFFEDE8E3);

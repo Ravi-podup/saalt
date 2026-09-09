@@ -5,7 +5,7 @@ import 'package:saalt/models/day_entry.dart';
 /// this a day you filled in yesterday came back blank, and the calendar had
 /// no way to show which days had anything on them.
 ///
-/// In memory only, like the bag: nothing in this app survives a restart yet.
+/// In memory only, like the cart: nothing in this app survives a restart yet.
 class EntryStore {
   EntryStore._();
 

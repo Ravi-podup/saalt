@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:saalt/helper/bag_store.dart';
+import 'package:saalt/helper/cart_store.dart';
 import 'package:saalt/helper/product_helper.dart';
 import 'package:saalt/models/product.dart';
 import 'package:saalt/models/shop_category.dart';
 import 'package:saalt/presentation/products/product_detail_screen.dart';
 import 'package:saalt/presentation/products/widgets/filter_sheet.dart';
 import 'package:saalt/presentation/products/widgets/product_grid_tile.dart';
-import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -68,8 +67,8 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
   Future<void> _openDetail(Product product) async {
     final added = await ProductDetailScreen.open(context, product: product);
     if (added == null || !mounted) return;
-    BagStore.add(added.label, added.quantity);
-    _toast('${added.label} added to bag');
+    CartStore.add(added.label, added.quantity);
+    _toast('${added.label} added to cart');
   }
 
   Future<void> _openFilters() async {
@@ -104,23 +103,23 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
                   '${products.length} '
                   '${products.length == 1 ? 'product' : 'products'}',
               onBack: () => context.pop(),
-              trailing: ValueListenableBuilder<Map<String, int>>(
-                valueListenable: BagStore.items,
-                builder: (context, _, _) {
-                  final count = BagStore.count;
-                  return CircleIconButton(
-                    icon: count == 0
-                        ? Icons.shopping_bag_outlined
-                        : Icons.shopping_bag_rounded,
-                    badgeCount: count,
-                    flat: true,
-                    onTap: () => _toast(
-                      count == 0 ? 'Your bag is empty' : '$count in your bag',
-                    ),
-                    tooltip: 'Bag',
-                  );
-                },
-              ),
+              // trailing: ValueListenableBuilder<Map<String, int>>(
+              //   valueListenable: CartStore.items,
+              //   builder: (context, _, _) {
+              //     final count = CartStore.count;
+              //     return CircleIconButton(
+              //       icon: count == 0
+              //           ? Icons.shopping_bag_outlined
+              //           : Icons.shopping_bag_rounded,
+              //       badgeCount: count,
+              //       flat: true,
+              //       onTap: () => _toast(
+              //         count == 0 ? 'Your cart is empty' : '$count in your cart',
+              //       ),
+              //       tooltip: 'Cart',
+              //     );
+              //   },
+              // ),
             ),
             _FilterBar(
               activeCount: _filters.count,

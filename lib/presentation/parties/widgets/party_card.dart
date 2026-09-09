@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/helper/date_labels.dart';
 import 'package:saalt/models/tmi_party.dart';
-import 'package:saalt/presentation/parties/widgets/party_grid_card.dart';
+import 'package:saalt/presentation/parties/widgets/party_bits.dart';
 import 'package:saalt/res/app_colors.dart';
 
 /// One session in the list. Carries the date, what it covers, and the one

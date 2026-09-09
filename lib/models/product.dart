@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// One choice a shopper must make before a product can go in the bag, such as
+/// One choice a shopper must make before a product can go in the cart, such as
 /// Size or Absorbency.
 class ProductOption {
   const ProductOption({required this.name, required this.values});
@@ -50,7 +50,7 @@ class Product {
   final Color tint;
   final Color accent;
 
-  /// Choices required before this product can be added to the bag. Empty for
+  /// Choices required before this product can be added to the cart. Empty for
   /// single-variant items, which can be quick-added.
   final List<ProductOption> options;
 

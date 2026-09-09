@@ -24,6 +24,9 @@ class _MyAppState extends State<MyApp> {
       title: 'Saalt',
       routerConfig: widget.router,
       theme: ThemeData(
+        // Applies Montserrat to the whole text theme, so every Text inherits
+        // it and only the weight/size need stating at the call site.
+        fontFamily: 'Montserrat',
         // scaffoldBackgroundColor: AppColors.primaryColor,
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),

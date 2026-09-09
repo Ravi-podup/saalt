@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:saalt/helper/bag_store.dart';
+import 'package:saalt/helper/cart_store.dart';
 import 'package:saalt/helper/product_helper.dart';
 import 'package:saalt/models/product.dart';
 import 'package:saalt/presentation/products/product_listing_screen.dart';
+import 'package:saalt/presentation/products/wishlist_screen.dart';
 import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
+import 'package:saalt/helper/notification_demo.dart';
+import 'package:saalt/presentation/notifications/notifications_screen.dart';
+import 'package:saalt/presentation/products/cart_screen.dart';
 import 'package:saalt/presentation/products/product_detail_screen.dart';
 import 'package:saalt/presentation/products/widgets/best_sellers.dart';
 import 'package:saalt/presentation/products/widgets/category_strip.dart';
@@ -49,8 +53,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   Future<void> _openDetail(Product product) async {
     final added = await ProductDetailScreen.open(context, product: product);
     if (added == null || !mounted) return;
-    BagStore.add(added.label, added.quantity);
-    _toast('${added.label} added to bag');
+    CartStore.add(added.label, added.quantity);
+    _toast('${added.label} added to cart');
   }
 
   /// The landing page browses; the listing only appears as search results.
@@ -97,9 +101,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 children: [
                   CircleIconButton(
                     icon: Icons.notifications_none_rounded,
-                    showDot: true,
+                    showDot: NotificationDemo.unreadCount > 0,
                     flat: true,
-                    onTap: () => _toast('No new notifications'),
+                    onTap: () => NotificationsScreen.open(context),
                     tooltip: 'Notifications',
                   ),
                   CircleIconButton(
@@ -109,29 +113,21 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     iconColor: _saved.isEmpty ? null : AppColors.rose,
                     badgeCount: _saved.length,
                     flat: true,
-                    onTap: () => _toast(
-                      _saved.isEmpty
-                          ? 'Nothing saved yet'
-                          : '${_saved.length} saved',
-                    ),
-                    tooltip: 'Favourites',
+                    onTap: () => WishlistScreen.open(context),
+                    tooltip: 'Saved',
                   ),
                   ValueListenableBuilder<Map<String, int>>(
-                    valueListenable: BagStore.items,
+                    valueListenable: CartStore.items,
                     builder: (context, _, _) {
-                      final count = BagStore.count;
+                      final count = CartStore.count;
                       return CircleIconButton(
                         icon: count == 0
                             ? Icons.shopping_bag_outlined
                             : Icons.shopping_bag_rounded,
                         badgeCount: count,
                         flat: true,
-                        onTap: () => _toast(
-                          count == 0
-                              ? 'Your bag is empty'
-                              : '$count in your bag',
-                        ),
-                        tooltip: 'Bag',
+                        onTap: () => CartScreen.open(context),
+                        tooltip: 'Cart',
                       );
                     },
                   ),

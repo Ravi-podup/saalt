@@ -5,12 +5,10 @@ import 'package:saalt/helper/tmi_helper.dart';
 import 'package:saalt/models/tmi_party.dart';
 import 'package:saalt/presentation/parties/wizard/webinar_wizard_screen.dart';
 import 'package:saalt/presentation/parties/widgets/party_card.dart';
-import 'package:saalt/presentation/parties/widgets/party_grid_card.dart';
 import 'package:saalt/presentation/parties/widgets/party_hero.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/presentation/widgets/video_player_screen.dart';
-import 'package:saalt/presentation/widgets/view_toggle.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
@@ -42,7 +40,6 @@ enum PartyFilter {
 
 class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
   PartyFilter _filter = PartyFilter.all;
-  bool _isGrid = true;
 
   /// Only a live room earns the hero; the rest of the time this is a console.
   TmiParty? get _live => TmiHelper.featured;
@@ -187,19 +184,11 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
                           for (final f in PartyFilter.values)
                             f: _partiesFor(f).length,
                         },
-                        isGrid: _isGrid,
                         onFilter: (f) => setState(() => _filter = f),
-                        onView: (grid) => setState(() => _isGrid = grid),
                       ),
                       const SizedBox(height: 14),
                       if (parties.isEmpty)
                         _Empty(filter: _filter)
-                      else if (_isGrid)
-                        _Grid(
-                          parties: parties,
-                          onAction: _act,
-                          onOpen: _showAbout,
-                        )
                       else
                         for (final party in parties) ...[
                           PartyCard(
@@ -223,69 +212,17 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
   }
 }
 
-/// Two columns of equal-height cards. The height is measured from the card's
-/// own content rather than set as an aspect ratio, so the tiles line up
-/// without leaving a hole under the shorter ones.
-class _Grid extends StatelessWidget {
-  const _Grid({
-    required this.parties,
-    required this.onAction,
-    required this.onOpen,
-  });
-
-  final List<TmiParty> parties;
-  final ValueChanged<TmiParty> onAction;
-  final ValueChanged<TmiParty> onOpen;
-
-  static const _gap = 12.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final cardWidth = (constraints.maxWidth - _gap) / 2;
-
-        return GridView.builder(
-          key: const Key('parties-grid'),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          itemCount: parties.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: _gap,
-            crossAxisSpacing: _gap,
-            mainAxisExtent: PartyGridCard.heightFor(cardWidth),
-          ),
-          itemBuilder: (context, index) {
-            final party = parties[index];
-            return PartyGridCard(
-              party: party,
-              onAction: () => onAction(party),
-              onOpen: () => onOpen(party),
-            );
-          },
-        );
-      },
-    );
-  }
-}
-
-/// Filter chips and the view switch on one line, the way a console reads.
+/// The session count and the filter chips.
 class _Controls extends StatelessWidget {
   const _Controls({
     required this.filter,
     required this.counts,
-    required this.isGrid,
     required this.onFilter,
-    required this.onView,
   });
 
   final PartyFilter filter;
   final Map<PartyFilter, int> counts;
-  final bool isGrid;
   final ValueChanged<PartyFilter> onFilter;
-  final ValueChanged<bool> onView;
 
   @override
   Widget build(BuildContext context) {
@@ -294,22 +231,14 @@ class _Controls extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // The switch sits on its own line: sharing one row with the chips
-        // left the last chips sliced off against it on a phone width.
-        Row(
-          children: [
-            Text(
-              '$total ${total == 1 ? 'session' : 'sessions'}',
-              style: const TextStyle(
-                fontSize: 12.5,
-                fontWeight: FontWeight.w700,
-                letterSpacing: -0.2,
-                color: AppColors.ink,
-              ),
-            ),
-            const Spacer(),
-            ViewToggle(isGrid: isGrid, onChanged: onView),
-          ],
+        Text(
+          '$total ${total == 1 ? 'session' : 'sessions'}',
+          style: const TextStyle(
+            fontSize: 12.5,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.2,
+            color: AppColors.ink,
+          ),
         ),
         const SizedBox(height: 12),
         SingleChildScrollView(

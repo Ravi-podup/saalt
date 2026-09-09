@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:saalt/models/tracker_prefs.dart';
 
 /// Tracker preferences, shared across the calendar, a day's entry and the
-/// settings screen. Held in memory like the bag: nothing in this app persists
+/// settings screen. Held in memory like the cart: nothing in this app persists
 /// across launches yet.
 class TrackerSettings {
   TrackerSettings._();

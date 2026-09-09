@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const AuthHeader(
                     title: 'Welcome back',
                     detail:
-                        'Sign in to pick up your cycle, your bag and the '
+                        'Sign in to pick up your cycle, your cart and the '
                         'sessions you follow.',
                   ),
                   const SizedBox(height: 28),

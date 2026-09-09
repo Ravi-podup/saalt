@@ -116,7 +116,7 @@ class ProductCard extends StatelessWidget {
                         // _ChooseButton(
                         //   label: product.needsChoice
                         //       ? 'Choose size'
-                        //       : 'Add to bag',
+                        //       : 'Add to cart',
                         //   onTap: onChoose,
                         // ),
                       ],
@@ -279,7 +279,7 @@ class _SaveButton extends StatelessWidget {
 }
 
 /// Navigational, not transactional. Most products have dozens of variants, so
-/// the listing cannot add to the bag - it sends you where the choice is made.
+/// the listing cannot add to the cart - it sends you where the choice is made.
 class _ChooseButton extends StatelessWidget {
   const _ChooseButton({required this.label, this.onTap});
 

@@ -663,4 +663,91 @@ class ProductHelper {
   static int colourCount(Product product) => product.options
       .where((o) => o.name == 'Color' || o.name == 'Color/Size')
       .fold(0, (sum, o) => sum + o.values.length);
+
+  /// Real colour for each named colourway, so the picker can show swatches
+  /// rather than the words. Anything unlisted falls back to a neutral.
+  static const _swatches = <String, Color>{
+    'Amber Stone': Color(0xFFC08A4A),
+    'Blue Dusk': Color(0xFF6B7FA3),
+    'Blue Rain': Color(0xFF8CA8C8),
+    'Blush': Color(0xFFEFC9C6),
+    'Cloud': Color(0xFFE8EAED),
+    'Coastal Blue (Regular)': Color(0xFF7FA8C9),
+    'Crimson Rose': Color(0xFFA83246),
+    'Dawn Sky': Color(0xFFBFD0E0),
+    'Deep Marine': Color(0xFF1E3A5F),
+    'Deep Plum': Color(0xFF4A2740),
+    'Deep Umber': Color(0xFF4A382C),
+    'Desert Blush': Color(0xFFDCA9A0),
+    'Electric Raspberry': Color(0xFFC42A64),
+    'Himalayan Pink': Color(0xFFE8A0A8),
+    'Lightning Indigo': Color(0xFF3B3E8C),
+    'Midnight Sky': Color(0xFF1B2440),
+    'Mist Grey': Color(0xFFB9BCC1),
+    'Moonlit Mauve': Color(0xFFA98CA5),
+    'Mountain Iris': Color(0xFF7A6E9E),
+    'Ocean Blue': Color(0xFF2F6690),
+    'Pink Dawn': Color(0xFFF0BFC4),
+    'Rich Earth': Color(0xFF6B4A38),
+    'Rich Ruby': Color(0xFF8E1F35),
+    'Seafoam Green': Color(0xFFA8CFC0),
+    'Seaglass': Color(0xFFBFD8D2),
+    'Seashell': Color(0xFFF1E3DA),
+    'Seaspray Green': Color(0xFF8FBFAE),
+    'Smooth Terracotta': Color(0xFFB5674C),
+    'Soft Lavender': Color(0xFFC9BBD8),
+    'Soft Sand': Color(0xFFE3D5C3),
+    'Sunset Coral (Small)': Color(0xFFE88A6F),
+    'Sunset Mauve': Color(0xFFB98192),
+    'Thistle Bloom': Color(0xFF9E7FA8),
+    'Volcanic Black': Color(0xFF22242A),
+    'Warm Wheat': Color(0xFFD9C09B),
+    'Wild Rose': Color(0xFFC4677E),
+  };
+
+  static Color swatchFor(String colourName) =>
+      _swatches[colourName] ?? AppColors.inkFaint;
+
+  /// True when we hold a real colour for every value, and so can drop the
+  /// words for swatches. A part-known list keeps its chips, since half
+  /// swatches and half grey discs reads as a bug.
+  static bool hasSwatches(Iterable<String> values) =>
+      values.every(_swatches.containsKey);
+
+  /// Photographs for the detail gallery. Only one shot per product is in
+  /// assets today, so the strip is filled out with the other photographs from
+  /// the same category. Give [Product] a gallery field once the extra angles
+  /// land and this can return those instead.
+  static List<String> galleryFor(Product product) {
+    final own = product.imageAsset;
+    return <String>[
+      ?own,
+      for (final other in catalog)
+        if (other.category == product.category &&
+            other.name != product.name &&
+            other.imageAsset != null)
+          other.imageAsset!,
+    ].take(5).toList();
+  }
+
+  /// What one of this product is called, for bundle wording such as
+  /// "3 pairs". Taken from the category, since product names end in too many
+  /// different nouns to read well ("1 High Waist").
+  static ({String one, String many}) unitNoun(Product product) =>
+      switch (product.category) {
+        'Underwear' => (one: 'pair', many: 'pairs'),
+        'Cups' || 'Teen' => (one: 'cup', many: 'cups'),
+        'Discs' => (one: 'disc', many: 'discs'),
+        'Bundles' => (one: 'set', many: 'sets'),
+        _ => (one: 'item', many: 'items'),
+      };
+
+  /// How many drops to draw beside an absorbency level.
+  static int dropsFor(String level) => switch (level) {
+    'Light' => 1,
+    'Regular' => 2,
+    'Heavy' => 3,
+    'Super' => 4,
+    _ => 1,
+  };
 }

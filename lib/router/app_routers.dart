@@ -14,9 +14,16 @@ import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/parties/wizard/brief_screen.dart';
 import 'package:saalt/presentation/parties/wizard/webinar_wizard_screen.dart';
+import 'package:saalt/presentation/notifications/notifications_screen.dart';
+import 'package:saalt/presentation/products/cart_screen.dart';
+import 'package:saalt/presentation/profile/profile_screen.dart';
+import 'package:saalt/presentation/products/checkout_screen.dart';
+import 'package:saalt/presentation/products/order_placed_screen.dart';
+import 'package:saalt/presentation/products/orders_screen.dart';
 import 'package:saalt/presentation/products/product_detail_screen.dart';
 import 'package:saalt/presentation/products/product_listing_screen.dart';
 import 'package:saalt/presentation/products/products_screen.dart';
+import 'package:saalt/presentation/products/wishlist_screen.dart';
 import 'package:saalt/presentation/show/saalt_show_screen.dart';
 import 'package:saalt/presentation/splash_screen.dart';
 import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
@@ -50,6 +57,20 @@ class AppRouters {
       pageBuilder: (context, state) => AppTransitions.buildPage(
         state: state,
         child: const DashboardScreen(),
+      ),
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.profileScreen,
+      pageBuilder: (context, state) =>
+          AppTransitions.buildPage(state: state, child: const ProfileScreen()),
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.notificationsScreen,
+      pageBuilder: (context, state) => AppTransitions.buildPage(
+        state: state,
+        child: const NotificationsScreen(),
       ),
     ),
 
@@ -95,6 +116,34 @@ class AppRouters {
           ),
         );
       },
+    ),
+
+    GoRoute(
+      path: AppRoutePaths.wishlistScreen,
+      pageBuilder: (context, state) =>
+          AppTransitions.buildPage(state: state, child: const WishlistScreen()),
+    ),
+    GoRoute(
+      path: AppRoutePaths.cartScreen,
+      pageBuilder: (context, state) =>
+          AppTransitions.buildPage(state: state, child: const CartScreen()),
+    ),
+    GoRoute(
+      path: AppRoutePaths.checkoutScreen,
+      pageBuilder: (context, state) =>
+          AppTransitions.buildPage(state: state, child: const CheckoutScreen()),
+    ),
+    GoRoute(
+      path: AppRoutePaths.orderPlacedScreen,
+      pageBuilder: (context, state) => AppTransitions.buildPage(
+        state: state,
+        child: const OrderPlacedScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutePaths.ordersScreen,
+      pageBuilder: (context, state) =>
+          AppTransitions.buildPage(state: state, child: const OrdersScreen()),
     ),
 
     /// ---------------- Knowledge ----------------

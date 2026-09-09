@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:saalt/helper/dashboard_helper.dart';
 import 'package:saalt/helper/tracker_helper.dart';
 import 'package:saalt/models/dashboard_item.dart';
-import 'package:saalt/presentation/auth/login_screen.dart';
+import 'package:saalt/helper/notification_demo.dart';
+import 'package:saalt/presentation/notifications/notifications_screen.dart';
+import 'package:saalt/presentation/profile/profile_screen.dart';
 import 'package:saalt/presentation/community/community_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
@@ -16,6 +18,7 @@ import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/res/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
+import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -187,14 +190,19 @@ class _Header extends StatelessWidget {
             children: [
               Image.asset(AppImages.logo, height: 26, fit: BoxFit.contain),
               const Spacer(),
-              const _CircleAction(
+              // The shared button, so these two carry labels and match every
+              // other header in the app.
+              CircleIconButton(
                 icon: Icons.notifications_none_rounded,
-                showDot: true,
+                tooltip: 'Notifications',
+                showDot: NotificationDemo.unreadCount > 0,
+                onTap: () => NotificationsScreen.open(context),
               ),
               const SizedBox(width: 10),
-              _CircleAction(
+              CircleIconButton(
                 icon: Icons.person_outline_rounded,
-                onTap: () => LoginScreen.open(context),
+                tooltip: 'Profile',
+                onTap: () => ProfileScreen.open(context),
               ),
             ],
           ),
@@ -220,58 +228,6 @@ class _Header extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _CircleAction extends StatelessWidget {
-  const _CircleAction({required this.icon, this.showDot = false, this.onTap});
-
-  final IconData icon;
-  final bool showDot;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      width: 40,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.hairline),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryColor.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const CircleBorder(),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Icon(icon, size: 19, color: AppColors.ink),
-            if (showDot)
-              Positioned(
-                top: 10,
-                right: 11,
-                child: Container(
-                  height: 7,
-                  width: 7,
-                  decoration: BoxDecoration(
-                    color: AppColors.rose,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.surface, width: 1.5),
-                  ),
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

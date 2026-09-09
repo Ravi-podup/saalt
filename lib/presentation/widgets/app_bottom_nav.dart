@@ -9,10 +9,15 @@ class BottomNavItem {
     this.icon,
     this.customIcon,
     this.badgeCount = 0,
+    this.onTap,
   });
 
   final String label;
   final IconData? icon;
+
+  /// Null leaves the tab presentational, which most of them are: the bars
+  /// mark where you already are rather than routing anywhere.
+  final VoidCallback? onTap;
 
   /// Drawn instead of [icon] when the tab needs its own artwork, such as the
   /// wordmark. Keeps its own colour rather than taking the active tint.
@@ -28,8 +33,8 @@ class BottomNavItem {
   );
 }
 
-/// Shared bottom tab bar. Presentational: tabs mark which one reads as current
-/// but do not route anywhere yet.
+/// Shared bottom tab bar. Tabs mark which one reads as current; a tab only
+/// routes if its item was given an [BottomNavItem.onTap].
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.items, required this.selected});
 
@@ -82,67 +87,72 @@ class _NavItem extends StatelessWidget {
       child: Semantics(
         button: true,
         selected: isActive,
-        child: Container(
-          decoration: BoxDecoration(
-            // A wordmark cannot take a tint, so the current tab is marked with
-            // a soft pill rather than by icon colour alone.
-            color: isActive ? AppColors.roseTint : Colors.transparent,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: 22,
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    item.customIcon ?? Icon(item.icon, size: 21, color: color),
-                    if (item.badgeCount > 0)
-                      Positioned(
-                        top: -3,
-                        right: -9,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          constraints: const BoxConstraints(minWidth: 16),
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: AppColors.rose,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                              color: AppColors.surface,
-                              width: 1.5,
+        child: InkWell(
+          onTap: item.onTap,
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            decoration: BoxDecoration(
+              // A wordmark cannot take a tint, so the current tab is marked with
+              // a soft pill rather than by icon colour alone.
+              color: isActive ? AppColors.roseTint : Colors.transparent,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 22,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.center,
+                    children: [
+                      item.customIcon ??
+                          Icon(item.icon, size: 21, color: color),
+                      if (item.badgeCount > 0)
+                        Positioned(
+                          top: -3,
+                          right: -9,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            constraints: const BoxConstraints(minWidth: 16),
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: AppColors.rose,
+                              borderRadius: BorderRadius.circular(30),
+                              border: Border.all(
+                                color: AppColors.surface,
+                                width: 1.5,
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${item.badgeCount}',
-                              style: const TextStyle(
-                                fontSize: 9,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                            child: Center(
+                              child: Text(
+                                '${item.badgeCount}',
+                                style: const TextStyle(
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                item.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
-                  color: color,
+                const SizedBox(height: 5),
+                Text(
+                  item.label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                    color: color,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

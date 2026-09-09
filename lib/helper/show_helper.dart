@@ -88,7 +88,7 @@ class ShowHelper {
     ),
   ];
 
-  /// Where to listen. Names only - no brand marks bundled.
+  /// Where to listen. Each name is matched to its brand mark in PlatformRow.
   static const platforms = [
     'Apple Podcasts',
     'Spotify',

@@ -3,11 +3,18 @@ abstract class AppRoutePaths {
   static const loginScreen = "/loginScreen";
   static const signupScreen = "/signupScreen";
   static const dashboardScreen = "/dashboardScreen";
+  static const profileScreen = "/profileScreen";
+  static const notificationsScreen = "/notificationsScreen";
 
   /// Shop
   static const productsScreen = "/productsScreen";
   static const productListingScreen = "/productListingScreen";
   static const productDetailScreen = "/productDetailScreen";
+  static const wishlistScreen = "/wishlistScreen";
+  static const cartScreen = "/cartScreen";
+  static const checkoutScreen = "/checkoutScreen";
+  static const orderPlacedScreen = "/orderPlacedScreen";
+  static const ordersScreen = "/ordersScreen";
 
   /// Knowledge
   static const knowledgebaseScreen = "/knowledgebaseScreen";

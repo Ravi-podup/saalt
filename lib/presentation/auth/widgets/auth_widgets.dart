@@ -13,7 +13,7 @@ class AuthHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Image.asset(AppImages.logo, height: 26, fit: BoxFit.contain),
+        Image.asset(AppImages.logo, height: 40, fit: BoxFit.contain),
         const SizedBox(height: 30),
         Text(
           title,
