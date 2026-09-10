@@ -9,6 +9,7 @@ import 'package:saalt/presentation/community/community_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/products/products_screen.dart';
+import 'package:saalt/presentation/quiz/fit_quiz_screen.dart';
 import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
 import 'package:saalt/presentation/show/saalt_show_screen.dart';
 import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
@@ -47,6 +48,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _openTracker() {
     PeriodTrackerScreen.open(context);
+  }
+
+  void _openFitQuiz() {
+    FitQuizScreen.open(context);
   }
 
   void _openItem(DashboardItem item) {
@@ -92,6 +97,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             onTap: _openTracker,
                             onLogTap: _openTracker,
                           ),
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
+                          child: _FindYourFitBanner(onTap: _openFitQuiz),
                         ),
                       ),
                       const SliverToBoxAdapter(child: _SectionLabel('Explore')),
@@ -256,6 +267,85 @@ class _SectionLabel extends StatelessWidget {
           const SizedBox(width: 12),
           const Expanded(child: Divider(color: AppColors.hairline, height: 1)),
         ],
+      ),
+    );
+  }
+}
+
+/// Entry point to the "find your fit" quiz. Sits directly under the tracker
+/// card because it is the other thing on this screen that gives back
+/// something personal.
+class _FindYourFitBanner extends StatelessWidget {
+  const _FindYourFitBanner({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColors.roseTint,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
+          child: Row(
+            children: [
+              Container(
+                height: 40,
+                width: 40,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.rose,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  size: 19,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Find your fit',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.3,
+                        color: AppColors.ink,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Nine questions and we will build your Saalt Stack.',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11.5,
+                        height: 1.3,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.inkMuted,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Icon(
+                Icons.chevron_right_rounded,
+                size: 20,
+                color: AppColors.rose,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

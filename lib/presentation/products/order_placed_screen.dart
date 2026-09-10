@@ -135,7 +135,7 @@ class OrderPlacedScreen extends StatelessWidget {
                   ShopOutlineButton(
                     label: 'Keep shopping',
                     // Back to the shop, dropping the checkout pages behind.
-                    onTap: () => context.go(AppRoutePaths.productsScreen),
+                    onTap: () => Navigator.pop(context),
                   ),
                 ],
               ),

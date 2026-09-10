@@ -30,6 +30,9 @@ abstract class AppRoutePaths {
   static const webinarWizardScreen = "/webinarWizardScreen";
   static const briefScreen = "/briefScreen";
 
+  /// Find your fit
+  static const fitQuizScreen = "/fitQuizScreen";
+
   /// Period tracker
   static const periodTrackerScreen = "/periodTrackerScreen";
   static const dayDetailScreen = "/dayDetailScreen";

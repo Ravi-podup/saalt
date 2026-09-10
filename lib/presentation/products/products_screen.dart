@@ -114,7 +114,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     badgeCount: _saved.length,
                     flat: true,
                     onTap: () => WishlistScreen.open(context),
-                    tooltip: 'Saved',
+                    tooltip: 'Favorites',
                   ),
                   ValueListenableBuilder<Map<String, int>>(
                     valueListenable: CartStore.items,

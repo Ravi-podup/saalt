@@ -10,6 +10,7 @@ import 'package:saalt/presentation/auth/sign_up_screen.dart';
 import 'package:saalt/presentation/community/community_screen.dart';
 import 'package:saalt/presentation/dashboard_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledge_section_screen.dart';
+import 'package:saalt/presentation/quiz/fit_quiz_screen.dart';
 import 'package:saalt/presentation/knowledgebase/knowledgebase_screen.dart';
 import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/parties/wizard/brief_screen.dart';
@@ -217,6 +218,15 @@ class AppRouters {
           ),
         );
       },
+    ),
+
+    /// ---------------- Find your fit ----------------
+    GoRoute(
+      path: AppRoutePaths.fitQuizScreen,
+      pageBuilder: (context, state) => AppTransitions.buildPage(
+        state: state,
+        child: const FitQuizScreen(),
+      ),
     ),
 
     /// ---------------- Period tracker ----------------

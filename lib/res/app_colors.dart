@@ -33,4 +33,18 @@ class AppColors {
 
   static const tealTint = Color(0xFFDEEBEC);
   static const teal = Color(0xFF457C85);
+
+  static const wizardSelectedBorderColor = Color(0xFFe8566a);
+  static const wizardSelectedBackgroundColor = Color(0xFFFFF0F3);
+
+  static const wizardUnselectedBackgroundColor = Color(0xFFF3F4F6);
+
+  /// The disc behind a mark that keeps its own accent colour, such as the
+  /// products on "reaching for, ruling out, wondering about".
+  static const wizardIconBackgroundColor = Color(0xFFFDF2F8);
+
+  /// The chosen size on the product detail screen: filled, with a darker
+  /// ring around it.
+  static const sizeSelectedBackgroundColor = Color(0xFFC95878);
+  static const sizeSelectedBorderColor = Color(0xFFAE3658);
 }

@@ -553,24 +553,22 @@ class _Swatch extends StatelessWidget {
         child: GestureDetector(
           onTap: onTap,
           behavior: HitTestBehavior.opaque,
+          // One disc, not a ring around an inner one: the border sits on the
+          // colour itself, so a chosen swatch reads as filled rather than as
+          // a colour floating inside a hoop.
           child: Container(
             height: 36,
             width: 36,
-            padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
+              color: ProductHelper.swatchFor(name),
               shape: BoxShape.circle,
-              // The ring, not a fill, marks the choice — the disc has to keep
-              // showing the colour it stands for.
+              // The hairline is what keeps a near-white colourway visible on
+              // the canvas; the accent takes over once it is chosen.
               border: Border.all(
-                color: isActive ? AppColors.rose : Colors.transparent,
-                width: 2,
-              ),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: ProductHelper.swatchFor(name),
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.hairline),
+                color: isActive
+                    ? AppColors.sizeSelectedBorderColor
+                    : AppColors.hairline,
+                width: isActive ? 2 : 1,
               ),
             ),
           ),
@@ -627,10 +625,15 @@ class _SizeDisc extends StatelessWidget {
     // discs anyway, and a long value such as a "Colour/Size" pairing stretches
     // into a pill instead of an ellipse.
     return Material(
-      color: isActive ? AppColors.rose : AppColors.surface,
+      color: isActive
+          ? AppColors.sizeSelectedBackgroundColor
+          : AppColors.surface,
       shape: StadiumBorder(
         side: BorderSide(
-          color: isActive ? AppColors.rose : AppColors.hairline,
+          color: isActive
+              ? AppColors.sizeSelectedBorderColor
+              : AppColors.hairline,
+          width: isActive ? 2 : 1,
         ),
       ),
       child: InkWell(
