@@ -61,7 +61,7 @@ class _AskCardState extends State<AskCard> {
           ),
           const SizedBox(height: 7),
           const Text(
-            'First-cycle nerves, perimenopause, the thing you have been '
+            "First-cycle nerves, perimenopause, the thing you've been "
             'meaning to ask a friend. One gets answered every week.',
             style: TextStyle(
               fontSize: 12.5,

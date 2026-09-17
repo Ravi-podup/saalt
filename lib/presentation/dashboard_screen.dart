@@ -58,13 +58,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     switch (item.title) {
       case 'Products':
         ProductsScreen.open(context);
-      case 'Knowledgebase':
+      case 'Trust Center':
         KnowledgebaseScreen.open(context);
       case 'Saalt Show':
         SaaltShowScreen.open(context);
       case 'Testimonials':
         TestimonialsScreen.open(context);
-      case 'Community':
+      case 'The Saalt Collective':
         CommunityScreen.open(context);
       case 'TMI Parties':
         TmiPartiesScreen.open(context);

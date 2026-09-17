@@ -15,6 +15,7 @@ class AppColors {
 
   static const roseTint = Color(0xFFF7E5E3);
   static const rose = Color(0xFFC0736A);
+  static const pastelColor = Color(0xFFF7C6B5);
 
   static const sageTint = Color(0xFFE4EDE3);
   static const sage = Color(0xFF62855E);

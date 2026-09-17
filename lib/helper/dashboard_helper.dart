@@ -5,7 +5,7 @@ import 'package:saalt/res/app_colors.dart';
 class DashboardHelper {
   static const items = <DashboardItem>[
     DashboardItem(
-      title: 'Community',
+      title: 'The Saalt Collective',
       imageAsset: 'assets/images/Community_explore.png',
       subtitle: 'Real talk, no filter',
       icon: Icons.forum_rounded,
@@ -29,7 +29,7 @@ class DashboardHelper {
       accent: AppColors.apricot,
     ),
     DashboardItem(
-      title: 'Knowledgebase',
+      title: 'Trust Center',
       imageAsset: 'assets/images/Knowledgebase_explore.png',
       subtitle: 'Guides & education',
       icon: Icons.menu_book_rounded,
@@ -39,7 +39,7 @@ class DashboardHelper {
     DashboardItem(
       title: 'TMI Parties',
       imageAsset: 'assets/images/TMI_Parties_explore.png',
-      subtitle: 'Live webinars',
+      subtitle: 'Live sessions',
       icon: Icons.celebration_rounded,
       tint: AppColors.lilacTint,
       accent: AppColors.lilac,

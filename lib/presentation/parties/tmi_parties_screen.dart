@@ -147,7 +147,7 @@ class _TmiPartiesScreenState extends State<TmiPartiesScreen> {
               onBack: () => context.pop(),
               trailing: CircleIconButton(
                 icon: Icons.add_rounded,
-                tooltip: 'Schedule a webinar',
+                tooltip: 'Schedule a TMI Party',
                 onTap: _scheduleSession,
               ),
             ),

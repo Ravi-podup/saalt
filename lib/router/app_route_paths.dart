@@ -2,6 +2,7 @@ abstract class AppRoutePaths {
   static const splashScreen = "/splashScreen";
   static const loginScreen = "/loginScreen";
   static const signupScreen = "/signupScreen";
+  static const forgotPasswordScreen = "/forgotPasswordScreen";
   static const dashboardScreen = "/dashboardScreen";
   static const profileScreen = "/profileScreen";
   static const notificationsScreen = "/notificationsScreen";

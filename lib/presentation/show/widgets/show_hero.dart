@@ -63,8 +63,7 @@ class ShowHero extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Every week: expert interviews, honest customer stories and '
-            'community roundtables. No TMI filter.',
+            'Every week: expert interviews, customer stories and The Saalt Collective roundtables.',
             style: TextStyle(
               fontSize: 12.5,
               height: 1.45,

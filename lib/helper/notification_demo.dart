@@ -31,7 +31,7 @@ enum NotificationKind {
     AppColors.apricotTint,
   ),
   community(
-    'Community',
+    'The Saalt Collective',
     Icons.forum_rounded,
     AppColors.lilac,
     AppColors.lilacTint,
@@ -81,7 +81,7 @@ class NotificationDemo {
       title: TmiHelper.live.isEmpty
           ? 'A TMI Party is starting soon'
           : '${TmiHelper.live.first.title} is live',
-      body: 'The room is open — join whenever you are ready.',
+      body: "The room is open — join whenever you're ready.",
       time: '9:02',
       group: 'Today',
       isUnread: true,

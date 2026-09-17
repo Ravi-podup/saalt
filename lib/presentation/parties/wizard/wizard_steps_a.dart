@@ -110,11 +110,11 @@ class _SetupStepState extends State<SetupStep> {
         const SizedBox(height: 22),
         WizardSection(
           title: 'Basic information',
-          detail: 'Tell us about your webinar.',
+          detail: 'Tell us about your session.',
           children: [
             WizardCard(
               children: [
-                const FieldLabel('Webinar schedule'),
+                const FieldLabel('Session schedule'),
                 ChoiceCards(
                   options: const [
                     (
@@ -204,7 +204,7 @@ class _SetupStepState extends State<SetupStep> {
             WizardCard(
               children: [
                 FieldLabel(
-                  'Webinar title',
+                  'Session title',
                   isRequired: true,
                   action: SparkLink(label: 'Suggest titles', onTap: null),
                 ),
@@ -219,7 +219,7 @@ class _SetupStepState extends State<SetupStep> {
                 ),
                 const CardDivider(),
                 FieldLabel(
-                  'Learning objectives',
+                  "What we'll cover",
                   action: SparkLink(label: 'Suggest objectives', onTap: null),
                 ),
                 for (var i = 0; i < _objectives.length; i++) ...[
@@ -248,7 +248,7 @@ class _SetupStepState extends State<SetupStep> {
                       Expanded(
                         child: WizardInput(
                           controller: _objectives[i],
-                          hint: 'What will attendees learn?',
+                          hint: 'What will people walk away with?',
                           maxLength: 90,
                           onChanged: (value) => _draft.objectives[i] = value,
                         ),
@@ -268,7 +268,7 @@ class _SetupStepState extends State<SetupStep> {
                 const SizedBox(height: 8),
                 WizardInput(
                   controller: _description,
-                  hint: 'Detailed description of your webinar.',
+                  hint: 'Detailed description of your session.',
                   maxLines: 5,
                   maxLength: 2000,
                   onChanged: (value) {
@@ -337,12 +337,12 @@ class _SetupStepState extends State<SetupStep> {
         ),
         const SizedBox(height: 22),
         WizardSection(
-          title: 'Webinar settings',
+          title: 'Session settings',
           detail: 'How the room runs.',
           children: [
             WizardCard(
               children: [
-                const FieldLabel('Webinar plan', isRequired: true),
+                const FieldLabel('Session plan', isRequired: true),
                 ChoiceCards(
                   options: const [
                     (
@@ -372,7 +372,7 @@ class _SetupStepState extends State<SetupStep> {
                   ),
                 ],
                 const CardDivider(),
-                const FieldLabel('Webinar type', isRequired: true),
+                const FieldLabel('Session type', isRequired: true),
                 ChoiceCards(
                   options: const [
                     (
@@ -572,8 +572,7 @@ class _BriefCard extends StatelessWidget {
                         Text(
                           draft.hasBrief
                               ? 'Tap to change what you wrote.'
-                              : 'Describe the session in a sentence and we '
-                                    'fill in what we can.',
+                              : "Describe it in a sentence and we'll draft the rest.",
                           style: const TextStyle(
                             fontSize: 10.5,
                             height: 1.4,
@@ -911,7 +910,7 @@ class _SpeakersStepState extends State<SpeakersStep> {
                   hint: 'e.g. Pelvic health physiotherapist',
                 ),
                 const SizedBox(height: 10),
-                const FieldLabel('Company or organisation'),
+                const FieldLabel('Company or organization'),
                 WizardInput(controller: _company, hint: 'Company name'),
                 const CardDivider(),
                 const FieldLabel('Speaker bio'),

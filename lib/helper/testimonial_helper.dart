@@ -18,7 +18,7 @@ class TestimonialHelper {
       isVerified: true,
       quote:
           'Three cycles in and I have stopped thinking about my period at all. '
-          'Twelve hours, no checking, no bag full of supplies. I did not '
+          "Twelve hours, no checking, no bag full of supplies. I didn't "
           'expect the mental quiet to be the best part.',
       helpfulCount: 128,
       avatarTint: AppColors.roseTint,
@@ -55,7 +55,7 @@ class TestimonialHelper {
       product: 'Saalt Disc',
       quote:
           'Took me two tries to get the angle right and I nearly gave up. '
-          'Third attempt it clicked, and removal is genuinely mess-free now. '
+          'Third attempt it clicked, and removal is mess-free now. '
           'Worth pushing through the learning curve.',
       helpfulCount: 61,
       avatarTint: AppColors.tealTint,

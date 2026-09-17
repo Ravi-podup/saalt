@@ -57,7 +57,7 @@ class ReviewStep extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         draft.title.trim().isEmpty
-                            ? 'Untitled webinar'
+                            ? 'Untitled session'
                             : draft.title.trim(),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -129,7 +129,7 @@ class ReviewStep extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         WizardSection(
-          title: 'About this webinar',
+          title: 'About this session',
           detail: 'The description attendees read.',
           trailing: SparkLink(
             label: 'Edit',
@@ -438,8 +438,7 @@ class SocialStep extends StatelessWidget {
         const NoticeStrip(
           tone: NoticeTone.info,
           message:
-              'Posting is design only in this build. Copy is drafted '
-              'here, then shared from the console.',
+              'Draft your posts here, then share them when the session is live',
         ),
         const SizedBox(height: 16),
         for (final channel in _channels) ...[
@@ -825,9 +824,7 @@ class _InviteStepState extends State<InviteStep> {
         const SizedBox(height: 18),
         const NoticeStrip(
           tone: NoticeTone.good,
-          message:
-              'Finish adds this session to the TMI Parties list. Invites '
-              'and streaming come from the console.',
+          message: 'Finish adds this session to the TMI Parties list.',
         ),
       ],
     );

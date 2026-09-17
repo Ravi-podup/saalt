@@ -95,8 +95,23 @@ class TmiParty {
   /// Watchable once the session is over.
   final String? replayUrl;
 
-  DateTime get startsAt =>
-      scheduledAt ?? DateTime.now().add(Duration(minutes: _offsetMinutes));
+  DateTime get startsAt {
+    final scheduled = scheduledAt;
+    if (scheduled != null) return scheduled;
+
+    // The seeded line-up is held as an offset from now so the demo schedule
+    // never reads as stale. Left raw, every session inherits the current
+    // minute and lands somewhere like 1:43 am, so it is floored to the half
+    // hour — where a real schedule would sit.
+    final at = DateTime.now().add(Duration(minutes: _offsetMinutes));
+    return DateTime(
+      at.year,
+      at.month,
+      at.day,
+      at.hour,
+      at.minute < 30 ? 0 : 30,
+    );
+  }
 
   DateTime get endsAt => startsAt.add(Duration(minutes: minutes));
 

@@ -107,7 +107,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
             // Pinned: brand row stays; everything below it scrolls.
             _CommunityHeader(
               onBack: () => context.pop(),
-              onSearch: () => _toast('Search the community'),
+              onSearch: () => _toast('Search the Collective'),
               onNotifications: () => _toast('No new notifications'),
               onProfile: () => _toast('Profile'),
             ),
@@ -202,16 +202,22 @@ class _CommunityHeader extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 2),
-          const Text(
-            'Community',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.3,
-              color: AppColors.ink,
+          // Expanded rather than Flexible beside a Spacer: the Spacer would
+          // take the free width and squeeze this name to "The Saalt ...".
+          // Taking the space here leaves the actions where they were.
+          const Expanded(
+            child: Text(
+              'The Saalt Collective',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.3,
+                color: AppColors.ink,
+              ),
             ),
           ),
-          const Spacer(),
           _HeaderAction(
             icon: Icons.search_rounded,
             onTap: onSearch,

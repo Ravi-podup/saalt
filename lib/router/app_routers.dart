@@ -5,6 +5,7 @@ import 'package:saalt/models/knowledge_section.dart';
 import 'package:saalt/models/product.dart';
 import 'package:saalt/models/shop_category.dart';
 import 'package:saalt/models/webinar_draft.dart';
+import 'package:saalt/presentation/auth/forgot_password_screen.dart';
 import 'package:saalt/presentation/auth/login_screen.dart';
 import 'package:saalt/presentation/auth/sign_up_screen.dart';
 import 'package:saalt/presentation/community/community_screen.dart';
@@ -85,6 +86,13 @@ class AppRouters {
       path: AppRoutePaths.signupScreen,
       pageBuilder: (context, state) =>
           AppTransitions.buildPage(state: state, child: const SignUpScreen()),
+    ),
+    GoRoute(
+      path: AppRoutePaths.forgotPasswordScreen,
+      pageBuilder: (context, state) => AppTransitions.buildPage(
+        state: state,
+        child: const ForgotPasswordScreen(),
+      ),
     ),
 
     /// ---------------- Shop ----------------

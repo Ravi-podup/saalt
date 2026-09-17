@@ -21,7 +21,7 @@ class TmiHelper {
       id: 'cups-101',
       title: 'Cups: your first one, start to finish',
       blurb:
-          'Folding, insertion, the pop, removal in a public loo. Nothing is '
+          'Folding, insertion, the pop, removal in a public bathroom. Nothing is '
           'too basic for this one.',
       host: 'Saalt Care Team',
       // Twelve minutes in, so the room is live on open.

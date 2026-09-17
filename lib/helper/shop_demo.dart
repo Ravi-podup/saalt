@@ -145,8 +145,8 @@ class ShopDemo {
 
   static const address = (
     name: 'Giorgia Meloni',
-    line1: '14 Kalyani Nagar',
-    line2: 'Pune, Maharashtra 411006',
+    line1: '1234 W Main St',
+    line2: 'Rexburg, ID 83440',
   );
 
   static const deliveryEstimate = 'Thu 11 – Sat 13 Sep';

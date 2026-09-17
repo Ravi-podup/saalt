@@ -69,7 +69,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            ScreenHeader(title: 'Knowledgebase', onBack: () => context.pop()),
+            ScreenHeader(title: 'Trust Center', onBack: () => context.pop()),
             SearchField(
               controller: _searchController,
               hintText: 'Search all guides and videos…',

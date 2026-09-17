@@ -46,11 +46,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   /// How the shop sells everything: one to try, a rotation, a full set, or
   /// pick-your-own. The discounts are the ones the site runs.
   static const _tiers = <BundleTier>[
-    BundleTier(
-      quantity: 1,
-      discount: 0,
-      blurb: 'Try it out — no commitment',
-    ),
+    BundleTier(quantity: 1, discount: 0, blurb: 'Try it out — no commitment'),
     BundleTier(
       quantity: 3,
       discount: 0.10,
@@ -247,7 +243,7 @@ class _Ratings extends StatelessWidget {
         ),
         if (ProductHelper.colourCount(product) > 1)
           Text(
-            '${ProductHelper.colourCount(product)} colours',
+            '${ProductHelper.colourCount(product)} colors',
             style: const TextStyle(fontSize: 12, color: AppColors.inkFaint),
           ),
       ],
@@ -272,7 +268,8 @@ class _OptionBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     // Same canonical order the filters use, so Size reads S, M, L here too.
     final values = ProductHelper.sortValues(option.name, option.values);
-    final isColour = option.name == 'Color' && ProductHelper.hasSwatches(values);
+    final isColour =
+        option.name == 'Color' && ProductHelper.hasSwatches(values);
     final isSize = option.name == 'Size';
 
     return Column(

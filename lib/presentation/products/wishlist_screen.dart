@@ -47,27 +47,20 @@ class WishlistScreen extends StatelessWidget {
                 builder: (context, box) {
                   const gap = 12.0;
                   const padding = 20.0;
-                  final tileWidth =
-                      (box.maxWidth - padding * 2 - gap) / 2;
+                  final tileWidth = (box.maxWidth - padding * 2 - gap) / 2;
 
                   return GridView.builder(
                     key: const Key('wishlist-body'),
-                    padding: const EdgeInsets.fromLTRB(
-                      padding,
-                      8,
-                      padding,
-                      28,
+                    padding: const EdgeInsets.fromLTRB(padding, 8, padding, 28),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: gap,
+                      mainAxisSpacing: 14,
+                      // Sized rather than given a ratio: the square
+                      // photograph plus a text block of known height, so
+                      // a long product name cannot squeeze the price out.
+                      mainAxisExtent: tileWidth + 90,
                     ),
-                    gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: gap,
-                          mainAxisSpacing: 14,
-                          // Sized rather than given a ratio: the square
-                          // photograph plus a text block of known height, so
-                          // a long product name cannot squeeze the price out.
-                          mainAxisExtent: tileWidth + 90,
-                        ),
                     itemCount: saved.length,
                     itemBuilder: (context, index) => _SavedTile(
                       product: saved[index],
@@ -161,7 +154,7 @@ class _SavedTile extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '$colours colours',
+                    '$colours colors',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -190,9 +183,7 @@ class _Photo extends StatelessWidget {
     final asset = product.imageAsset;
     final fallback = ColoredBox(
       color: product.tint,
-      child: Center(
-        child: Icon(product.icon, size: 30, color: product.accent),
-      ),
+      child: Center(child: Icon(product.icon, size: 30, color: product.accent)),
     );
 
     return ClipRRect(
@@ -219,9 +210,7 @@ class _SavedHeart extends StatelessWidget {
     // white ground, and an unbordered white disc vanishes into them.
     return Material(
       color: AppColors.surface,
-      shape: const CircleBorder(
-        side: BorderSide(color: AppColors.hairline),
-      ),
+      shape: const CircleBorder(side: BorderSide(color: AppColors.hairline)),
       child: InkWell(
         onTap: () {},
         customBorder: const CircleBorder(),

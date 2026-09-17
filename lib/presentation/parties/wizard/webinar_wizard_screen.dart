@@ -14,7 +14,7 @@ import 'package:saalt/router/app_route_paths.dart';
 enum WizardStep {
   setup(
     'Setup',
-    'Create your webinar',
+    'Create your session',
     'Add the title, schedule and details '
         'your attendees will see.',
   ),
@@ -22,12 +22,12 @@ enum WizardStep {
     'Speakers',
     'Add your speakers',
     'Hosts, presenters and panelists '
-        'who will join this webinar.',
+        'who will join this session.',
   ),
   emails(
     'Emails',
     'Set up your emails',
-    'Pick who you are emailing '
+    "Pick who you're emailing "
         'and which emails go out.',
   ),
   thumbnail(
@@ -38,7 +38,7 @@ enum WizardStep {
   ),
   review(
     'Review',
-    'Preview and review',
+    'Review your session',
     'Check each section, then '
         'continue when it reads right.',
   ),
@@ -57,8 +57,7 @@ enum WizardStep {
   invite(
     'Invite',
     'Invite attendees',
-    'Send invitations to your '
-        'colleagues, clients and network.',
+    'Invite the people you want in the room.',
   );
 
   const WizardStep(this.railLabel, this.title, this.detail);
@@ -180,21 +179,7 @@ class _WebinarWizardScreenState extends State<WebinarWizardScreen> {
       ),
     );
 
-    context.pop();
-    _toast('${_draft.title.trim()} is on the schedule');
-  }
-
-  void _toast(String message) {
-    final messenger = ScaffoldMessenger.of(context);
-    messenger.hideCurrentSnackBar();
-    messenger.showSnackBar(
-      SnackBar(
-        content: Text(message),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: AppColors.ink,
-        duration: const Duration(milliseconds: 1700),
-      ),
-    );
+    context.go(AppRoutePaths.dashboardScreen);
   }
 
   Widget get _body => switch (_step) {
@@ -233,7 +218,7 @@ class _WebinarWizardScreenState extends State<WebinarWizardScreen> {
         child: Column(
           children: [
             ScreenHeader(
-              title: 'Schedule a webinar',
+              title: 'Schedule a TMI Party',
               onBack: () => context.pop(),
             ),
             _StepRail(

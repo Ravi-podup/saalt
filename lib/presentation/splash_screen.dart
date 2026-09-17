@@ -29,7 +29,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _goToLogin() {
     if (!mounted) return;
-    // go, not push: the splash must not stay underneath the login screen.
     context.go(AppRoutePaths.loginScreen);
   }
 

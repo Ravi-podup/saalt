@@ -12,7 +12,7 @@ class CommunityHelper {
       body:
           'Three cycles in and I finally got the seal right. What helped: '
           'stop aiming straight up and angle it back toward your tailbone '
-          'instead. If you are still leaking on day two, try that before '
+          "instead. If you're still leaking on day two, try that before "
           'you size up.',
       tags: ['CupLife', 'Leaks'],
       helpfulCount: 24,
@@ -27,7 +27,7 @@ class CommunityHelper {
       group: 'First period',
       body:
           'The first period kit arrived for my daughter today. She had the '
-          'whole thing organised into her own pouch before I could even '
+          'whole thing organized into her own pouch before I could even '
           'start explaining it.',
       imageAsset: 'assets/images/saalt_cup.jpg',
       helpfulCount: 61,
@@ -42,8 +42,8 @@ class CommunityHelper {
       timeAgo: '8h ago',
       group: 'Sustainability',
       body:
-          'Did the maths on four years of cup use this morning: roughly 900 '
-          'tampons that never got made, and about \$420 I did not spend. '
+          'Did the math on four years of cup use this morning: roughly 900 '
+          "tampons that never got made, and about \$420 I didn't spend. "
           'Still the same cup.',
       tags: ['Sustainability'],
       helpfulCount: 143,
@@ -57,8 +57,8 @@ class CommunityHelper {
       timeAgo: '1d ago',
       group: 'Postpartum',
       body:
-          'Six weeks postpartum and the CloudShort is the only thing I have '
-          'worn that does not feel like a diaper. Nobody warned me about '
+          "Six weeks postpartum and the CloudShort is the only thing I've "
+          "worn that doesn't feel like a diaper. Nobody warned me about "
           'that part of recovery.',
       tags: ['Postpartum'],
       imageAsset: 'assets/images/leakproof_comfort_cloudshort.jpg',
@@ -73,7 +73,7 @@ class CommunityHelper {
       timeAgo: '1d ago',
       group: 'Heavy flow',
       body:
-          'PSA for heavy-flow people: the disc genuinely holds more than the '
+          'PSA for heavy-flow people: the disc holds more than the '
           'cup. Switched last cycle and stopped setting a 3am alarm.',
       tags: ['HeavyFlow', 'Discs'],
       imageAsset: 'assets/images/menstrual_disc.jpg',
@@ -91,7 +91,7 @@ class CommunityHelper {
       group: 'Teens',
       body:
           'Teaching my thirteen-year-old about her cycle without the shame '
-          'spiral I grew up with. The knowledgebase articles gave me words '
+          'spiral I grew up with. The Trust Center articles gave me words '
           'I did not have.',
       tags: ['Teens'],
       helpfulCount: 76,

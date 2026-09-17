@@ -78,15 +78,19 @@ class WebinarDraft {
   bool startsImmediately = false;
   DateTime? date;
   TimeOfDay? time;
-  String timeZone = 'India Standard Time (IST)';
+  /// Saalt runs out of Idaho, so the builder opens on Mountain Time.
+  String timeZone = 'Mountain Time (MT)';
   String title = '';
   final objectives = <String>['', '', ''];
   String description = '';
   bool isPaid = false;
   bool isLive = true;
-  int minutes = 60;
+  /// 45 minutes is the standard run of show, so the builder opens on it.
+  int minutes = 45;
   String language = 'English';
-  String audience = '1–50';
+  /// The seeded line-up runs 150-500 places, so a new party opens on the
+  /// bucket most of them sit in rather than the smallest one.
+  String audience = '201–500';
   bool requiresApproval = false;
   bool hasWaitingRoom = false;
   SessionLook look = sessionLooks.first;

@@ -126,7 +126,7 @@ class ProductGridTile extends StatelessWidget {
                 const Spacer(),
                 if (colours > 1)
                   Text(
-                    '$colours colours',
+                    '$colours colors',
                     style: const TextStyle(
                       fontSize: 9.5,
                       fontWeight: FontWeight.w600,

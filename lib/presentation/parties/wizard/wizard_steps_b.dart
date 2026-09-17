@@ -21,7 +21,7 @@ class _EmailsStepState extends State<EmailsStep> {
       _forSpeakers ? widget.draft.speakerEmails : widget.draft.attendeeEmails;
 
   static const _details = <String, String>{
-    'Invitation email': 'Sent when a speaker is added to this webinar.',
+    'Invitation email': 'Sent when a speaker is added to this session.',
     'Reminder email': 'Sent shortly before the webinar starts.',
     'Invite email': 'Sent to attendees when you add them.',
     'Registration confirmation': 'Sent to attendees after they register.',
@@ -93,13 +93,12 @@ class _EmailsStepState extends State<EmailsStep> {
                   : 'You are invited'
                         '',
               body: _forSpeakers
-                  ? 'We are glad to have you lead this session. Your slot and '
-                        'materials are in your speaker portal.'
+                  ? "We're glad to have you lead this session. Your slot and materials are ready for you."
                   : 'Join us for a live TMI Party. Places are limited, so '
                         'register while there is room.',
-              cta: _forSpeakers ? 'Join webinar' : 'Register now — it is free',
+              cta: _forSpeakers ? 'Join session' : 'Register now — it is free',
               title: widget.draft.title.trim().isEmpty
-                  ? 'Your webinar title'
+                  ? 'Your session title'
                   : widget.draft.title.trim(),
             ),
           ],
@@ -578,7 +577,7 @@ class _ThumbnailStepState extends State<ThumbnailStep> {
         const SizedBox(height: 22),
         WizardSection(
           title: 'Image adjustments',
-          detail: 'The console keeps these on hand for stills.',
+          detail: 'Fine-tune how the cover looks.',
           children: [
             WizardCard(
               children: [

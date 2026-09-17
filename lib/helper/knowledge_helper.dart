@@ -8,7 +8,7 @@ class KnowledgeHelper {
   /// areas they explain.
   static const sections = <KnowledgeSection>[
     KnowledgeSection(
-      title: 'Community',
+      title: 'The Saalt Collective',
       subtitle: 'Groups, mentors, etiquette',
       icon: Icons.forum_rounded,
       tint: AppColors.roseTint,
@@ -31,14 +31,15 @@ class KnowledgeHelper {
     ),
     KnowledgeSection(
       title: 'TMI Parties',
-      subtitle: 'Live webinars, explained',
+      subtitle: 'Live sessions, explained',
       icon: Icons.celebration_rounded,
       tint: AppColors.lilacTint,
       accent: AppColors.lilac,
     ),
     KnowledgeSection(
       title: 'Saalt Show',
-      subtitle: 'Episodes and their topics',
+      subtitle:
+          'Section contains health articles, not episode guides. Relabel to match contents',
       icon: Icons.podcasts_rounded,
       tint: AppColors.tealTint,
       accent: AppColors.teal,
@@ -53,7 +54,7 @@ class KnowledgeHelper {
           'First period, cup life, postpartum, perimenopause. Picking the '
           'group that matches where you are makes the feed useful instead of '
           'noisy.',
-      section: 'Community',
+      section: 'The Saalt Collective',
       category: 'Getting started',
       minutes: 3,
       icon: Icons.groups_rounded,
@@ -65,7 +66,7 @@ class KnowledgeHelper {
       excerpt:
           'Mentors are members who have been through it, not staff. Here is '
           'what they can help with and what to take to support instead.',
-      section: 'Community',
+      section: 'The Saalt Collective',
       category: 'Mentors',
       minutes: 3,
       icon: Icons.volunteer_activism_rounded,
@@ -77,7 +78,7 @@ class KnowledgeHelper {
       excerpt:
           'There is no TMI filter here, but there is a line around other '
           'people. A short guide to what belongs in a post.',
-      section: 'Community',
+      section: 'The Saalt Collective',
       category: 'Etiquette',
       minutes: 4,
       icon: Icons.edit_note_rounded,
@@ -89,7 +90,7 @@ class KnowledgeHelper {
       excerpt:
           'No medical advice as fact, no product spam, no screenshots of '
           'other members. That is most of it.',
-      section: 'Community',
+      section: 'The Saalt Collective',
       category: 'Etiquette',
       minutes: 2,
       icon: Icons.gavel_rounded,
@@ -263,7 +264,7 @@ class KnowledgeHelper {
       accent: AppColors.lilac,
     ),
     Article(
-      title: 'Joining your first webinar',
+      title: 'Joining your first TMI Party',
       excerpt:
           'Reserve a seat, arrive from the reminder, and ask anonymously if '
           'you would rather not be named.',
@@ -349,7 +350,7 @@ class KnowledgeHelper {
       question: 'Can it get lost inside me?',
       answer:
           'No. The vaginal canal is a closed space that ends at the cervix, '
-          'so there is nowhere for it to go. If it sits high, bear down '
+          "so there's nowhere for it to go. If it sits high, bear down "
           'gently and reach again.',
     ),
     Faq(

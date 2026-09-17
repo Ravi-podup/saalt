@@ -73,7 +73,8 @@ class _TestimonialsScreenState extends State<TestimonialsScreen> {
           children: [
             ScreenHeader(
               title: 'Testimonials',
-              subtitle: 'Real switch stories, on video',
+              subtitle:
+                  'Some entries are text only. Either relabel or restrict the section to video',
               onBack: () => context.pop(),
               trailing: CircleIconButton(
                 icon: Icons.rate_review_outlined,

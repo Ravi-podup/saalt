@@ -93,10 +93,13 @@ class _DashboardTileState extends State<DashboardTile> {
                     children: [
                       Text(
                         item.title,
-                        maxLines: 1,
+                        // Two lines: the longest name on the grid is "The
+                        // Saalt Collective", which a single line cuts short.
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 15,
+                          height: 1.15,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.2,
                           color: Colors.white,

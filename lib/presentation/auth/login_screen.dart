@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saalt/presentation/auth/forgot_password_screen.dart';
 import 'package:saalt/presentation/auth/sign_up_screen.dart';
 import 'package:saalt/presentation/auth/widgets/auth_widgets.dart';
 import 'package:saalt/presentation/dashboard_screen.dart';
@@ -78,9 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(30),
                       child: InkWell(
-                        // Inert like the rest of this screen, but it looks
-                        // like a link, so it has to feel like one.
-                        onTap: () {},
+                        onTap: () => ForgotPasswordScreen.open(context),
                         borderRadius: BorderRadius.circular(30),
                         child: const Padding(
                           padding: EdgeInsets.symmetric(
