@@ -55,8 +55,6 @@ class _RecommendationSliderState extends State<RecommendationSlider> {
               ),
             ),
           ),
-          // Over the picture rather than under it: the printed button sits
-          // to the left, so the dots have the bottom corner to themselves.
           Positioned(
             left: 0,
             right: 0,
@@ -87,7 +85,6 @@ class _RecommendationSliderState extends State<RecommendationSlider> {
 /// The pictures the slider runs, in order.
 const recommendationImages = <String>[
   AppImages.hankyPankyImg,
-  AppImages.hankyPankyImg,
-  AppImages.hankyPankyImg,
-  AppImages.hankyPankyImg,
+  "assets/images/recommand1_img.png",
+  "assets/images/recommand2_img.png",
 ];

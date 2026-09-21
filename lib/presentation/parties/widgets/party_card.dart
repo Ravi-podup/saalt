@@ -18,6 +18,8 @@ class PartyCard extends StatelessWidget {
           subtitle:
               "Folding, insertion, and the pop removal in public. Nothing is too basic.",
           boxContentWidget: _liveWidget(),
+          isProgressFull: false,
+          status: "Live Demo",
         ),
         const SizedBox(height: 16),
         _partyWidget(
@@ -28,6 +30,8 @@ class PartyCard extends StatelessWidget {
           subtitle:
               "Folding, insertion, and the pop removal in public. Nothing is too basic.",
           boxContentWidget: _liveWidget(),
+          isProgressFull: false,
+          status: "Live Demo",
         ),
         const SizedBox(height: 16),
         _partyWidget(
@@ -38,6 +42,8 @@ class PartyCard extends StatelessWidget {
           subtitle:
               "Folding, insertion, and the pop removal in public. Nothing is too basic.",
           boxContentWidget: _dateTitleWidget("21", Color(0xff67938C)),
+          isProgressFull: true,
+          status: "Completed",
         ),
         const SizedBox(height: 16),
         _partyWidget(
@@ -48,6 +54,8 @@ class PartyCard extends StatelessWidget {
           subtitle:
               "Folding, insertion, and the pop removal in public. Nothing is too basic.",
           boxContentWidget: _dateTitleWidget("21", Color(0xff4E6FC3)),
+          isProgressFull: true,
+          status: "Completed",
         ),
       ],
     );
@@ -104,6 +112,8 @@ class PartyCard extends StatelessWidget {
     String? title,
     String? subtitle,
     double progress = 0,
+    bool isProgressFull = false,
+    String status = '',
   }) {
     return Container(
       padding: const EdgeInsets.all(14),
@@ -174,7 +184,7 @@ class PartyCard extends StatelessWidget {
               Image.asset(AppImages.happyUsersImg, height: 22),
               const SizedBox(width: 10),
               Text(
-                "Joined by 1.2k+ designers",
+                "Joined by 1.2k+ users",
                 style: TextStyle(
                   fontSize: 12,
                   color: Color(0xff9CA3AF),
@@ -183,11 +193,11 @@ class PartyCard extends StatelessWidget {
               ),
               const Spacer(),
               // _buttonsWidget("Pro"),
-              _buttonsWidget("Live Demo"),
+              _buttonsWidget(status),
             ],
           ),
           const SizedBox(height: 18),
-          _progressWidget(progress),
+          _progressWidget(progress, isProgressFull),
           const SizedBox(height: 18),
           Row(
             children: [
@@ -233,7 +243,7 @@ class PartyCard extends StatelessWidget {
     );
   }
 
-  Widget _progressWidget(double value) {
+  Widget _progressWidget(double value, bool isProgressFull) {
     return LayoutBuilder(
       builder: (context, box) {
         return Stack(
@@ -247,7 +257,9 @@ class PartyCard extends StatelessWidget {
             ),
             Container(
               height: 6,
-              width: box.maxWidth * value.clamp(0.0, 1.0),
+              width: isProgressFull
+                  ? null
+                  : box.maxWidth * value.clamp(0.0, 1.0),
               decoration: BoxDecoration(
                 color: Color(0xff66AD79),
                 borderRadius: BorderRadius.circular(30),

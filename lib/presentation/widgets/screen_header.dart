@@ -42,9 +42,8 @@ class ScreenHeader extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.4,
-                      color: AppColors.ink,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.inkDeep,
                     ),
                   ),
                 ),

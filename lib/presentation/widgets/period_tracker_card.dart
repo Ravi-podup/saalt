@@ -122,7 +122,7 @@ class _LogButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 42,
-        padding: EdgeInsets.symmetric(horizontal: 13),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(100),

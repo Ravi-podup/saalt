@@ -136,9 +136,20 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
                   const SizedBox(height: 14),
                   PlatformRow(platforms: ShowHelper.platforms),
                   const SizedBox(height: 26),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    child: _SectionLabel('All Episodes'),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Row(
+                      children: [
+                        Expanded(child: _SectionLabel('All Episodes')),
+                        Padding(
+                          padding: EdgeInsets.only(right: 20),
+                          child: ViewToggle(
+                            isGrid: _isGrid,
+                            onChanged: (v) => setState(() => _isGrid = v),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 12),
                   // The show's formats double as the episode filter, with the
@@ -150,14 +161,6 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
                           formats: ShowHelper.formats,
                           selected: _format,
                           onSelect: (f) => setState(() => _format = f),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: ViewToggle(
-                          isGrid: _isGrid,
-                          onChanged: (v) => setState(() => _isGrid = v),
                         ),
                       ),
                     ],
@@ -284,10 +287,10 @@ class _SectionLabel extends StatelessWidget {
         Text(
           text,
           style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.2,
-            color: AppColors.ink,
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+            letterSpacing: -0.4,
+            color: AppColors.inkDeep,
           ),
         ),
         const SizedBox(width: 12),

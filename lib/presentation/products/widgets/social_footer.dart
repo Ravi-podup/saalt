@@ -8,9 +8,6 @@ class SocialFooter extends StatelessWidget {
 
   final VoidCallback? onFollow;
 
-  static const _bodyInk = Color(0xFF3F4759);
-  static const _shopPurple = Color(0xFF5A31F4);
-
   static const _socials = <String>[
     AppImages.facebookIcon,
     AppImages.instagramIcon,
@@ -22,12 +19,12 @@ class SocialFooter extends StatelessWidget {
   static const _payments = <String>[
     AppImages.amexPayIcon,
     AppImages.applePayIcon,
-    AppImages.dinersClubPayIcon,
+    // AppImages.dinersClubPayIcon,
     AppImages.discoverPayIcon,
-    AppImages.googlePayIcon,
+    // AppImages.googlePayIcon,
     AppImages.mastercardPayIcon,
     AppImages.paypalPayIcon,
-    AppImages.shopPayIcon,
+    // AppImages.shopPayIcon,
     AppImages.venmoPayIcon,
     AppImages.visaPayIcon,
   ];
@@ -81,8 +78,8 @@ class SocialFooter extends StatelessWidget {
         ),
         const SizedBox(height: 18),
         Wrap(
-          spacing: 8,
-          runSpacing: 10,
+          spacing: 5,
+          runSpacing: 8,
           children: [
             for (final mark in _payments)
               Image.asset(

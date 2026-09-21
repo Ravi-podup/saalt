@@ -55,7 +55,7 @@ class ShowHero extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           const Text(
-            'Real answer from real sources - periods to perimenopause',
+            'Real answer from real\nsources - periods to perimenopause',
             style: TextStyle(
               fontSize: 22,
               height: 1.25,
@@ -77,7 +77,7 @@ class ShowHero extends StatelessWidget {
           const SizedBox(height: 22),
           Row(
             children: [
-              _SubscribeButton(onTap: onSubscribe),
+              Expanded(child: _SubscribeButton(onTap: onSubscribe)),
               const SizedBox(width: 10),
               Expanded(child: _EpisodesButton(onTap: onEpisodes)),
             ],

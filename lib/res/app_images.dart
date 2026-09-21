@@ -183,15 +183,16 @@ class AppImages {
   /// The two covers on the best-seller shelf.
   /// The shop banner. Claim, buttons and review line are printed into
   /// the artwork, so nothing is laid over it.
-  static const productSliderImg =
-      "assets/images/product_slider_img.png";
+  static const productSliderImg = "assets/images/product_slider_img.png";
+  static const productSlide1Img = "assets/images/product_slider1_img.png";
   static const seller1Img = "assets/images/seller1_img.png";
-  static const seller2Img = "assets/images/seller2_img.png";
+  static const sellerCupImg = "assets/images/seller_cup_img.png";
+  static const sellerCup1Img = "assets/images/seller_cup1_img.png";
+  static const seller2Img = "assets/images/seller3_img.jpg";
   static const doubleWaterDropIcon = "assets/icons/double_water_drop_ic.png";
   static const tripeWaterDropIcon = "assets/icons/triple_water_drop_ic.png";
   static const boltIcon = "assets/icons/bolt_ic.png";
-  static const externalLinkIcon =
-      "assets/icons/external_link_ic.png";
+  static const externalLinkIcon = "assets/icons/external_link_ic.png";
 
   /// The cards and wallets checkout accepts.
   static const applePayIcon = "assets/icons/apple_pay_ic.png";

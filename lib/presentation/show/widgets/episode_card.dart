@@ -121,7 +121,7 @@ class _Art extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 78,
+      height: 100,
       width: 78,
       child: Stack(
         alignment: Alignment.center,

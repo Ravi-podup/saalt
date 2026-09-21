@@ -17,10 +17,17 @@ class _EpisodeCarouselState extends State<EpisodeCarousel> {
   late final PageController _controller;
   int _page = 0;
 
+  static const _viewportFraction = 0.88;
+
+  /// The gap a slide leaves for its neighbour.
+  static const _gap = 10.0;
+
+  static const _copyHeight = 152.0;
+
   @override
   void initState() {
     super.initState();
-    _controller = PageController(viewportFraction: 0.88);
+    _controller = PageController(viewportFraction: _viewportFraction);
   }
 
   @override
@@ -31,32 +38,42 @@ class _EpisodeCarouselState extends State<EpisodeCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 350,
-          child: PageView.builder(
-            key: const Key('show-carousel'),
-            controller: _controller,
-            itemCount: widget.episodes.length,
-            onPageChanged: (i) => setState(() => _page = i),
-            itemBuilder: (context, index) {
-              final episode = widget.episodes[index];
-              return Padding(
-                padding: EdgeInsets.only(
-                  right: index == widget.episodes.length - 1 ? 0 : 10,
-                ),
-                child: _Slide(
-                  episode: episode,
-                  onPlay: () => widget.onPlay?.call(episode),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 12),
-        _Dots(count: widget.episodes.length, active: _page),
-      ],
+    // the next, and larger type sizes push it over on any of them.
+    return LayoutBuilder(
+      builder: (context, box) {
+        final slideWidth = box.maxWidth * _viewportFraction - _gap;
+        final coverHeight = slideWidth * 9.5 / 16;
+        final copyHeight =
+            _copyHeight * MediaQuery.textScalerOf(context).scale(1);
+
+        return Column(
+          children: [
+            SizedBox(
+              height: coverHeight + copyHeight,
+              child: PageView.builder(
+                key: const Key('show-carousel'),
+                controller: _controller,
+                itemCount: widget.episodes.length,
+                onPageChanged: (i) => setState(() => _page = i),
+                itemBuilder: (context, index) {
+                  final episode = widget.episodes[index];
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      right: index == widget.episodes.length - 1 ? 0 : _gap,
+                    ),
+                    child: _Slide(
+                      episode: episode,
+                      onPlay: () => widget.onPlay?.call(episode),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 12),
+            _Dots(count: widget.episodes.length, active: _page),
+          ],
+        );
+      },
     );
   }
 }

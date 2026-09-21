@@ -115,47 +115,15 @@ class _Poster extends StatelessWidget {
                   ),
                 // Some stills ship with the button already drawn on them.
                 if (review.hasVideo && !review.stillHasPlayBadge)
-                  const Center(child: _PlayBadge()),
+                  Center(
+                    child: Image.asset(
+                      "assets/icons/play_video_ic.png",
+                      height: 85,
+                    ),
+                  ),
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// The play control: a solid white disc inside a soft white halo, with the
-/// triangle in the same #373737 the artwork uses. Sized off the still, so
-/// it holds its proportions on any screen.
-class _PlayBadge extends StatelessWidget {
-  const _PlayBadge();
-
-  static const _haloSize = 72.0;
-  static const _discSize = 43.0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: _haloSize,
-      width: _haloSize,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.28),
-        shape: BoxShape.circle,
-      ),
-      child: Container(
-        height: _discSize,
-        width: _discSize,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(
-          Icons.play_arrow_rounded,
-          size: 32,
-          color: AppColors.ink,
         ),
       ),
     );

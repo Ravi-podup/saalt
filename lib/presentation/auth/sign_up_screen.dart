@@ -51,10 +51,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     'Join Saalt',
                     style: TextStyle(
                       fontSize: 24,
-                      height: 1.2,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: -0.6,
-                      color: AppColors.ink,
+                      height: 1.1,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.inkDeep,
                     ),
                   ),
                   const SizedBox(height: 8),

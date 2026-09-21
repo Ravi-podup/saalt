@@ -7,9 +7,9 @@ class BestSeller {
     required this.image,
     required this.title,
     required this.price,
-    required this.chips,
     required this.swatches,
-    required this.moreLabel,
+    this.chips = const [],
+    this.moreLabel,
   });
 
   final String image;
@@ -18,8 +18,10 @@ class BestSeller {
 
   final List<({String icon, String label})> chips;
 
+  /// The colours it comes in, and how many more there are. A shelf that
+  /// shows every colour it has leaves [moreLabel] null.
   final List<Color> swatches;
-  final String moreLabel;
+  final String? moreLabel;
 }
 
 class BestSellers extends StatefulWidget {
@@ -35,43 +37,61 @@ class BestSellers extends StatefulWidget {
 class _BestSellersState extends State<BestSellers> {
   static const _groups = ['Saalt Wear', 'Cup & Discs'];
 
-  /// The tabs mark themselves; the shelf below them does not change.
-  static const _shelf = <BestSeller>[
-    BestSeller(
-      image: AppImages.seller1Img,
-      title: 'Leakproof Cotton Sleep Short',
-      price: '\$57.00',
-      chips: [
-        (icon: AppImages.doubleWaterDropIcon, label: 'HEAVY'),
-        (icon: AppImages.waterDropIcon, label: 'REGULAR'),
-      ],
-      swatches: [
-        Color(0xFF844646),
-        Color(0xFFD2B48C),
-        Color(0xFF919C84),
-        Color(0xFFB5B8C6),
-      ],
-      moreLabel: '+2 More',
-    ),
-    BestSeller(
-      image: AppImages.seller2Img,
-      title: 'Leakproof Cotton Sleep Short',
-      price: '\$31.00 – \$55.00',
-      chips: [(icon: AppImages.tripeWaterDropIcon, label: 'SUPER')],
-      swatches: [
-        Color(0xFF1A1A1A),
-        Color(0xFF2C3E50),
-        Color(0xFFBDC3C7),
-        Color(0xFFEBDEF0),
-      ],
-      moreLabel: '+4 More',
-    ),
-  ];
+  /// One shelf per tab.
+  static const _shelves = <String, List<BestSeller>>{
+    'Saalt Wear': [
+      BestSeller(
+        image: AppImages.seller1Img,
+        title: 'Leakproof Cotton Sleep Short',
+        price: '\$57.00',
+        chips: [
+          (icon: AppImages.doubleWaterDropIcon, label: 'HEAVY'),
+          (icon: AppImages.waterDropIcon, label: 'REGULAR'),
+        ],
+        swatches: [
+          Color(0xFF844646),
+          Color(0xFFD2B48C),
+          Color(0xFF919C84),
+          Color(0xFFB5B8C6),
+        ],
+        moreLabel: '+2 More',
+      ),
+      BestSeller(
+        image: AppImages.seller2Img,
+        title: 'Leakproof Cotton Sleep Short',
+        price: '\$31.00 – \$55.00',
+        chips: [(icon: AppImages.tripeWaterDropIcon, label: 'SUPER')],
+        swatches: [
+          Color(0xFF1A1A1A),
+          Color(0xFF2C3E50),
+          Color(0xFFBDC3C7),
+          Color(0xFFEBDEF0),
+        ],
+        moreLabel: '+4 More',
+      ),
+    ],
+    'Cup & Discs': [
+      BestSeller(
+        image: AppImages.sellerCupImg,
+        title: 'Saalt Disc',
+        price: '\$36.00',
+        swatches: [Color(0xFF9DC8DD), Color(0xFFA38C72)],
+      ),
+      BestSeller(
+        image: AppImages.sellerCup1Img,
+        title: 'Saalt Teen Cup',
+        price: '\$32.00',
+        swatches: [Color(0xFFBB5F78)],
+      ),
+    ],
+  };
 
   String _group = _groups.first;
 
   @override
   Widget build(BuildContext context) {
+    final shelf = _shelves[_group] ?? const <BestSeller>[];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -108,17 +128,17 @@ class _BestSellersState extends State<BestSellers> {
         ),
         const SizedBox(height: 14),
         SizedBox(
-          height: 360,
+          height: 375,
           child: ListView.separated(
             key: const Key('best-sellers'),
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: _shelf.length,
+            itemCount: shelf.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) => _Card(
-              seller: _shelf[index],
-              onTap: () => widget.onOpen?.call(_shelf[index]),
-              onBuy: () => widget.onBuy?.call(_shelf[index]),
+              seller: shelf[index],
+              onTap: () => widget.onOpen?.call(shelf[index]),
+              onBuy: () => widget.onBuy?.call(shelf[index]),
             ),
           ),
         ),
@@ -174,9 +194,7 @@ class _GroupTab extends StatelessWidget {
 class _Card extends StatelessWidget {
   const _Card({required this.seller, this.onTap, this.onBuy});
 
-  /// Fixed, not Expanded: product names run to one line or two, and an
-  /// expanded image absorbs the difference, stepping the covers up and down.
-  static const _imageHeight = 285.0;
+  static const _imageHeight = 300.0;
   static const _width = 215.0;
 
   final BestSeller seller;
@@ -205,9 +223,9 @@ class _Card extends StatelessWidget {
                     children: [
                       Image.asset(
                         seller.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) =>
-                            const ColoredBox(color: Color(0xFFE7E3DE)),
+                        fit: BoxFit.fitWidth,
+                        // errorBuilder: (_, _, _) =>
+                        //     const ColoredBox(color: Color(0xFFE7E3DE)),
                       ),
                       const _Scrim(),
                       Positioned(
@@ -217,18 +235,20 @@ class _Card extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 6,
-                              children: [
-                                for (final chip in seller.chips)
-                                  _AbsorbencyPill(
-                                    icon: chip.icon,
-                                    label: chip.label,
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
+                            if (seller.chips.isNotEmpty) ...[
+                              Wrap(
+                                spacing: 6,
+                                runSpacing: 6,
+                                children: [
+                                  for (final chip in seller.chips)
+                                    _AbsorbencyPill(
+                                      icon: chip.icon,
+                                      label: chip.label,
+                                    ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                            ],
                             Text(
                               seller.title,
                               maxLines: 2,
@@ -297,7 +317,7 @@ class _Scrim extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [Color(0x00000000), Color(0x40000000), Color(0xB3000000)],
-          stops: [0.45, 0.72, 1],
+          stops: [0.55, 0.80, 1.8],
         ),
       ),
     );
@@ -313,17 +333,17 @@ class _AbsorbencyPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
             icon,
-            height: 11,
+            height: 9,
             color: Color(0xff64748B),
             errorBuilder: (_, _, _) => const SizedBox(width: 11),
           ),
@@ -331,7 +351,7 @@ class _AbsorbencyPill extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 9.5,
+              fontSize: 8,
               fontWeight: FontWeight.w500,
               letterSpacing: 0.5,
               color: Color(0xff373737).withValues(alpha: .9),
@@ -346,10 +366,10 @@ class _AbsorbencyPill extends StatelessWidget {
 /// The colours it comes in. Shown as dots rather than named, because a name
 /// per colour will not fit beside the price.
 class _Swatches extends StatelessWidget {
-  const _Swatches({required this.colours, required this.moreLabel});
+  const _Swatches({required this.colours, this.moreLabel});
 
   final List<Color> colours;
-  final String moreLabel;
+  final String? moreLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -363,19 +383,19 @@ class _Swatches extends StatelessWidget {
           ),
           const SizedBox(width: 6),
         ],
-        const SizedBox(width: 2),
-        Flexible(
-          child: Text(
-            moreLabel,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Color(0xff333333),
+        if (moreLabel != null)
+          Flexible(
+            child: Text(
+              moreLabel!,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff333333),
+              ),
             ),
           ),
-        ),
       ],
     );
   }

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:saalt/models/episode.dart';
 import 'package:saalt/res/app_images.dart';
 
-/// Episode artwork. Uses [Episode.imageAsset] when there is real art, and
-/// otherwise composes a branded panel from the episode's own colours - which
-/// is why every episode has an image even before artwork is shot.
 class EpisodeArt extends StatelessWidget {
   const EpisodeArt({
     super.key,
@@ -15,8 +12,6 @@ class EpisodeArt extends StatelessWidget {
 
   final Episode episode;
 
-  /// Large surfaces carry the wordmark and episode number; small thumbnails
-  /// would only turn them into noise.
   final bool showWordmark;
 
   final double borderRadius;
@@ -195,7 +190,7 @@ class VideoBadge extends StatelessWidget {
       child: Icon(
         Icons.play_arrow_rounded,
         size: size * 0.62,
-        color: Color(0xff384252),
+        color: Color(0xffC06C6C),
       ),
     );
   }

@@ -98,24 +98,30 @@ class _StoriesHeader extends StatelessWidget {
   final VoidCallback? onBack;
   final VoidCallback? onRecord;
 
+  /// One button on the left, two on the right. Kept clear of the widest
+  /// side so the title can sit on the screen's centre line, not between
+  /// the buttons.
+  static const _clearance = 92.0;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
-      child: Row(
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          _BackButton(onTap: onBack),
-          const Expanded(
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: _clearance),
             child: Column(
               children: [
                 Text(
                   'Stories',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
-                    // letterSpacing: -0.2,
                     color: AppColors.inkDeep,
                   ),
                 ),
@@ -124,25 +130,32 @@ class _StoriesHeader extends StatelessWidget {
                   'Real people, on camera',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 11, color: AppColors.inkDeep),
                 ),
               ],
             ),
           ),
-          GestureDetector(
-            onTap: onRecord,
-            behavior: HitTestBehavior.opaque,
-            child: Image.asset(
-              AppImages.recordButtonIcon,
-              height: 40,
-              width: 40,
-            ),
-          ),
-          const SizedBox(width: 6),
-          Image.asset(
-            AppImages.profilePictureCircleImage,
-            height: 40,
-            width: 40,
+          Row(
+            children: [
+              _BackButton(onTap: onBack),
+              const Spacer(),
+              GestureDetector(
+                onTap: onRecord,
+                behavior: HitTestBehavior.opaque,
+                child: Image.asset(
+                  AppImages.recordButtonIcon,
+                  height: 40,
+                  width: 40,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Image.asset(
+                AppImages.profilePictureCircleImage,
+                height: 40,
+                width: 40,
+              ),
+            ],
           ),
         ],
       ),

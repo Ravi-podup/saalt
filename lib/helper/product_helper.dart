@@ -492,14 +492,9 @@ class ProductHelper {
     ),
   ];
 
-  /// Brand banners for the shop slider. Converted to JPEG because Flutter
-  /// cannot decode the AVIF originals.
   static const banners = <String>[
     AppImages.productSliderImg,
-    AppImages.productSliderImg,
-    AppImages.productSliderImg,
-    // 'assets/images/slider2.jpg',
-    // 'assets/images/slider3.jpg',
+    AppImages.productSlide1Img,
   ];
 
   /// The two best-seller groups the site splits its shelf into.

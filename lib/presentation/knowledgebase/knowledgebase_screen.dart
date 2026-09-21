@@ -10,7 +10,8 @@ class TrustSection {
     required this.icon,
     required this.title,
     required this.subtitle,
-    required this.count,
+    required this.total,
+    this.unit = 'guides',
     required this.ground,
     required this.ink,
     this.guides = const [],
@@ -20,7 +21,8 @@ class TrustSection {
   final String icon;
   final String title;
   final String subtitle;
-  final String count;
+  final int total;
+  final String unit;
   final Color ground;
   final Color ink;
 
@@ -48,7 +50,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       icon: AppImages.chatDoubleIcon,
       title: 'The Collective',
       subtitle: 'Groups, mentors, etiquette',
-      count: '4 guides',
+      total: 4,
       ground: Color(0xFFF9E6EA),
       ink: Color(0xFFCC5555),
       guides: [
@@ -60,7 +62,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       icon: AppImages.cupDoubleIcon,
       title: 'Products',
       subtitle: 'Sizing, fit and care',
-      count: '8 guides',
+      total: 8,
       ground: Color(0xFFD3EAE9),
       ink: Color(0xFF065F46),
       guides: [
@@ -72,7 +74,8 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       icon: AppImages.videoPlayIcon,
       title: 'Testimonials',
       subtitle: 'Watch real switch stories',
-      count: '4 videos',
+      total: 4,
+      unit: 'videos',
       ground: Color(0xFFFBD4C2),
       ink: Color(0xFF92400E),
       isVideo: true,
@@ -85,7 +88,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       icon: AppImages.videoPeopleIcon,
       title: 'TMI Parties',
       subtitle: 'Live sessions, explained',
-      count: '3 guides',
+      total: 3,
       ground: Color(0xFFC6C9D2),
       ink: Color(0xFF6B21A8),
       guides: [
@@ -97,7 +100,7 @@ class _KnowledgebaseScreenState extends State<KnowledgebaseScreen> {
       icon: AppImages.shippingIcon,
       title: 'Shipping & Returns',
       subtitle: 'Tracking, exchanges, refunds',
-      count: '5 guides',
+      total: 5,
       ground: Color(0xFFCCE2EB),
       ink: Color(0xFF207192),
       guides: [
@@ -413,7 +416,10 @@ class _SectionCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  _CountPill(label: section.count, ink: section.ink),
+                  _CountPill(
+                    label: '${section.total} ${section.unit}',
+                    ink: section.ink,
+                  ),
                   const SizedBox(width: 6),
                   Icon(
                     isOpen
@@ -438,14 +444,16 @@ class _SectionCard extends StatelessWidget {
                     _GuideRow(title: guide.title, minutes: guide.minutes),
                     const SizedBox(height: 20),
                   ],
-                  Text(
-                    '2 more  →',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: section.ink,
+                  // What the pill counts, less what is listed above.
+                  if (section.total > section.guides.length)
+                    Text(
+                      '${section.total - section.guides.length} more  \u2192',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: section.ink,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
