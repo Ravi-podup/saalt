@@ -16,6 +16,9 @@ class Testimonial {
     this.imageAsset,
     this.videoUrl,
     this.minutes = 0,
+    this.tags = const [],
+    this.productIcon,
+    this.stillHasPlayBadge = false,
   });
 
   final String id;
@@ -42,6 +45,16 @@ class Testimonial {
 
   /// Runtime of the clip.
   final int minutes;
+
+  /// The topics the story is filed under, shown under the quote.
+  final List<String> tags;
+
+  /// Small mark beside the product name, e.g. the disc or the brief.
+  final String? productIcon;
+
+  /// Some stills are exported with the play button already drawn on them;
+  /// those must not get a second one.
+  final bool stillHasPlayBadge;
 
   bool get hasVideo => videoUrl != null;
 

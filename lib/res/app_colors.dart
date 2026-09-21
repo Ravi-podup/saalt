@@ -5,13 +5,21 @@ class AppColors {
 
   static const primaryColor = Color(0xFF3F4759);
 
+  static const softBeige = Color(0xFFF4ECE4);
+
+  static const blackColor = Color(0xff000000);
+  static const whiteColor = Color(0xffffffff);
   // Neutrals
   static const canvas = Color(0xFFFAF8F6);
   static const surface = Color(0xFFFFFFFF);
   static const ink = Color(0xFF373737);
+
+  static const inkDeep = Color(0xFF1C1917);
+  static const charcoal = Color(0xFF2E2925);
   static const inkMuted = Color(0xFF6B7385);
   static const inkFaint = Color(0xFF9AA1B0);
   static const hairline = Color(0xFFEDE8E3);
+  static const lightGray = Color(0xFFD3D3D3);
 
   static const roseTint = Color(0xFFF7E5E3);
   static const rose = Color(0xFFC0736A);

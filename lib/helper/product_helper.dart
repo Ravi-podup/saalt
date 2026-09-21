@@ -4,6 +4,7 @@ import 'package:saalt/models/product.dart';
 import 'package:saalt/models/review_quote.dart';
 import 'package:saalt/models/shop_category.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 
 class ProductHelper {
   static const catalog = <Product>[
@@ -494,9 +495,11 @@ class ProductHelper {
   /// Brand banners for the shop slider. Converted to JPEG because Flutter
   /// cannot decode the AVIF originals.
   static const banners = <String>[
-    'assets/images/slider1.jpg',
-    'assets/images/slider2.jpg',
-    'assets/images/slider3.jpg',
+    AppImages.productSliderImg,
+    AppImages.productSliderImg,
+    AppImages.productSliderImg,
+    // 'assets/images/slider2.jpg',
+    // 'assets/images/slider3.jpg',
   ];
 
   /// The two best-seller groups the site splits its shelf into.
@@ -512,6 +515,12 @@ class ProductHelper {
 
   /// The shop-by-category row, mirroring the site's collections.
   static const categories = <ShopCategory>[
+    ShopCategory(
+      label: 'Period Underwear',
+      chipLabel: 'Underwear',
+      imageAsset: 'assets/images/Mask group (3).png',
+      matches: {'Underwear'},
+    ),
     ShopCategory(
       label: 'Leakproof Underwear',
       chipLabel: 'Underwear',
@@ -548,7 +557,7 @@ class ProductHelper {
       catalog.where((p) => category.matches.contains(p.category)).toList();
 
   /// Editorial panel promoting the underwear line.
-  static const whySaaltWearImage = 'assets/images/why_saalt_wear.jpg';
+  static const whySaaltWearImage = 'assets/images/saalt_wear_img.png';
 
   /// Promoted collections, shown under the Why Saalt Wear panel.
   static const collections = <Collection>[

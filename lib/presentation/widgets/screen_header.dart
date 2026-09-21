@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 import 'package:saalt/res/app_colors.dart';
 
-/// Standard header for every screen below the dashboard: back button, the page
-/// title centred, and an optional action. Shared so Products and Knowledgebase
-/// stay pixel-identical.
 class ScreenHeader extends StatelessWidget {
   const ScreenHeader({
     super.key,
@@ -15,14 +12,10 @@ class ScreenHeader extends StatelessWidget {
   });
 
   final String title;
-
-  /// Optional supporting line, centred beneath the title.
   final String? subtitle;
 
   final VoidCallback? onBack;
 
-  /// Optional action on the right. The slot keeps its width when empty so the
-  /// title stays optically centred.
   final Widget? trailing;
 
   @override
@@ -78,6 +71,37 @@ class ScreenHeader extends StatelessWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _BackButton extends StatelessWidget {
+  const _BackButton({this.onTap});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      label: 'Back',
+      child: Material(
+        color: AppColors.surface,
+        shape: const CircleBorder(),
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: const SizedBox(
+            height: 40,
+            width: 40,
+            child: Icon(
+              Icons.arrow_back_rounded,
+              size: 19,
+              color: AppColors.ink,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -67,7 +67,6 @@ class _KnowledgeSectionScreenState extends State<KnowledgeSectionScreen> {
     final unit = section.isVideo ? 'videos' : 'guides';
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

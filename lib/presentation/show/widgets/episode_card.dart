@@ -38,10 +38,10 @@ class EpisodeCard extends StatelessWidget {
                         Text(
                           'EP ${episode.number}',
                           style: TextStyle(
-                            fontSize: 9,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
-                            color: episode.accent,
+                            color: Color(0xff6B7280),
                           ),
                         ),
                         if (episode.isNew) ...[
@@ -52,13 +52,13 @@ class EpisodeCard extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.rose,
-                              borderRadius: BorderRadius.circular(30),
+                              color: Color(0xffC95878),
+                              borderRadius: BorderRadius.circular(2),
                             ),
                             child: const Text(
                               'NEW',
                               style: TextStyle(
-                                fontSize: 7.5,
+                                fontSize: 9,
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: 0.6,
                                 color: Colors.white,
@@ -76,9 +76,9 @@ class EpisodeCard extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 14,
                         height: 1.25,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w500,
                         letterSpacing: -0.2,
-                        color: AppColors.ink,
+                        color: AppColors.inkDeep,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -87,8 +87,8 @@ class EpisodeCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 11.5,
-                        color: AppColors.inkMuted,
+                        fontSize: 12,
+                        color: Color(0xff6B7280),
                       ),
                     ),
                     const SizedBox(height: 5),
@@ -97,9 +97,9 @@ class EpisodeCard extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.inkFaint,
+                        color: Color(0xff9CA3AF),
                       ),
                     ),
                   ],

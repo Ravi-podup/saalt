@@ -3,8 +3,6 @@ import 'package:saalt/models/episode.dart';
 import 'package:saalt/presentation/show/widgets/episode_art.dart';
 import 'package:saalt/res/app_colors.dart';
 
-/// Swipeable strip of the newest episodes, with page dots beneath. Neighbours
-/// peek in at the edges so it reads as a slider rather than a static card.
 class EpisodeCarousel extends StatefulWidget {
   const EpisodeCarousel({super.key, required this.episodes, this.onPlay});
 
@@ -36,7 +34,7 @@ class _EpisodeCarouselState extends State<EpisodeCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 282,
+          height: 350,
           child: PageView.builder(
             key: const Key('show-carousel'),
             controller: _controller,
@@ -89,12 +87,15 @@ class _Slide extends StatelessWidget {
               Stack(
                 children: [
                   AspectRatio(
-                    aspectRatio: 2,
-                    child: EpisodeArt(
-                      episode: episode,
-                      showWordmark: true,
-                      borderRadius: 0,
-                    ),
+                    aspectRatio: 16 / 9,
+                    child: episode.coverAsset == null
+                        ? EpisodeArt(episode: episode, borderRadius: 0)
+                        : Image.asset(
+                            episode.coverAsset!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) =>
+                                EpisodeArt(episode: episode, borderRadius: 0),
+                          ),
                   ),
                   if (episode.isNew)
                     const Positioned(top: 12, right: 12, child: _NewFlag()),
@@ -117,32 +118,37 @@ class _Slide extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 15,
-                          height: 1.25,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.3,
-                          color: AppColors.ink,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.inkDeep,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       Text(
                         'with ${episode.guest}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 11.5,
-                          color: AppColors.inkMuted,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF6B7280),
                         ),
                       ),
-                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: const Divider(
+                          height: 1,
+                          color: Color(0xFFDBDBDB),
+                        ),
+                      ),
                       Text(
                         '${episode.date} · ${episode.minutes} min',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          fontSize: 10.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.inkFaint,
+                          color: Color(0xFF9CA3AF),
                         ),
                       ),
                     ],
@@ -164,17 +170,16 @@ class _NewFlag extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.rose,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        color: Color(0xffC06C6C),
+        borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
         child: Text(
           'NEW',
           style: TextStyle(
-            fontSize: 8,
+            fontSize: 9,
             fontWeight: FontWeight.w700,
-            letterSpacing: 0.7,
             color: Colors.white,
           ),
         ),
@@ -201,7 +206,7 @@ class _Dots extends StatelessWidget {
             height: 6,
             width: i == active ? 18 : 6,
             decoration: BoxDecoration(
-              color: i == active ? AppColors.rose : AppColors.hairline,
+              color: i == active ? Color(0xffC95878) : Color(0xffD1D5DB),
               borderRadius: BorderRadius.circular(30),
             ),
           ),

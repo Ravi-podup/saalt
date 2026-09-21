@@ -4,6 +4,12 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Saalt needs the camera so you can film a video testimonial.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Saalt needs the microphone to record sound with your testimonial.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Saalt needs your library so you can choose a clip you already filmed.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

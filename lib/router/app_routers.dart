@@ -28,6 +28,7 @@ import 'package:saalt/presentation/products/products_screen.dart';
 import 'package:saalt/presentation/products/wishlist_screen.dart';
 import 'package:saalt/presentation/show/saalt_show_screen.dart';
 import 'package:saalt/presentation/splash_screen.dart';
+import 'package:saalt/presentation/testimonials/share_story_screen.dart';
 import 'package:saalt/presentation/testimonials/testimonials_screen.dart';
 import 'package:saalt/presentation/tracker/day_detail_screen.dart';
 import 'package:saalt/presentation/tracker/period_tracker_screen.dart';
@@ -190,6 +191,13 @@ class AppRouters {
       pageBuilder: (context, state) => AppTransitions.buildPage(
         state: state,
         child: const TestimonialsScreen(),
+      ),
+    ),
+    GoRoute(
+      path: AppRoutePaths.shareStoryScreen,
+      pageBuilder: (context, state) => AppTransitions.buildPage(
+        state: state,
+        child: const ShareStoryScreen(),
       ),
     ),
     GoRoute(

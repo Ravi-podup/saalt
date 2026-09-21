@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/res/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
@@ -35,12 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.asset(AppImages.saaltLogo, height: 100),
-        ),
-      ),
+      body: Center(child: Image.asset(AppImages.logo, height: 50)),
     );
   }
 }

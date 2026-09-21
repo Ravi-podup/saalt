@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/models/post.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 
 /// Timeline post: author, body, optional photo, reaction counts and actions.
 class PostCard extends StatelessWidget {
+  /// The ring around the author's disc, the ground behind their standing,
+  /// and the colour the hashtags carry.
+  static const _avatarRing = Color(0xFFFFEDD5);
+  static const _badgeGround = Color(0xFFEFEFEF);
+  static const _tagInk = Color(0xFFE97451);
+
   const PostCard({
     super.key,
     required this.post,
@@ -34,12 +41,12 @@ class PostCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.hairline),
+        border: Border.all(color: AppColors.blackColor.withValues(alpha: .05)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primaryColor.withValues(alpha: 0.04),
+            color: AppColors.blackColor.withValues(alpha: 0.04),
             blurRadius: 14,
-            offset: const Offset(0, 6),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -47,7 +54,7 @@ class PostCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 14, 8, 0),
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
             child: _AuthorRow(post: post, onMenu: onMenu),
           ),
           Padding(
@@ -55,15 +62,16 @@ class PostCard extends StatelessWidget {
             child: Text(
               post.body,
               style: const TextStyle(
-                fontSize: 13.5,
-                height: 1.5,
-                color: AppColors.ink,
+                fontSize: 14,
+                height: 1.4,
+                fontWeight: FontWeight.w400,
+                color: Color(0xff2D2D2D),
               ),
             ),
           ),
           if (post.tags.isNotEmpty)
             Padding(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 0),
+              padding: const EdgeInsets.fromLTRB(14, 18, 14, 0),
               child: Wrap(
                 spacing: 8,
                 runSpacing: 4,
@@ -71,10 +79,10 @@ class PostCard extends StatelessWidget {
                   for (final tag in post.tags)
                     Text(
                       '#$tag',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.5,
-                        fontWeight: FontWeight.w600,
-                        color: post.avatarAccent,
+                        fontWeight: FontWeight.w700,
+                        color: PostCard._tagInk,
                       ),
                     ),
                 ],
@@ -83,23 +91,18 @@ class PostCard extends StatelessWidget {
           if (post.imageAsset != null)
             Padding(
               padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
-              child: _PostImage(
-                asset: post.imageAsset!,
-                isVideo: post.isVideo,
-                onTap: onTapImage,
-              ),
+              child: Image.asset(post.imageAsset!),
             ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 0),
-            child: _MetaRow(
-              helpful: helpful,
-              comments: post.commentCount,
-              isLiked: isLiked,
+            padding: EdgeInsets.fromLTRB(14, 14, 14, 0),
+            child: Divider(
+              height: 1,
+              color: AppColors.blackColor.withValues(alpha: .05),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(14, 10, 14, 0),
-            child: Divider(height: 1, color: AppColors.hairline),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+            child: _MetaRow(helpful: helpful, comments: post.commentCount),
           ),
           _ActionRow(
             isLiked: isLiked,
@@ -126,17 +129,18 @@ class _AuthorRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 42,
-          width: 42,
+          height: 46,
+          width: 46,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: post.avatarTint,
             shape: BoxShape.circle,
+            border: Border.all(color: PostCard._avatarRing, width: 1.5),
           ),
           child: Text(
             post.initial,
             style: TextStyle(
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: FontWeight.w700,
               color: post.avatarAccent,
             ),
@@ -148,6 +152,7 @@ class _AuthorRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Flexible(
                     child: Text(
@@ -156,9 +161,8 @@ class _AuthorRow extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.2,
-                        color: AppColors.ink,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xff2D2D2D),
                       ),
                     ),
                   ),
@@ -166,20 +170,20 @@ class _AuthorRow extends StatelessWidget {
                     const SizedBox(width: 7),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
+                        horizontal: 10,
                         vertical: 3,
                       ),
                       decoration: BoxDecoration(
-                        color: post.avatarTint,
-                        borderRadius: BorderRadius.circular(5),
+                        color: PostCard._badgeGround,
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         post.badge!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 8.5,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.7,
-                          color: post.avatarAccent,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.6,
+                          color: Color(0xff555F70),
                         ),
                       ),
                     ),
@@ -193,124 +197,51 @@ class _AuthorRow extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 11.5,
-                  color: AppColors.inkFaint,
+                  color: Color(0xff717171),
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],
           ),
         ),
-        IconButton(
-          onPressed: onMenu,
-          visualDensity: VisualDensity.compact,
-          icon: const Icon(
-            Icons.more_horiz_rounded,
-            size: 20,
-            color: AppColors.inkFaint,
-          ),
-        ),
+        Image.asset("assets/icons/more_vert_ic.png", height: 28, width: 20),
       ],
     );
   }
 }
 
-class _PostImage extends StatelessWidget {
-  const _PostImage({required this.asset, this.isVideo = false, this.onTap});
-
-  final String asset;
-  final bool isVideo;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(14),
-        child: AspectRatio(
-          aspectRatio: 4 / 3,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              Image.asset(
-                asset,
-                fit: BoxFit.cover,
-                // A missing photo should not tear a hole in the timeline.
-                errorBuilder: (_, _, _) => const ColoredBox(
-                  color: AppColors.hairline,
-                  child: Center(
-                    child: Icon(
-                      Icons.image_outlined,
-                      size: 26,
-                      color: AppColors.inkFaint,
-                    ),
-                  ),
-                ),
-              ),
-              if (isVideo)
-                Center(
-                  child: Container(
-                    height: 52,
-                    width: 52,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.45),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.play_arrow_rounded,
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _MetaRow extends StatelessWidget {
-  const _MetaRow({
-    required this.helpful,
-    required this.comments,
-    required this.isLiked,
-  });
+  const _MetaRow({required this.helpful, required this.comments});
 
   final int helpful;
   final int comments;
-  final bool isLiked;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          height: 19,
-          width: 19,
-          decoration: BoxDecoration(
-            color: isLiked ? AppColors.rose : AppColors.roseTint,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(
-            Icons.favorite_rounded,
-            size: 10,
-            color: isLiked ? Colors.white : AppColors.rose,
-          ),
-        ),
+        Image.asset(AppImages.likeFillIcon, height: 20, width: 20),
         const SizedBox(width: 7),
-        Flexible(
+        Expanded(
           child: Text(
             '$helpful found this helpful',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 11.5, color: AppColors.inkMuted),
+            style: const TextStyle(
+              fontSize: 11.5,
+              fontWeight: FontWeight.w500,
+              color: Color(0xff717171),
+            ),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           '$comments comments',
-          style: const TextStyle(fontSize: 11.5, color: AppColors.inkMuted),
+          style: TextStyle(
+            fontSize: 11.5,
+            fontWeight: FontWeight.w500,
+            color: Color(0xff717171),
+          ),
         ),
       ],
     );
@@ -339,22 +270,18 @@ class _ActionRow extends StatelessWidget {
       child: Row(
         children: [
           _Action(
-            icon: isLiked
-                ? Icons.favorite_rounded
-                : Icons.favorite_border_rounded,
+            asset: AppImages.likeIcon,
             label: 'Like',
             isActive: isLiked,
             onTap: onLike,
           ),
           _Action(
-            icon: Icons.chat_bubble_outline_rounded,
+            asset: AppImages.commentIcon,
             label: 'Comment',
             onTap: onComment,
           ),
           _Action(
-            icon: isSaved
-                ? Icons.bookmark_rounded
-                : Icons.bookmark_border_rounded,
+            asset: AppImages.saveIcon,
             label: 'Save',
             isActive: isSaved,
             onTap: onSave,
@@ -367,20 +294,20 @@ class _ActionRow extends StatelessWidget {
 
 class _Action extends StatelessWidget {
   const _Action({
-    required this.icon,
+    required this.asset,
     required this.label,
     this.isActive = false,
     this.onTap,
   });
 
-  final IconData icon;
+  final String asset;
   final String label;
   final bool isActive;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppColors.rose : AppColors.inkMuted;
+    final color = isActive ? AppColors.rose : AppColors.ink;
 
     return Expanded(
       child: Material(
@@ -394,14 +321,14 @@ class _Action extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 17, color: color),
-                const SizedBox(width: 7),
+                Image.asset(asset, height: 14),
+                const SizedBox(width: 8),
                 Text(
                   label,
                   style: TextStyle(
                     fontSize: 12.5,
-                    fontWeight: FontWeight.w600,
-                    color: color,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xff2D2D2D),
                   ),
                 ),
               ],

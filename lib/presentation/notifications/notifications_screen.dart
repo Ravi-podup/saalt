@@ -19,7 +19,6 @@ class NotificationsScreen extends StatelessWidget {
     final unread = NotificationDemo.unreadCount;
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

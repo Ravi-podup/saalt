@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 class DashboardItem {
   const DashboardItem({
     required this.title,
+    required this.chipTitle,
     required this.subtitle,
     required this.icon,
     required this.tint,
     required this.accent,
     required this.imageAsset,
     this.secondImageAsset,
+    this.index,
   });
 
   final String title;
+  final String chipTitle;
   final String subtitle;
   final IconData icon;
 
@@ -23,4 +26,5 @@ class DashboardItem {
   final String imageAsset;
 
   final String? secondImageAsset;
+  final int? index;
 }

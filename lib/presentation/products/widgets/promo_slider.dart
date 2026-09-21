@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/res/app_colors.dart';
 
-/// Brand banner slider for the top of the shop. Swipe-driven, matching the
-/// episode carousel, with page dots beneath.
+/// The shop's banner. Each picture carries its own claim and buttons, so the
+/// slider draws nothing but the picture and the dots beneath it.
 class PromoSlider extends StatefulWidget {
   const PromoSlider({super.key, required this.images, this.onTap});
 
@@ -35,26 +35,23 @@ class _PromoSliderState extends State<PromoSlider> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: AspectRatio(
-            aspectRatio: 16 / 9,
-            child: PageView.builder(
-              key: const Key('promo-slider'),
-              controller: _controller,
-              itemCount: widget.images.length,
-              onPageChanged: (i) => setState(() => _page = i),
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: () => widget.onTap?.call(index),
-                child: Image.asset(
-                  widget.images[index],
-                  fit: BoxFit.cover,
-                  // These banners put faces near the top, and one of them is
-                  // portrait, so anchoring to the top keeps heads in frame.
-                  alignment: Alignment.topCenter,
-                  errorBuilder: (_, _, _) =>
-                      const ColoredBox(color: AppColors.hairline),
-                ),
+        AspectRatio(
+          aspectRatio: 2,
+          child: PageView.builder(
+            key: const Key('promo-slider'),
+            controller: _controller,
+            itemCount: widget.images.length,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (context, index) => GestureDetector(
+              onTap: () => widget.onTap?.call(index),
+              child: Image.asset(
+                widget.images[index],
+                // fit: BoxFit.cover,
+                // These banners put faces near the top, and one of them is
+                // portrait, so anchoring to the top keeps heads in frame.
+                alignment: Alignment.topCenter,
+                errorBuilder: (_, _, _) =>
+                    const ColoredBox(color: AppColors.hairline),
               ),
             ),
           ),
@@ -70,7 +67,9 @@ class _PromoSliderState extends State<PromoSlider> {
                 height: 6,
                 width: i == _page ? 18 : 6,
                 decoration: BoxDecoration(
-                  color: i == _page ? AppColors.rose : AppColors.hairline,
+                  color: i == _page
+                      ? const Color(0xffE95D7A)
+                      : AppColors.ink.withValues(alpha: .3),
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),

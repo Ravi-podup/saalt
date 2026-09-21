@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:saalt/res/app_colors.dart';
 
 class StarRating extends StatelessWidget {
   const StarRating({super.key, required this.rating, this.size = 13});
@@ -21,7 +20,7 @@ class StarRating extends StatelessWidget {
         } else {
           icon = Icons.star_outline_rounded;
         }
-        return Icon(icon, size: size, color: AppColors.rose);
+        return Icon(icon, size: size, color: Color(0xffC96630));
       }),
     );
   }

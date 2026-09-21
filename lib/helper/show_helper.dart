@@ -1,11 +1,12 @@
 import 'package:saalt/models/episode.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 
 class ShowHelper {
   /// Doubles as the episode filter: the show's three formats.
   static const formats = [
-    'All',
-    'Customer Stories',
+    'All Episodes',
+    'User Stories',
     'Expert Interviews',
     'Community Roundtables',
   ];
@@ -24,7 +25,8 @@ class ShowHelper {
       minutes: 45,
       format: 'Expert Interviews',
       isNew: true,
-      imageAsset: 'assets/images/saalt_soft_cup.jpg',
+      imageAsset: AppImages.episode1Img,
+      coverAsset: AppImages.saaltShow1Img,
       tint: AppColors.lilacTint,
       accent: AppColors.lilac,
     ),
@@ -37,8 +39,9 @@ class ShowHelper {
       guest: 'Lily Palmer',
       date: '3 Aug 2026',
       minutes: 41,
-      format: 'Customer Stories',
-      imageAsset: 'assets/images/saalt_cup.jpg',
+      format: 'User Stories',
+      imageAsset: AppImages.episode2Img,
+      coverAsset: AppImages.saaltShow2Img,
       tint: AppColors.roseTint,
       accent: AppColors.rose,
     ),
@@ -51,8 +54,9 @@ class ShowHelper {
       guest: 'Jessica Davis',
       date: '29 Jul 2026',
       minutes: 36,
-      format: 'Customer Stories',
-      imageAsset: 'assets/images/leakproof_comfort_cloudshort.jpg',
+      format: 'User Stories',
+      imageAsset: AppImages.episode3Img,
+      coverAsset: AppImages.saaltShow3Img,
       tint: AppColors.sageTint,
       accent: AppColors.sage,
     ),
@@ -90,12 +94,12 @@ class ShowHelper {
 
   /// Where to listen. Each name is matched to its brand mark in PlatformRow.
   static const platforms = [
-    'Apple Podcasts',
-    'Spotify',
     'YouTube',
-    'Amazon Music',
+    'Spotify',
+    'Apple',
+    'Amazon',
+    'Vimeo',
     'iHeartRadio',
-    'Pocket Casts',
     'Overcast',
   ];
 }

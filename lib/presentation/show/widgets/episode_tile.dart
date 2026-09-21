@@ -3,8 +3,6 @@ import 'package:saalt/models/episode.dart';
 import 'package:saalt/presentation/show/widgets/episode_art.dart';
 import 'package:saalt/res/app_colors.dart';
 
-/// Grid form of an episode: artwork on top, then the essentials. Drops the
-/// guest line the list row carries, since there is no width for it.
 class EpisodeTile extends StatelessWidget {
   const EpisodeTile({super.key, required this.episode, this.onOpen});
 
@@ -36,8 +34,13 @@ class EpisodeTile extends StatelessWidget {
                   ),
                   if (episode.isNew)
                     const Positioned(top: 8, right: 8, child: _NewFlag()),
+
                   if (episode.hasVideo)
-                    Center(child: VideoBadge(accent: episode.accent, size: 36)),
+                    Positioned.fill(
+                      child: Center(
+                        child: VideoBadge(accent: episode.accent, size: 36),
+                      ),
+                    ),
                 ],
               ),
               Expanded(
@@ -49,10 +52,10 @@ class EpisodeTile extends StatelessWidget {
                       Text(
                         'EP ${episode.number}',
                         style: TextStyle(
-                          fontSize: 8.5,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
                           letterSpacing: 0.8,
-                          color: episode.accent,
+                          color: Color(0xff6B7280),
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -62,21 +65,32 @@ class EpisodeTile extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 14,
                             height: 1.25,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w500,
                             letterSpacing: -0.2,
-                            color: AppColors.ink,
+                            color: AppColors.inkDeep,
                           ),
                         ),
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${episode.minutes} min',
+                        'with ${episode.guest}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.inkFaint,
+                          color: AppColors.inkMuted,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${episode.minutes} min',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff9CA3AF),
                         ),
                       ),
                     ],
@@ -98,15 +112,15 @@ class _NewFlag extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.rose,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
+        color: Color(0xffC95878),
+        borderRadius: BorderRadius.circular(2),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 7, vertical: 2),
         child: Text(
           'NEW',
           style: TextStyle(
-            fontSize: 7.5,
+            fontSize: 9,
             fontWeight: FontWeight.w700,
             letterSpacing: 0.6,
             color: Colors.white,

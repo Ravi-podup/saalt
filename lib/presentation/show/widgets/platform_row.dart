@@ -2,69 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/res/app_images.dart';
 
-/// Where to listen. Scrolls horizontally so the list can grow.
+/// Where to watch. Scrolls horizontally so the list can grow.
 class PlatformRow extends StatelessWidget {
   const PlatformRow({super.key, required this.platforms, this.onOpen});
 
   final List<String> platforms;
   final ValueChanged<String>? onOpen;
 
+  static const _border = Color(0xFFBABABA);
+
   static const _logos = <String, String>{
-    'Apple Podcasts': AppImages.applePodcastsIcon,
-    'Spotify': AppImages.spotifyIcon,
     'YouTube': AppImages.youtubeIcon,
-    'Amazon Music': AppImages.amazonIcon,
-    'iHeartRadio': AppImages.iheartIcon,
-    'Pocket Casts': AppImages.pocketCastIcon,
+    'Spotify': AppImages.spotifyIcon,
+    'Apple': AppImages.appleIcon,
+    'Amazon': AppImages.amazonIcon,
+    'Vimeo': AppImages.vimeoIcon,
+    'iHeartRadio': AppImages.iheartRadioIcon,
     'Overcast': AppImages.overcastIcon,
   };
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 84,
+      height: 88,
       child: ListView.separated(
         key: const Key('show-platforms'),
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         itemCount: platforms.length,
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           final name = platforms[index];
           final logo = _logos[name];
+
           return Semantics(
             button: true,
-            label: 'Listen on $name',
+            label: 'Watch on $name',
             child: GestureDetector(
               onTap: () => onOpen?.call(name),
               behavior: HitTestBehavior.opaque,
-              child: SizedBox(
-                width: 66,
+              child: Container(
+                width: 90,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: _border),
+                ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (logo == null)
                       const _FallbackMark()
                     else
                       Image.asset(
                         logo,
-                        height: 48,
-                        width: 48,
+                        height: 26,
+                        width: 26,
                         fit: BoxFit.contain,
                         // A platform added without artwork still gets a mark
                         // rather than a broken-image box.
                         errorBuilder: (_, _, _) => const _FallbackMark(),
                       ),
-                    const SizedBox(height: 7),
+                    const SizedBox(height: 2),
                     Text(
                       name,
-                      maxLines: 2,
                       textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 9.5,
-                        height: 1.2,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.inkMuted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.blackColor,
                       ),
                     ),
                   ],
@@ -84,15 +91,10 @@ class _FallbackMark extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      width: 48,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.hairline),
-      ),
-      child: const Icon(Icons.podcasts_rounded, size: 22, color: AppColors.ink),
+    return const SizedBox(
+      height: 26,
+      width: 26,
+      child: Icon(Icons.podcasts_rounded, size: 22, color: AppColors.ink),
     );
   }
 }

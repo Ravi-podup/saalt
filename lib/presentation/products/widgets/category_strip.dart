@@ -15,10 +15,8 @@ class CategoryStrip extends StatelessWidget {
 
   final List<ShopCategory> categories;
 
-  /// Label of the active category, or null when everything is showing.
   final String? selected;
 
-  /// Passes the label, or null to clear back to everything.
   final ValueChanged<String?> onSelect;
 
   @override
@@ -37,8 +35,6 @@ class CategoryStrip extends StatelessWidget {
           return _Card(
             category: category,
             isActive: isActive,
-            // Tapping the active card clears the filter, so there is a way
-            // back to everything without a separate "All" card.
             onTap: () => onSelect(isActive ? null : category.label),
           );
         },
@@ -48,6 +44,9 @@ class CategoryStrip extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
+  /// Leaves the strip's 202 with room for the 9 gap and two lines of label.
+  static const _imageHeight = 160.0;
+
   const _Card({
     required this.category,
     required this.isActive,
@@ -72,7 +71,8 @@ class _Card extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
+              SizedBox(
+                height: _imageHeight,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Stack(
@@ -96,18 +96,18 @@ class _Card extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 9),
-              Text(
-                category.label,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 12.5,
-                  height: 1.25,
-                  fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
-                  color: isActive ? AppColors.ink : AppColors.inkMuted,
-                  decoration: isActive ? TextDecoration.underline : null,
-                  decorationColor: AppColors.ink,
-                  decorationThickness: 2,
+              Center(
+                child: Text(
+                  category.label,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.25,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.blackColor,
+                  ),
                 ),
               ),
             ],

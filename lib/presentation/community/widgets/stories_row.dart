@@ -5,24 +5,22 @@ import 'package:saalt/res/app_colors.dart';
 class Storyteller {
   const Storyteller({
     required this.name,
-    required this.tint,
-    required this.accent,
-    this.hasUnseen = true,
+    required this.imageAsset,
+    this.isOnline = false,
   });
 
   final String name;
-  final Color tint;
-  final Color accent;
+  final String imageAsset;
 
-  /// Draws the accent ring that marks an unwatched story.
-  final bool hasUnseen;
-
-  String get initial => name.substring(0, 1).toUpperCase();
+  /// Draws the green dot on the corner of the tile.
+  final bool isOnline;
 }
 
-/// Horizontal strip of story bubbles, led by the viewer's own add button.
 class StoriesRow extends StatelessWidget {
   const StoriesRow({super.key, required this.people, this.onAdd, this.onOpen});
+
+  static const _tileSize = 64.0;
+  static const _radius = 20.0;
 
   final List<Storyteller> people;
   final VoidCallback? onAdd;
@@ -31,25 +29,29 @@ class StoriesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 96,
+      height: 98,
       child: ListView.separated(
         key: const Key('community-stories'),
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 2),
         itemCount: people.length + 1,
-        separatorBuilder: (_, _) => const SizedBox(width: 14),
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           if (index == 0) {
             return _Bubble(
-              label: 'Add story',
+              label: 'Add Story',
+              labelColour: Color(0xffC95878),
+              fontWeight: FontWeight.w600,
               onTap: onAdd,
-              child: const _AddCircle(),
+              child: const _AddTile(),
             );
           }
           final person = people[index - 1];
           return _Bubble(
             label: person.name,
+            fontWeight: FontWeight.w400,
             onTap: () => onOpen?.call(person),
+            labelColour: Color(0xff222222),
             child: _Avatar(person: person),
           );
         },
@@ -59,10 +61,18 @@ class StoriesRow extends StatelessWidget {
 }
 
 class _Bubble extends StatelessWidget {
-  const _Bubble({required this.label, required this.child, this.onTap});
+  const _Bubble({
+    required this.label,
+    required this.child,
+    required this.fontWeight,
+    this.labelColour,
+    this.onTap,
+  });
 
   final String label;
   final Widget child;
+  final Color? labelColour;
+  final FontWeight fontWeight;
   final VoidCallback? onTap;
 
   @override
@@ -74,7 +84,7 @@ class _Bubble extends StatelessWidget {
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: SizedBox(
-          width: 62,
+          width: StoriesRow._tileSize,
           child: Column(
             children: [
               child,
@@ -84,10 +94,10 @@ class _Bubble extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.inkMuted,
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: fontWeight,
+                  color: labelColour,
                 ),
               ),
             ],
@@ -98,20 +108,23 @@ class _Bubble extends StatelessWidget {
   }
 }
 
-class _AddCircle extends StatelessWidget {
-  const _AddCircle();
+class _AddTile extends StatelessWidget {
+  const _AddTile();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 58,
-      width: 58,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.rose.withValues(alpha: 0.45)),
+    return CustomPaint(
+      painter: const _DashedBorder(color: AppColors.rose),
+      child: Container(
+        height: StoriesRow._tileSize,
+        width: StoriesRow._tileSize,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(StoriesRow._radius),
+        ),
+        child: Image.asset("assets/icons/add_dark_ic.png", height: 20),
       ),
-      child: const Icon(Icons.add_rounded, size: 24, color: AppColors.rose),
     );
   }
 }
@@ -123,29 +136,83 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 58,
-      width: 58,
-      padding: const EdgeInsets.all(2.5),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: person.hasUnseen ? person.accent : AppColors.hairline,
-          width: person.hasUnseen ? 2 : 1,
-        ),
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: person.tint, shape: BoxShape.circle),
-        child: Text(
-          person.initial,
-          style: TextStyle(
-            fontSize: 19,
-            fontWeight: FontWeight.w700,
-            color: person.accent,
+    return SizedBox(
+      height: StoriesRow._tileSize,
+      width: StoriesRow._tileSize,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: StoriesRow._tileSize,
+            width: StoriesRow._tileSize,
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(StoriesRow._radius),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(StoriesRow._radius - 2),
+              child: Image.asset(
+                person.imageAsset,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) =>
+                    const ColoredBox(color: AppColors.hairline),
+              ),
+            ),
           ),
-        ),
+          if (person.isOnline)
+            Positioned(
+              right: 2,
+              bottom: 0,
+              child: Container(
+                height: 12,
+                width: 12,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF3FBF6A),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.surface, width: 2),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
+}
+
+/// A rounded rectangle drawn as a dashed outline. Flutter's Border has no
+/// dash pattern, so the path is walked and stroked a segment at a time.
+class _DashedBorder extends CustomPainter {
+  const _DashedBorder({required this.color});
+
+  final Color color;
+
+  static const _radius = StoriesRow._radius;
+  static const _dash = 5.0;
+  static const _gap = 4.0;
+  static const _strokeWidth = 2.0;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final outline = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(_radius)),
+      );
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _strokeWidth
+      ..color = color;
+
+    for (final metric in outline.computeMetrics()) {
+      var start = 0.0;
+      while (start < metric.length) {
+        final end = (start + _dash).clamp(0.0, metric.length);
+        canvas.drawPath(metric.extractPath(start, end), paint);
+        start = end + _gap;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DashedBorder old) => old.color != color;
 }

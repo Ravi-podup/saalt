@@ -24,6 +24,7 @@ abstract class AppRoutePaths {
   /// Community, testimonials and the show
   static const communityScreen = "/communityScreen";
   static const testimonialsScreen = "/testimonialsScreen";
+  static const shareStoryScreen = "/shareStoryScreen";
   static const saaltShowScreen = "/saaltShowScreen";
 
   /// TMI Parties

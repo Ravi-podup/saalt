@@ -19,7 +19,6 @@ import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/res/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
-import 'package:saalt/presentation/widgets/circle_icon_button.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -55,19 +54,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _openItem(DashboardItem item) {
-    switch (item.title) {
-      case 'Products':
-        ProductsScreen.open(context);
-      case 'Trust Center':
-        KnowledgebaseScreen.open(context);
-      case 'Saalt Show':
-        SaaltShowScreen.open(context);
-      case 'Testimonials':
-        TestimonialsScreen.open(context);
-      case 'The Saalt Collective':
+    switch (item.index) {
+      case 0:
         CommunityScreen.open(context);
-      case 'TMI Parties':
+      case 1:
+        TestimonialsScreen.open(context);
+      case 2:
+        ProductsScreen.open(context);
+      case 3:
         TmiPartiesScreen.open(context);
+      case 4:
+        SaaltShowScreen.open(context);
+      case 5:
+        KnowledgebaseScreen.open(context);
       default:
         _open(item.title);
     }
@@ -76,111 +75,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.canvas,
-      body: Stack(
-        children: [
-          const _BackdropWash(),
-          SafeArea(
-            child: Column(
-              children: [
-                const _Header(),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
-                          child: PeriodTrackerCard(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const _Header(),
+            Expanded(
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Hey Maria 👋',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.inkDeep,
+                            ),
+                          ),
+                          const SizedBox(height: 7),
+                          const Text(
+                            'TMI welcome. Actually,\nTMI encouraged',
+                            style: TextStyle(
+                              fontSize: 24,
+                              height: 1.1,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.inkDeep,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          PeriodTrackerCard(
                             cycleDay: TrackerHelper.cycleDay,
                             cycleLength: TrackerHelper.averageCycle,
                             phaseLabel: TrackerHelper.phase.label,
                             onTap: _openTracker,
                             onLogTap: _openTracker,
+                            onFitQuizTap: _openFitQuiz,
                           ),
-                        ),
+                        ],
                       ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 14, 20, 0),
-                          child: _FindYourFitBanner(onTap: _openFitQuiz),
-                        ),
-                      ),
-                      const SliverToBoxAdapter(child: _SectionLabel('Explore')),
-                      SliverPadding(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-                        sliver: SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 14,
-                                crossAxisSpacing: 14,
-                                childAspectRatio: 1.14,
-                              ),
-                          delegate: SliverChildBuilderDelegate((
-                            context,
-                            index,
-                          ) {
-                            final item = DashboardHelper.items[index];
-                            return DashboardTile(
-                              item: item,
-                              onTap: () => _openItem(item),
-                            );
-                          }, childCount: DashboardHelper.items.length),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _BackdropWash extends StatelessWidget {
-  const _BackdropWash();
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: IgnorePointer(
-        child: Stack(
-          children: [
-            Positioned(
-              top: -110,
-              right: -70,
-              child: _Bloom(color: AppColors.roseTint, size: 260),
-            ),
-            Positioned(
-              top: 180,
-              left: -100,
-              child: _Bloom(color: AppColors.periwinkleTint, size: 220),
+                  const SliverToBoxAdapter(
+                    child: _SectionLabel('Explore Saalt'),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 35),
+                    sliver: SliverToBoxAdapter(
+                      child: _ExploreGrid(onOpen: _openItem),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Bloom extends StatelessWidget {
-  const _Bloom({required this.color, required this.size});
-
-  final Color color;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: RadialGradient(
-          colors: [color.withValues(alpha: 0.75), color.withValues(alpha: 0)],
         ),
       ),
     );
@@ -193,49 +144,27 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 5),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Image.asset(AppImages.logo, height: 26, fit: BoxFit.contain),
-              const Spacer(),
-              // The shared button, so these two carry labels and match every
-              // other header in the app.
-              CircleIconButton(
-                icon: Icons.notifications_none_rounded,
-                tooltip: 'Notifications',
-                showDot: NotificationDemo.unreadCount > 0,
-                onTap: () => NotificationsScreen.open(context),
-              ),
-              const SizedBox(width: 10),
-              CircleIconButton(
-                icon: Icons.person_outline_rounded,
-                tooltip: 'Profile',
-                onTap: () => ProfileScreen.open(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          Text(
-            'Hey there 👋',
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0.2,
-              color: AppColors.inkMuted.withValues(alpha: 0.9),
+          Image.asset(AppImages.logo, height: 26, fit: BoxFit.contain),
+          const Spacer(),
+          GestureDetector(
+            onTap: () => NotificationsScreen.open(context),
+            child: Image.asset(
+              AppImages.notificationButtonIcon,
+              height: 44,
+              width: 44,
             ),
           ),
-          const SizedBox(height: 6),
-          const Text(
-            'Everything you need,\nall in one place.',
-            style: TextStyle(
-              fontSize: 24,
-              height: 1.25,
-              fontWeight: FontWeight.w700,
-              letterSpacing: -0.4,
-              color: AppColors.ink,
+
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: () => ProfileScreen.open(context),
+            child: Image.asset(
+              AppImages.profilePictureCircleImage,
+              height: 44,
+              width: 44,
             ),
           ),
         ],
@@ -252,100 +181,119 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 28, 20, 14),
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
       child: Row(
         children: [
           Text(
             text,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 18,
               fontWeight: FontWeight.w700,
               letterSpacing: -0.2,
-              color: AppColors.ink,
+              color: AppColors.inkDeep,
             ),
           ),
           const SizedBox(width: 12),
-          const Expanded(child: Divider(color: AppColors.hairline, height: 1)),
+          const Expanded(child: Divider(color: AppColors.lightGray, height: 1)),
         ],
       ),
     );
   }
 }
 
-/// Entry point to the "find your fit" quiz. Sits directly under the tracker
-/// card because it is the other thing on this screen that gives back
-/// something personal.
-class _FindYourFitBanner extends StatelessWidget {
-  const _FindYourFitBanner({required this.onTap});
+class _ExploreGrid extends StatelessWidget {
+  const _ExploreGrid({required this.onOpen});
 
-  final VoidCallback onTap;
+  final ValueChanged<DashboardItem> onOpen;
+
+  static const _gap = 14.0;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.roseTint,
-      borderRadius: BorderRadius.circular(20),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
-          child: Row(
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                  color: AppColors.rose,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.auto_awesome_rounded,
-                  size: 19,
-                  color: Colors.white,
-                ),
+    final items = DashboardHelper.items;
+
+    return LayoutBuilder(
+      builder: (context, box) {
+        final tileWidth = (box.maxWidth - _gap) / 2;
+        final smallHeight = tileWidth / 1.14;
+        final tallHeight = smallHeight * 2 + _gap;
+
+        final groups = <Widget>[];
+        for (var start = 0; start < items.length; start += 3) {
+          final end = start + 3 <= items.length ? start + 3 : items.length;
+          groups.add(
+            Padding(
+              padding: EdgeInsets.only(top: start == 0 ? 0 : _gap),
+              child: _ExploreGroup(
+                items: items.sublist(start, end),
+                tallOnRight: (start ~/ 3).isEven,
+                smallHeight: smallHeight,
+                tallHeight: tallHeight,
+                onOpen: onOpen,
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Find your fit',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.3,
-                        color: AppColors.ink,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      'Nine questions and we will build your Saalt Stack.',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 11.5,
-                        height: 1.3,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.inkMuted,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(
-                Icons.chevron_right_rounded,
-                size: 20,
-                color: AppColors.rose,
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
+
+        return Column(children: groups);
+      },
+    );
+  }
+}
+
+class _ExploreGroup extends StatelessWidget {
+  const _ExploreGroup({
+    required this.items,
+    required this.tallOnRight,
+    required this.smallHeight,
+    required this.tallHeight,
+    required this.onOpen,
+  });
+
+  final List<DashboardItem> items;
+
+  final bool tallOnRight;
+  final double smallHeight;
+  final double tallHeight;
+  final ValueChanged<DashboardItem> onOpen;
+
+  Widget _tile(DashboardItem item, double height, {bool isTall = false}) =>
+      SizedBox(
+        height: height,
+        child: DashboardTile(item: item, onTap: () => onOpen(item)),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.length < 3) {
+      return Row(
+        children: [
+          for (var i = 0; i < items.length; i++) ...[
+            if (i > 0) const SizedBox(width: _ExploreGrid._gap),
+            Expanded(child: _tile(items[i], smallHeight)),
+          ],
+          if (items.length == 1) const Spacer(),
+        ],
+      );
+    }
+
+    final stacked = Column(
+      children: [
+        Expanded(child: _tile(items[0], smallHeight)),
+        const SizedBox(height: _ExploreGrid._gap),
+        Expanded(child: _tile(items[1], smallHeight)),
+      ],
+    );
+    final tall = _tile(items[2], tallHeight, isTall: true);
+
+    return SizedBox(
+      height: tallHeight,
+      child: Row(
+        children: [
+          Expanded(child: tallOnRight ? stacked : tall),
+          const SizedBox(width: _ExploreGrid._gap),
+          Expanded(child: tallOnRight ? tall : stacked),
+        ],
       ),
     );
   }

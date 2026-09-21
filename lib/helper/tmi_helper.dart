@@ -30,10 +30,10 @@ class TmiHelper {
       topics: ['Cups', 'Beginners', 'Live demo'],
       capacity: 500,
       booked: 438,
-      tint: AppColors.roseTint,
-      accent: AppColors.rose,
+      tint: Color(0xffF43F5E),
+      accent: Color(0xffF43F5E),
       icon: Icons.water_drop_rounded,
-      coverAsset: 'assets/images/explore_community.jpg',
+      coverAsset: 'assets/images/webinar_img.png',
     ),
     TmiParty(
       id: 'discs',

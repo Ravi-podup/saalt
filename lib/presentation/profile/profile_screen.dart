@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/helper/shop_demo.dart';
+import 'package:saalt/presentation/notifications/notifications_screen.dart';
+import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/products/cart_screen.dart';
 import 'package:saalt/presentation/products/orders_screen.dart';
 import 'package:saalt/presentation/products/wishlist_screen.dart';
 import 'package:saalt/presentation/tracker/tracker_settings_screen.dart';
-import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 import 'package:saalt/router/app_route_paths.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -24,11 +26,14 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [
-            ScreenHeader(title: 'Profile', onBack: () => context.pop()),
+            _ProfileHeader(
+              onBack: () => context.pop(),
+              onCart: () => CartScreen.open(context),
+              onNotifications: () => NotificationsScreen.open(context),
+            ),
             Expanded(
               child: ListView(
                 key: const Key('profile-body'),
@@ -454,6 +459,69 @@ class _SignOut extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Back on the left, the screen named in the middle, the shop's own actions
+/// opposite. The same header the shop carries.
+class _ProfileHeader extends StatelessWidget {
+  const _ProfileHeader({this.onBack, this.onCart, this.onNotifications});
+
+  final VoidCallback? onBack;
+  final VoidCallback? onCart;
+  final VoidCallback? onNotifications;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+      child: Row(
+        children: [
+          BackButtonWidget(onTap: onBack),
+          const Expanded(
+            child: Text(
+              'Profile',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: AppColors.inkDeep,
+              ),
+            ),
+          ),
+          // The artwork is the whole button, count and dot included, so these
+          // are tapped as images rather than rebuilt as icons.
+          // _ImageButton(asset: AppImages.cartButtonIcon, onTap: onCart),
+          // const SizedBox(width: 6),
+          _ImageButton(
+            asset: AppImages.notificationButtonIcon,
+            onTap: onNotifications,
+          ),
+          // const SizedBox(width: 6),
+          // Image.asset(
+          //   AppImages.profilePictureCircleImage,
+          //   height: 40,
+          //   width: 40,
+          // ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImageButton extends StatelessWidget {
+  const _ImageButton({required this.asset, this.onTap});
+
+  final String asset;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Image.asset(asset, height: 40, width: 40),
     );
   }
 }

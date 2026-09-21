@@ -7,6 +7,7 @@ class BottomNavItem {
   const BottomNavItem({
     required this.label,
     this.icon,
+    this.asset,
     this.customIcon,
     this.badgeCount = 0,
     this.onTap,
@@ -14,6 +15,10 @@ class BottomNavItem {
 
   final String label;
   final IconData? icon;
+
+  /// Drawn instead of [icon]. The glyphs are solid, so they take the tab's
+  /// colour the same way a Material icon would.
+  final String? asset;
 
   /// Null leaves the tab presentational, which most of them are: the bars
   /// mark where you already are rather than routing anywhere.
@@ -29,14 +34,36 @@ class BottomNavItem {
   /// once so every bar's Home reads identically.
   static BottomNavItem home() => BottomNavItem(
     label: 'Home',
-    customIcon: Image.asset(AppImages.logo, height: 18, fit: BoxFit.contain),
+    customIcon: Image.asset(AppImages.logo, height: 15, fit: BoxFit.contain),
   );
+
+  /// The five tabs the Collective runs, in order.
+  static const collective = <BottomNavItem>[
+    BottomNavItem(label: 'Saalt', asset: AppImages.homeNavIcon),
+    BottomNavItem(label: 'Groups', asset: AppImages.groupNavIcon),
+    BottomNavItem(label: 'Chat', asset: AppImages.chatNavIcon),
+    BottomNavItem(label: 'Events', asset: AppImages.eventNavIcon),
+    BottomNavItem(label: 'You', asset: AppImages.profileNavIcon),
+  ];
+
+  /// The same bar for the Saalt Show: only the marks and the words change.
+  static const show = <BottomNavItem>[
+    BottomNavItem(label: 'Saalt', asset: AppImages.homeNavIcon),
+    BottomNavItem(label: 'Episodes', asset: AppImages.episodesNavIcon),
+    BottomNavItem(label: 'Shop', asset: AppImages.shopNavIcon),
+    BottomNavItem(label: 'Blog', asset: AppImages.blogNavIcon),
+    BottomNavItem(label: 'About', asset: AppImages.aboutNavIcon),
+  ];
 }
 
-/// Shared bottom tab bar. Tabs mark which one reads as current; a tab only
-/// routes if its item was given an [BottomNavItem.onTap].
 class AppBottomNav extends StatelessWidget {
   const AppBottomNav({super.key, required this.items, required this.selected});
+
+  /// The tints the bar is drawn with.
+  static const _activeInk = Color(0xFFC95878);
+  static const _activeGround = Color(0xFFF6E4E4);
+  static const _restingInk = Color(0xFF9CA3AF);
+  static const _topEdge = Color(0xFFF3F4F6);
 
   final List<BottomNavItem> items;
 
@@ -48,11 +75,11 @@ class AppBottomNav extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.hairline)),
+        border: Border(top: BorderSide(color: _topEdge)),
         boxShadow: [
           BoxShadow(
-            color: Color(0x0F3F4759),
-            blurRadius: 16,
+            color: Color(0x08000000),
+            blurRadius: 20,
             offset: Offset(0, -4),
           ),
         ],
@@ -81,7 +108,8 @@ class _NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppColors.ink : AppColors.inkFaint;
+    final color = isActive ? AppBottomNav._activeInk : AppBottomNav._restingInk;
+    final asset = item.asset;
 
     return Expanded(
       child: Semantics(
@@ -89,15 +117,12 @@ class _NavItem extends StatelessWidget {
         selected: isActive,
         child: InkWell(
           onTap: item.onTap,
-          borderRadius: BorderRadius.circular(14),
           child: Container(
             decoration: BoxDecoration(
-              // A wordmark cannot take a tint, so the current tab is marked with
-              // a soft pill rather than by icon colour alone.
-              color: isActive ? AppColors.roseTint : Colors.transparent,
+              color: isActive ? AppBottomNav._activeGround : Colors.transparent,
               borderRadius: BorderRadius.circular(14),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -107,8 +132,27 @@ class _NavItem extends StatelessWidget {
                     clipBehavior: Clip.none,
                     alignment: Alignment.center,
                     children: [
-                      item.customIcon ??
-                          Icon(item.icon, size: 21, color: color),
+                      if (item.customIcon != null)
+                        item.customIcon!
+                      else if (asset != null)
+                        Image.asset(
+                          asset,
+                          height:
+                              item.label == 'Saalt' || item.label == 'Underwear'
+                              ? 15
+                              : item.label == 'You' ||
+                                    item.label == 'Events' ||
+                                    item.label == "Bundles" ||
+                                    item.label == "Cleaning" ||
+                                    item.label == "Teen"
+                              ? 22
+                              : 18,
+                          color: color,
+                          errorBuilder: (_, _, _) =>
+                              Icon(item.icon, size: 21, color: color),
+                        )
+                      else
+                      // Icon(item.icon, size: 21, color: color),
                       if (item.badgeCount > 0)
                         Positioned(
                           top: -3,
@@ -118,7 +162,7 @@ class _NavItem extends StatelessWidget {
                             constraints: const BoxConstraints(minWidth: 16),
                             height: 16,
                             decoration: BoxDecoration(
-                              color: AppColors.rose,
+                              color: Color(0xffF6E4E4),
                               borderRadius: BorderRadius.circular(30),
                               border: Border.all(
                                 color: AppColors.surface,
@@ -147,7 +191,7 @@ class _NavItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 11,
-                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     color: color,
                   ),
                 ),

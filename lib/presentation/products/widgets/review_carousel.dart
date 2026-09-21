@@ -57,7 +57,9 @@ class _ReviewCarouselState extends State<ReviewCarousel> {
                 height: 6,
                 width: i == _page ? 18 : 6,
                 decoration: BoxDecoration(
-                  color: i == _page ? AppColors.rose : AppColors.hairline,
+                  color: i == _page
+                      ? Color(0xffE95D7A)
+                      : AppColors.ink.withValues(alpha: .3),
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),

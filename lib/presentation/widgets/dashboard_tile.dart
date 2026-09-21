@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/models/dashboard_item.dart';
+import 'package:saalt/res/app_colors.dart';
 
-/// Dashboard tile: a cover photo with the label over a scrim. Photography
-/// says what an area is faster than an icon does.
 class DashboardTile extends StatefulWidget {
   const DashboardTile({super.key, required this.item, this.onTap});
 
@@ -38,51 +37,21 @@ class _DashboardTileState extends State<DashboardTile> {
           duration: const Duration(milliseconds: 140),
           curve: Curves.easeOut,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: item.accent.withValues(alpha: 0.16),
-                  blurRadius: 18,
-                  offset: const Offset(0, 8),
-                ),
-              ],
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            foregroundDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Color(0xffDBDBDB)),
             ),
             clipBehavior: Clip.antiAlias,
             child: Stack(
               fit: StackFit.expand,
               children: [
                 _Cover(asset: item.imageAsset, item: item),
-                const DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Color(0x1A000000),
-                        Color(0xB3000000),
-                      ],
-                      stops: [0, 0.45, 1],
-                    ),
-                  ),
-                ),
+                const _Scrim(),
                 Positioned(
-                  top: 10,
-                  right: 10,
-                  child: Container(
-                    height: 26,
-                    width: 26,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.arrow_outward_rounded,
-                      size: 14,
-                      color: item.accent,
-                    ),
-                  ),
+                  left: 13,
+                  top: 15,
+                  child: _chipWidget(item.chipTitle),
                 ),
                 Positioned(
                   left: 14,
@@ -93,26 +62,30 @@ class _DashboardTileState extends State<DashboardTile> {
                     children: [
                       Text(
                         item.title,
-                        // Two lines: the longest name on the grid is "The
-                        // Saalt Collective", which a single line cuts short.
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15,
-                          height: 1.15,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                          color: Colors.white,
+                        // maxLines: 2,
+                        // overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          height: 1.1,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.whiteColor,
+                          // item.chipTitle == "WEBINAR"
+                          //     ? AppColors.whiteColor
+                          //     : AppColors.inkDeep,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 3),
                       Text(
                         item.subtitle,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withValues(alpha: 0.82),
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.whiteColor,
+                          // item.chipTitle == "WEBINAR"
+                          //     ? AppColors.whiteColor
+                          //     : AppColors.inkDeep,
                         ),
                       ),
                     ],
@@ -121,6 +94,47 @@ class _DashboardTileState extends State<DashboardTile> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _chipWidget(String? title) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: AppColors.whiteColor,
+        border: Border.all(color: AppColors.blackColor.withValues(alpha: .23)),
+      ),
+      child: Text(
+        title ?? '',
+        style: TextStyle(
+          fontSize: 9,
+          letterSpacing: 1,
+          color: Color(0xff626262),
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+/// The wash the title and subtitle sit on. Starts a quarter of the way down
+/// the tile and deepens to the bottom edge, so the photograph reads at the
+/// top while the words stay legible over whatever is underneath them.
+class _Scrim extends StatelessWidget {
+  const _Scrim();
+
+  @override
+  Widget build(BuildContext context) {
+    return const DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x00000000), Color(0x40000000), Color(0xD9000000)],
+          stops: [0.25, 0.62, 1],
         ),
       ),
     );
@@ -135,27 +149,6 @@ class _Cover extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      asset,
-      fit: BoxFit.cover,
-      // Faces and products sit high in these frames.
-      alignment: Alignment.topCenter,
-      errorBuilder: (_, _, _) => _Fallback(item: item),
-    );
-  }
-}
-
-/// Keeps the old tinted look if a cover photo is missing.
-class _Fallback extends StatelessWidget {
-  const _Fallback({required this.item});
-
-  final DashboardItem item;
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: item.tint,
-      child: Center(child: Icon(item.icon, size: 34, color: item.accent)),
-    );
+    return Image.asset(asset, fit: BoxFit.cover);
   }
 }

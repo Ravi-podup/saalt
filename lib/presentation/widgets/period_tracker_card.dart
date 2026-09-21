@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 
 class PeriodTrackerCard extends StatelessWidget {
   const PeriodTrackerCard({
@@ -9,6 +10,7 @@ class PeriodTrackerCard extends StatelessWidget {
     required this.phaseLabel,
     this.onTap,
     this.onLogTap,
+    this.onFitQuizTap,
   });
 
   final int cycleDay;
@@ -16,40 +18,26 @@ class PeriodTrackerCard extends StatelessWidget {
   final String phaseLabel;
   final VoidCallback? onTap;
   final VoidCallback? onLogTap;
+  final VoidCallback? onFitQuizTap;
 
   @override
   Widget build(BuildContext context) {
     final progress = (cycleDay / cycleLength).clamp(0.0, 1.0);
-    final daysLeft = (cycleLength - cycleDay).clamp(0, cycleLength);
 
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(28),
-      child: InkWell(
-        onTap: onTap,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            gradient: const LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF4A5468),
-                AppColors.primaryColor,
-                Color(0xFF343B4A),
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.primaryColor.withValues(alpha: 0.28),
-                blurRadius: 24,
-                offset: const Offset(0, 12),
-              ),
-            ],
-          ),
-          child: Row(
+        image: const DecorationImage(
+          image: AssetImage(AppImages.periodTrackerBgImage),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
                 child: Column(
@@ -58,57 +46,50 @@ class PeriodTrackerCard extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          height: 26,
-                          width: 26,
+                          height: 32,
+                          width: 32,
+                          alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: AppColors.roseTint.withValues(alpha: 0.18),
-                            borderRadius: BorderRadius.circular(9),
+                            color: AppColors.whiteColor.withValues(alpha: 0.1),
+                            shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.water_drop_rounded,
-                            size: 14,
-                            color: AppColors.roseTint,
+                          child: Image.asset(
+                            AppImages.waterDropIcon,
+                            height: 20,
+                            width: 10,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 12),
                         Flexible(
                           child: Text(
                             'Period Tracker',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              letterSpacing: 0.4,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: Color(0xffFDFBF6),
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 15),
                     Text(
                       phaseLabel,
                       style: const TextStyle(
-                        fontSize: 20,
-                        height: 1.15,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
-                        color: Colors.white,
+                        color: Color(0xffFDFBF6),
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      daysLeft == 0
-                          ? 'Your next period is expected today'
-                          : 'Next period in $daysLeft ${daysLeft == 1 ? 'day' : 'days'}',
+                      'Next period in 14 days',
                       style: TextStyle(
-                        fontSize: 12.5,
-                        height: 1.35,
-                        color: Colors.white.withValues(alpha: 0.65),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white.withValues(alpha: 0.7),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    _LogButton(onTap: onLogTap),
                   ],
                 ),
               ),
@@ -116,7 +97,15 @@ class PeriodTrackerCard extends StatelessWidget {
               _CycleRing(progress: progress, cycleDay: cycleDay),
             ],
           ),
-        ),
+          const SizedBox(height: 25),
+          Row(
+            children: [
+              _LogButton(onTap: onLogTap),
+              const SizedBox(width: 10),
+              Expanded(child: FitQuizButton(onTap: onFitQuizTap)),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -129,29 +118,71 @@ class _LogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(30),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(30),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(Icons.add_rounded, size: 16, color: AppColors.primaryColor),
-              SizedBox(width: 6),
-              Text(
-                'Log today',
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 42,
+        padding: EdgeInsets.symmetric(horizontal: 13),
+        decoration: BoxDecoration(
+          color: AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(AppImages.addIcon, height: 10, width: 10),
+            const SizedBox(width: 6),
+            const Flexible(
+              child: Text(
+                'LOG TODAY',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primaryColor,
+                  color: AppColors.inkDeep,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FitQuizButton extends StatelessWidget {
+  final VoidCallback? onTap;
+  const FitQuizButton({super.key, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 42,
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          border: Border.all(color: AppColors.whiteColor),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'TAKE THE FIT QUIZ',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppColors.whiteColor,
+              ),
+            ),
+            const SizedBox(width: 3),
+            Image.asset(AppImages.forwardIcon, height: 10),
+          ],
         ),
       ),
     );
@@ -167,39 +198,37 @@ class _CycleRing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 104,
-      width: 104,
+      height: 78,
+      width: 78,
       child: Stack(
         alignment: Alignment.center,
         children: [
           SizedBox.expand(
             child: CircularProgressIndicator(
               value: progress,
-              strokeWidth: 7,
+              strokeWidth: 6,
               strokeCap: StrokeCap.round,
-              backgroundColor: Colors.white.withValues(alpha: 0.14),
-              valueColor: const AlwaysStoppedAnimation(AppColors.roseTint),
+              backgroundColor: Color(0xff423B38),
+              valueColor: const AlwaysStoppedAnimation(Color(0xffF4ECE4)),
             ),
           ),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'DAY',
+                '$cycleDay',
                 style: TextStyle(
-                  fontSize: 9,
-                  letterSpacing: 1.6,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withValues(alpha: 0.55),
+                  fontSize: 26,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xffFDFBF6),
                 ),
               ),
               Text(
-                '$cycleDay',
-                style: const TextStyle(
-                  fontSize: 30,
-                  height: 1.1,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
+                "Day's",
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.whiteColor.withValues(alpha: .7),
                 ),
               ),
             ],

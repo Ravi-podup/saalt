@@ -8,10 +8,11 @@ import 'package:saalt/presentation/show/widgets/episode_carousel.dart';
 import 'package:saalt/presentation/show/widgets/episode_tile.dart';
 import 'package:saalt/presentation/show/widgets/platform_row.dart';
 import 'package:saalt/presentation/show/widgets/show_hero.dart';
+import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
 import 'package:saalt/presentation/widgets/view_toggle.dart';
-import 'package:saalt/presentation/widgets/screen_header.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
 
@@ -27,12 +28,12 @@ class SaaltShowScreen extends StatefulWidget {
 }
 
 class _SaaltShowScreenState extends State<SaaltShowScreen> {
-  String _format = 'All';
+  String _format = 'All Episodes';
   bool _isGrid = false;
 
-  List<Episode> get _visible => _format == 'All'
-      ? ShowHelper.episodes
-      : ShowHelper.episodes.where((e) => e.format == _format).toList();
+  /// The three episodes with artwork. The chips above them mark themselves
+  /// but do not narrow the list.
+  List<Episode> get _visible => ShowHelper.episodes.take(3).toList();
 
   // void _toast(String message) {
   //   final messenger = ScaffoldMessenger.of(context);
@@ -79,43 +80,87 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
     final episodes = _visible;
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         bottom: false,
         child: Column(
           children: [
-            ScreenHeader(title: 'The Saalt Show', onBack: () => context.pop()),
+            _ShowHeader(onBack: () => context.pop()),
             Expanded(
               child: ListView(
                 key: const Key('show-body'),
-                padding: const EdgeInsets.fromLTRB(20, 4, 20, 28),
+                padding: const EdgeInsets.only(top: 4, bottom: 28),
                 children: [
-                  ShowHero(
-                    // onSubscribe: () => _toast('Subscribed to The Saalt Show'),
-                    // onEpisodes: () => _toast('Jumping to episodes'),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: ShowHero(
+                      // onSubscribe: () => _toast('Subscribed to The Saalt Show'),
+                      // onEpisodes: () => _toast('Jumping to episodes'),
+                    ),
                   ),
                   const SizedBox(height: 24),
-                  const _SectionLabel('Latest'),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      children: [
+                        Expanded(child: _SectionLabel('Latest Episodes')),
+                        Text(
+                          'View All',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFFC95878),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   EpisodeCarousel(
                     episodes: ShowHelper.episodes.take(3).toList(),
                     onPlay: _play,
                   ),
                   const SizedBox(height: 24),
-                  _SectionLabel(
-                    'All episodes',
-                    trailing: ViewToggle(
-                      isGrid: _isGrid,
-                      onChanged: (v) => setState(() => _isGrid = v),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      'Watch on your favorite platforms',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w400,
+                        // letterSpacing: -0.3,
+                        color: AppColors.inkDeep,
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 14),
+                  PlatformRow(platforms: ShowHelper.platforms),
+                  const SizedBox(height: 26),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: _SectionLabel('All Episodes'),
+                  ),
                   const SizedBox(height: 12),
-                  // The show's three formats double as the episode filter,
-                  // rather than sitting in a separate explainer block.
-                  _FormatBar(
-                    formats: ShowHelper.formats,
-                    selected: _format,
-                    onSelect: (f) => setState(() => _format = f),
+                  // The show's formats double as the episode filter, with the
+                  // view switch on the same line rather than up in the title.
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _FormatBar(
+                          formats: ShowHelper.formats,
+                          selected: _format,
+                          onSelect: (f) => setState(() => _format = f),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: ViewToggle(
+                          isGrid: _isGrid,
+                          onChanged: (v) => setState(() => _isGrid = v),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   if (episodes.isEmpty)
@@ -125,14 +170,14 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
                       key: const Key('show-grid'),
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
                       itemCount: episodes.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             mainAxisSpacing: 12,
                             crossAxisSpacing: 12,
-                            childAspectRatio: 0.74,
+                            childAspectRatio: 0.69,
                           ),
                       itemBuilder: (context, index) => EpisodeTile(
                         episode: episodes[index],
@@ -141,22 +186,21 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
                     )
                   else
                     for (final episode in episodes) ...[
-                      EpisodeCard(
-                        episode: episode,
-                        onPlay: () => _play(episode),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: EpisodeCard(
+                          episode: episode,
+                          onPlay: () => _play(episode),
+                        ),
                       ),
                       const SizedBox(height: 10),
                     ],
-                  const SizedBox(height: 16),
-                  const _SectionLabel('Where to listen'),
-                  const SizedBox(height: 12),
-                  PlatformRow(
-                    platforms: ShowHelper.platforms,
-                    // onOpen: (name) => _toast('Opening $name'),
-                  ),
                   const SizedBox(height: 24),
-                  AskCard(
-                    // onSend: (question) => _toast('Sent to Cherie')
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: AskCard(
+                      // onSend: (question) => _toast('Sent to Cherie')
+                    ),
                   ),
                 ],
               ),
@@ -164,15 +208,9 @@ class _SaaltShowScreenState extends State<SaaltShowScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: AppBottomNav(
-        selected: 'Home',
-        items: [
-          BottomNavItem.home(),
-          const BottomNavItem(label: 'Episodes', icon: Icons.podcasts_rounded),
-          const BottomNavItem(label: 'Shop', icon: Icons.shopping_bag_outlined),
-          const BottomNavItem(label: 'Blog', icon: Icons.article_outlined),
-          const BottomNavItem(label: 'About', icon: Icons.info_outline_rounded),
-        ],
+      bottomNavigationBar: const AppBottomNav(
+        selected: 'Saalt',
+        items: BottomNavItem.show,
       ),
     );
   }
@@ -192,11 +230,11 @@ class _FormatBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 38,
+      height: 36,
       child: ListView.separated(
         key: const Key('show-formats'),
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.zero,
+        padding: EdgeInsets.symmetric(horizontal: 20),
         itemCount: formats.length,
         separatorBuilder: (_, _) => const SizedBox(width: 8),
         itemBuilder: (context, index) {
@@ -221,8 +259,8 @@ class _FormatBar extends StatelessWidget {
                   format,
                   style: TextStyle(
                     fontSize: 12.5,
-                    fontWeight: FontWeight.w600,
-                    color: isActive ? Colors.white : AppColors.inkMuted,
+                    fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                    color: isActive ? Colors.white : Color(0xff4B5563),
                   ),
                 ),
               ),
@@ -235,12 +273,9 @@ class _FormatBar extends StatelessWidget {
 }
 
 class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.text, {this.trailing});
+  const _SectionLabel(this.text);
 
   final String text;
-
-  /// Optional control on the right, such as the list/grid switch.
-  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +292,6 @@ class _SectionLabel extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         const Expanded(child: Divider(color: AppColors.hairline, height: 1)),
-        if (trailing != null) ...[const SizedBox(width: 12), trailing!],
       ],
     );
   }
@@ -279,6 +313,44 @@ class _EmptyState extends StatelessWidget {
             color: AppColors.inkMuted,
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Back on the left, the show named in the middle, the viewer's own face
+/// opposite. Same shape as the Collective, Stories and TMI Parties.
+class _ShowHeader extends StatelessWidget {
+  const _ShowHeader({this.onBack});
+
+  final VoidCallback? onBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+      child: Row(
+        children: [
+          BackButtonWidget(onTap: onBack),
+          const Expanded(
+            child: Text(
+              'The Saalt Show',
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: AppColors.inkDeep,
+              ),
+            ),
+          ),
+          Image.asset(
+            AppImages.profilePictureCircleImage,
+            height: 40,
+            width: 40,
+          ),
+        ],
       ),
     );
   }

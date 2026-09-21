@@ -3,13 +3,16 @@ import 'package:saalt/helper/cart_store.dart';
 import 'package:saalt/helper/product_helper.dart';
 import 'package:saalt/models/product.dart';
 import 'package:saalt/models/shop_category.dart';
+import 'package:saalt/presentation/notifications/notifications_screen.dart';
+import 'package:saalt/presentation/parties/tmi_parties_screen.dart';
 import 'package:saalt/presentation/products/cart_screen.dart';
 import 'package:saalt/presentation/products/product_detail_screen.dart';
 import 'package:saalt/presentation/products/widgets/filter_sheet.dart';
 import 'package:saalt/presentation/products/widgets/product_grid_tile.dart';
-import 'package:saalt/presentation/widgets/circle_icon_button.dart';
-import 'package:saalt/presentation/widgets/screen_header.dart';
+import 'package:saalt/presentation/products/wishlist_screen.dart';
+import 'package:saalt/presentation/profile/profile_screen.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 import 'package:go_router/go_router.dart';
 import 'package:saalt/router/app_route_paths.dart';
 
@@ -95,33 +98,15 @@ class _ProductListingScreenState extends State<ProductListingScreen> {
     final title = widget.category?.label ?? 'All products';
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [
-            ScreenHeader(
+            _ListingHeader(
               title: title,
-              subtitle:
-                  '${products.length} '
-                  '${products.length == 1 ? 'product' : 'products'}',
               onBack: () => context.pop(),
-              // Rebuilt on the store, since this screen is one of the places
-              // the cart actually grows: add something from a product here
-              // and the badge has to move.
-              trailing: ValueListenableBuilder<Map<String, int>>(
-                valueListenable: CartStore.items,
-                builder: (context, _, _) {
-                  final count = CartStore.count;
-                  return CircleIconButton(
-                    icon: count == 0
-                        ? Icons.shopping_bag_outlined
-                        : Icons.shopping_bag_rounded,
-                    badgeCount: count,
-                    onTap: () => CartScreen.open(context),
-                    tooltip: 'Cart',
-                  );
-                },
-              ),
+              onCart: () => CartScreen.open(context),
+              onNotifications: () => NotificationsScreen.open(context),
+              onProfile: () => ProfileScreen.open(context),
             ),
             _FilterBar(
               activeCount: _filters.count,
@@ -275,6 +260,76 @@ class _NoMatches extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Back on the left, the category named in the middle, the shop's own
+/// actions opposite. The same header the shop landing page carries.
+class _ListingHeader extends StatelessWidget {
+  const _ListingHeader({
+    required this.title,
+    this.onBack,
+    this.onCart,
+    this.onNotifications,
+    this.onProfile,
+  });
+
+  final String title;
+  final VoidCallback? onBack;
+  final VoidCallback? onCart;
+  final VoidCallback? onNotifications;
+  final VoidCallback? onProfile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 6, 16, 12),
+      child: Row(
+        children: [
+          BackButtonWidget(onTap: onBack),
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: AppColors.inkDeep,
+              ),
+            ),
+          ),
+          _ImageButton(asset: AppImages.cartButtonIcon, onTap: onCart),
+          const SizedBox(width: 6),
+          // _ImageButton(
+          //   asset: AppImages.notificationButtonIcon,
+          //   onTap: onNotifications,
+          // ),
+          // const SizedBox(width: 6),
+          _ImageButton(
+            asset: AppImages.profilePictureCircleImage,
+            onTap: onProfile,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImageButton extends StatelessWidget {
+  const _ImageButton({required this.asset, this.onTap});
+
+  final String asset;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Image.asset(asset, height: 40, width: 40),
     );
   }
 }

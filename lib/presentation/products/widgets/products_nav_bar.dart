@@ -1,41 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:saalt/helper/cart_store.dart';
-import 'package:saalt/presentation/products/cart_screen.dart';
 import 'package:saalt/presentation/widgets/app_bottom_nav.dart';
+import 'package:saalt/res/app_images.dart';
 
-/// Bottom bar for the shop: home, the two headline categories, and the cart.
-///
-/// Only the cart tab routes. The categories are presentational, as they have
-/// been since the bar went in — the shop already filters from its own chips.
+/// The shop's tab bar: the five things the catalogue is divided into. Same
+/// bar as the Collective and the Show; only the marks and the words change.
 class ProductsNavBar extends StatelessWidget {
-  const ProductsNavBar({super.key, this.selected = 'Home'});
+  const ProductsNavBar({super.key, this.selected = 'Underwear'});
 
   final String selected;
 
+  /// In catalogue order, the way the category strip lists them.
+  static const items = <BottomNavItem>[
+    BottomNavItem(label: 'Underwear', asset: AppImages.underwearNavIcon),
+    BottomNavItem(label: 'Cups & Discs', asset: AppImages.cupDiscNavIcon),
+    BottomNavItem(label: 'Teen', asset: AppImages.teenNavIcon),
+    BottomNavItem(label: 'Cleaning', asset: AppImages.clearingNavIcon),
+    BottomNavItem(label: 'Bundles', asset: AppImages.bundleNavIcon),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<Map<String, int>>(
-      valueListenable: CartStore.items,
-      builder: (context, _, _) => AppBottomNav(
-        selected: selected,
-        items: [
-          BottomNavItem.home(),
-          const BottomNavItem(
-            label: 'Underwear',
-            icon: Icons.checkroom_rounded,
-          ),
-          const BottomNavItem(
-            label: 'Cups & Discs',
-            icon: Icons.water_drop_rounded,
-          ),
-          BottomNavItem(
-            label: 'Cart',
-            icon: Icons.shopping_bag_outlined,
-            badgeCount: CartStore.count,
-            onTap: () => CartScreen.open(context),
-          ),
-        ],
-      ),
-    );
+    return AppBottomNav(selected: selected, items: items);
   }
 }

@@ -27,7 +27,6 @@ class WishlistScreen extends StatelessWidget {
     final saved = ShopDemo.saved;
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

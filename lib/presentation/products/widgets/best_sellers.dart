@@ -1,24 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:saalt/models/product.dart';
 import 'package:saalt/res/app_colors.dart';
+import 'package:saalt/res/app_images.dart';
 
-/// Best-seller shelf: a section title with inline group tabs, then a
-/// horizontal row of image-led cards, matching how the site presents it.
-class BestSellers extends StatelessWidget {
-  const BestSellers({
-    super.key,
-    required this.groups,
-    required this.selected,
-    required this.products,
-    required this.onSelectGroup,
-    this.onOpen,
+class BestSeller {
+  const BestSeller({
+    required this.image,
+    required this.title,
+    required this.price,
+    required this.chips,
+    required this.swatches,
+    required this.moreLabel,
   });
 
-  final List<String> groups;
-  final String selected;
-  final List<Product> products;
-  final ValueChanged<String> onSelectGroup;
-  final ValueChanged<Product>? onOpen;
+  final String image;
+  final String title;
+  final String price;
+
+  final List<({String icon, String label})> chips;
+
+  final List<Color> swatches;
+  final String moreLabel;
+}
+
+class BestSellers extends StatefulWidget {
+  const BestSellers({super.key, this.onOpen, this.onBuy});
+
+  final ValueChanged<BestSeller>? onOpen;
+  final ValueChanged<BestSeller>? onBuy;
+
+  @override
+  State<BestSellers> createState() => _BestSellersState();
+}
+
+class _BestSellersState extends State<BestSellers> {
+  static const _groups = ['Saalt Wear', 'Cup & Discs'];
+
+  /// The tabs mark themselves; the shelf below them does not change.
+  static const _shelf = <BestSeller>[
+    BestSeller(
+      image: AppImages.seller1Img,
+      title: 'Leakproof Cotton Sleep Short',
+      price: '\$57.00',
+      chips: [
+        (icon: AppImages.doubleWaterDropIcon, label: 'HEAVY'),
+        (icon: AppImages.waterDropIcon, label: 'REGULAR'),
+      ],
+      swatches: [
+        Color(0xFF844646),
+        Color(0xFFD2B48C),
+        Color(0xFF919C84),
+        Color(0xFFB5B8C6),
+      ],
+      moreLabel: '+2 More',
+    ),
+    BestSeller(
+      image: AppImages.seller2Img,
+      title: 'Leakproof Cotton Sleep Short',
+      price: '\$31.00 – \$55.00',
+      chips: [(icon: AppImages.tripeWaterDropIcon, label: 'SUPER')],
+      swatches: [
+        Color(0xFF1A1A1A),
+        Color(0xFF2C3E50),
+        Color(0xFFBDC3C7),
+        Color(0xFFEBDEF0),
+      ],
+      moreLabel: '+4 More',
+    ),
+  ];
+
+  String _group = _groups.first;
 
   @override
   Widget build(BuildContext context) {
@@ -26,51 +76,49 @@ class BestSellers extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             children: [
               const Text(
                 'Best Sellers',
                 style: TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                  color: AppColors.ink,
+                  fontWeight: FontWeight.w400,
+                  letterSpacing: -0.4,
+                  color: AppColors.inkDeep,
                 ),
               ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (final group in groups) ...[
-                        _GroupTab(
-                          label: group,
-                          isActive: group == selected,
-                          onTap: () => onSelectGroup(group),
-                        ),
-                        const SizedBox(width: 14),
-                      ],
-                    ],
-                  ),
-                ),
+              const SizedBox(width: 10),
+              Image.asset(
+                AppImages.externalLinkIcon,
+                height: 16,
+                errorBuilder: (_, _, _) => const SizedBox(width: 16),
               ),
+              const Spacer(),
+              for (final group in _groups) ...[
+                _GroupTab(
+                  label: group,
+                  isActive: group == _group,
+                  onTap: () => setState(() => _group = group),
+                ),
+                const SizedBox(width: 12),
+              ],
             ],
           ),
         ),
         const SizedBox(height: 14),
         SizedBox(
-          height: 320,
+          height: 360,
           child: ListView.separated(
             key: const Key('best-sellers'),
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: products.length,
+            itemCount: _shelf.length,
             separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) => _Card(
-              product: products[index],
-              onTap: () => onOpen?.call(products[index]),
+              seller: _shelf[index],
+              onTap: () => widget.onOpen?.call(_shelf[index]),
+              onBuy: () => widget.onBuy?.call(_shelf[index]),
             ),
           ),
         ),
@@ -99,27 +147,24 @@ class _GroupTab extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? AppColors.ink : AppColors.inkMuted,
+        child: Container(
+          padding: const EdgeInsets.only(bottom: 4),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: isActive ? const Color(0xFFC95878) : Colors.transparent,
+                width: 2,
               ),
             ),
-            const SizedBox(height: 4),
-            Container(
-              height: 3,
-              width: isActive ? 44 : 0,
-              decoration: BoxDecoration(
-                color: AppColors.roseTint,
-                borderRadius: BorderRadius.circular(30),
-              ),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 13.5,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+              color: isActive ? AppColors.inkDeep : Color(0xff737373),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -127,96 +172,108 @@ class _GroupTab extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  const _Card({required this.product, this.onTap});
+  const _Card({required this.seller, this.onTap, this.onBuy});
 
-  final Product product;
+  /// Fixed, not Expanded: product names run to one line or two, and an
+  /// expanded image absorbs the difference, stepping the covers up and down.
+  static const _imageHeight = 285.0;
+  static const _width = 215.0;
+
+  final BestSeller seller;
   final VoidCallback? onTap;
+  final VoidCallback? onBuy;
 
   @override
   Widget build(BuildContext context) {
-    final badge = product.absorbencyBadge;
-    final asset = product.imageAsset;
-
     return Semantics(
       button: true,
-      label: product.name,
+      label: seller.title,
       child: GestureDetector(
         onTap: onTap,
         behavior: HitTestBehavior.opaque,
         child: SizedBox(
-          width: 176,
+          width: _width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
+              SizedBox(
+                height: _imageHeight,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(16),
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      if (asset == null)
-                        ColoredBox(color: product.tint)
-                      else
-                        Image.asset(
-                          asset,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) =>
-                              ColoredBox(color: product.tint),
+                      Image.asset(
+                        seller.image,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) =>
+                            const ColoredBox(color: Color(0xFFE7E3DE)),
+                      ),
+                      const _Scrim(),
+                      Positioned(
+                        left: 12,
+                        right: 12,
+                        bottom: 15,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 6,
+                              children: [
+                                for (final chip in seller.chips)
+                                  _AbsorbencyPill(
+                                    icon: chip.icon,
+                                    label: chip.label,
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              seller.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                height: 1.3,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xffFAF7F2),
+                              ),
+                            ),
+                          ],
                         ),
-                      if (product.isDiscounted)
-                        const Positioned(
-                          top: 10,
-                          right: 10,
-                          child: _SalePill(),
-                        ),
-                      if (badge != null)
-                        Positioned(
-                          left: 10,
-                          bottom: 10,
-                          child: _AbsorbencyPill(
-                            label: badge.label,
-                            drops: badge.drops,
-                          ),
-                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-              Text(
-                product.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  fontSize: 14,
-                  height: 1.25,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.2,
-                  color: AppColors.ink,
-                ),
-              ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 12),
               Row(
                 children: [
-                  Text(
-                    '\$${product.price.toStringAsFixed(0)}',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.ink,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          seller.price,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xff2A2520),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        _Swatches(
+                          colours: seller.swatches,
+                          moreLabel: seller.moreLabel,
+                        ),
+                      ],
                     ),
                   ),
-                  if (product.isDiscounted) ...[
-                    const SizedBox(width: 6),
-                    Text(
-                      '\$${product.compareAtPrice!.toStringAsFixed(0)}',
-                      style: const TextStyle(
-                        fontSize: 11.5,
-                        color: AppColors.inkFaint,
-                        decoration: TextDecoration.lineThrough,
-                      ),
-                    ),
-                  ],
+                  const SizedBox(width: 8),
+                  _BuyButton(onTap: onBuy),
                 ],
               ),
             ],
@@ -227,68 +284,139 @@ class _Card extends StatelessWidget {
   }
 }
 
-class _SalePill extends StatelessWidget {
-  const _SalePill();
+/// The wash the chips and the name sit on, so white type reads over any
+/// photograph.
+class _Scrim extends StatelessWidget {
+  const _Scrim();
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
+    return const DecoratedBox(
       decoration: BoxDecoration(
-        color: AppColors.roseTint,
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        child: Text(
-          'Sale',
-          style: TextStyle(
-            fontSize: 10.5,
-            fontWeight: FontWeight.w700,
-            color: AppColors.ink,
-          ),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0x00000000), Color(0x40000000), Color(0xB3000000)],
+          stops: [0.45, 0.72, 1],
         ),
       ),
     );
   }
 }
 
-/// Droplets plus a label, the way the site signals absorbency at a glance.
 class _AbsorbencyPill extends StatelessWidget {
-  const _AbsorbencyPill({required this.label, required this.drops});
+  const _AbsorbencyPill({required this.icon, required this.label});
 
+  final String icon;
   final String label;
-  final int drops;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(8),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          for (var i = 0; i < drops; i++)
-            const Padding(
-              padding: EdgeInsets.only(right: 1),
-              child: Icon(
-                Icons.water_drop_rounded,
-                size: 9,
-                color: AppColors.ink,
-              ),
-            ),
-          const SizedBox(width: 4),
+          Image.asset(
+            icon,
+            height: 11,
+            color: Color(0xff64748B),
+            errorBuilder: (_, _, _) => const SizedBox(width: 11),
+          ),
+          const SizedBox(width: 5),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 10.5,
-              fontWeight: FontWeight.w700,
-              color: AppColors.ink,
+            style: TextStyle(
+              fontSize: 9.5,
+              fontWeight: FontWeight.w500,
+              letterSpacing: 0.5,
+              color: Color(0xff373737).withValues(alpha: .9),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// The colours it comes in. Shown as dots rather than named, because a name
+/// per colour will not fit beside the price.
+class _Swatches extends StatelessWidget {
+  const _Swatches({required this.colours, required this.moreLabel});
+
+  final List<Color> colours;
+  final String moreLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        for (final colour in colours) ...[
+          Container(
+            height: 14,
+            width: 14,
+            decoration: BoxDecoration(color: colour, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 6),
+        ],
+        const SizedBox(width: 2),
+        Flexible(
+          child: Text(
+            moreLabel,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: Color(0xff333333),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _BuyButton extends StatelessWidget {
+  const _BuyButton({this.onTap});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: AppColors.inkDeep,
+          border: Border.all(color: AppColors.whiteColor.withValues(alpha: .3)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              AppImages.boltIcon,
+              height: 13,
+              errorBuilder: (_, _, _) => const SizedBox(width: 13),
+            ),
+            const SizedBox(width: 5),
+            const Text(
+              'BUY',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.5,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -129,7 +129,6 @@ class _FitQuizScreenState extends State<FitQuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         bottom: false,
         child: Column(

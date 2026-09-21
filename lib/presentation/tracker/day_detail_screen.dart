@@ -176,7 +176,6 @@ class _DayDetailScreenState extends State<DayDetailScreen> {
     );
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

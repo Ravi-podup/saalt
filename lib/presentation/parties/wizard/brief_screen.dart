@@ -109,7 +109,6 @@ class _BriefScreenState extends State<BriefScreen> {
           );
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

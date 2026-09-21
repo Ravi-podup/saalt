@@ -14,6 +14,7 @@ class Episode {
     required this.accent,
     this.isNew = false,
     this.imageAsset,
+    this.coverAsset,
     this.videoUrl,
   });
 
@@ -35,6 +36,10 @@ class Episode {
   /// Real episode artwork once it exists. While null the art is drawn from
   /// [tint], [accent] and the wordmark instead.
   final String? imageAsset;
+
+  /// The printed episode card, used where the artwork is shown large. It
+  /// carries its own wordmark and titles, so nothing is laid over it.
+  final String? coverAsset;
 
   /// Streamable episode video. Null means the episode is not watchable yet.
   final String? videoUrl;

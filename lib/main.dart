@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:saalt/res/app_colors.dart';
 import 'package:saalt/router/app_routers.dart';
 
 void main() {
@@ -24,7 +25,8 @@ class _MyAppState extends State<MyApp> {
       title: 'Saalt',
       routerConfig: widget.router,
       theme: ThemeData(
-        fontFamily: 'Gotham',
+        fontFamily: 'Montserrat',
+        scaffoldBackgroundColor: AppColors.softBeige,
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: SplashScreen(),

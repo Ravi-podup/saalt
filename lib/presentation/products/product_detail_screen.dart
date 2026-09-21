@@ -115,7 +115,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final unit = ProductHelper.unitNoun(product);
 
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         bottom: false,
         child: Column(

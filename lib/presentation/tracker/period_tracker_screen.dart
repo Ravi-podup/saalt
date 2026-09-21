@@ -66,7 +66,6 @@ class _PeriodTrackerScreenState extends State<PeriodTrackerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

@@ -114,7 +114,6 @@ class _Generated extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Soft off-centre bloom, so the panel is not a flat wash.
           Positioned(
             top: -30,
             right: -30,
@@ -193,7 +192,11 @@ class VideoBadge extends StatelessWidget {
           ),
         ],
       ),
-      child: Icon(Icons.play_arrow_rounded, size: size * 0.62, color: accent),
+      child: Icon(
+        Icons.play_arrow_rounded,
+        size: size * 0.62,
+        color: Color(0xff384252),
+      ),
     );
   }
 }
